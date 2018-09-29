@@ -635,8 +635,7 @@ layui.define(['layer', 'form'], function (exports) {
                             //, maxmin: true
                             , area: ['900px', '600px']
                             , offset: '100px'
-                            , content: ['<div id ="aceHtmleditor" style="width:100%;height:80%">'
-                                , '</div>'
+                            , content: ['<div id ="aceHtmleditor" style="width:100%;height:80%"></div>'
                                 , '<div style="text-align:center">'
                                 , '<button type="button" class="layui-btn layedit-btn-yes"> 确定 </button>'
                                 , '<button style="margin-left: 20px;" type="button" class="layui-btn layui-btn-primary"> 取消 </button>'
@@ -647,8 +646,9 @@ layui.define(['layer', 'form'], function (exports) {
                                 editor.setFontSize(14);
                                 editor.session.setMode("ace/mode/html");
                                 editor.setTheme("ace/theme/tomorrow");
-                                editor.setOption("wrap", "free")
                                 editor.setValue(docs);
+                                editor.setOption("wrap", "free")
+                                editor.gotoLine(0);
                                 layero.find('.layui-btn-primary').on('click', function () {
                                     layer.close(index);
                                 });
@@ -656,6 +656,9 @@ layui.define(['layer', 'form'], function (exports) {
                                     iframeWin.document.body.innerHTML = editor.getValue();
                                     layer.close(index);
                                 });
+                                window.onresize = function () {
+                                    editor.resize();
+                                }  
                             }
                         });
                     }
@@ -663,9 +666,11 @@ layui.define(['layer', 'form'], function (exports) {
                     , fullScreen: function (range) {
                         if (this.parentElement.parentElement.getAttribute("style") == null || this.parentElement.parentElement.getAttribute("style") == "") {
                             this.parentElement.parentElement.setAttribute("style", "position: fixed;top: 0;left: 0;height: 100%;width: 100%;background-color: antiquewhite;z-index: 9999;");
+                            this.parentElement.nextElementSibling.style = "height:100%";
                             this.parentElement.nextElementSibling.firstElementChild.allowFullscreen = true;
                         } else {
                             this.parentElement.parentElement.removeAttribute("style");
+                            this.parentElement.nextElementSibling.removeAttribute("style");
                             this.parentElement.nextElementSibling.firstElementChild.allowFullscreen = false;
                         }
                     }
@@ -686,35 +691,12 @@ layui.define(['layer', 'form'], function (exports) {
                             });
                             return arr;
                         }();
-                        fontFomatt.hide = fontFomatt.hide || function (e) {
-                            if ($(e.target).attr('layedit-event') !== 'fontFomatt') {
-                                layer.close(fontFomatt.index);
-                            }
-                        }
-                        fontFomatt.index = layer.tips(function () {
-                            var content = [];
-                            layui.each(fonts, function (key, item) {
-                                content.push('<li title="' + key + '">' + item + '</li>');
-                            });
-                            return '<ul class="layui-clear">' + content.join('') + '</ul>';
-                        }(), this, {
-                                tips: 1
-                                , time: 0
-                                , skin: 'layui-box layui-util-face'
-                                , success: function (layero, index) {
-                                    layero.css({
-                                        marginTop: -4
-                                        , marginLeft: -10
-                                    }).find('.layui-clear>li').on('click', function () {
-                                        iframeDOM.execCommand('formatBlock', false, "<" + this.title + ">");
-                                        setTimeout(function () {
-                                            body.focus();
-                                        }, 10);
-                                        layer.close(index);
-                                    });
-                                    $(document).off('click', fontFomatt.hide).on('click', fontFomatt.hide);
-                                }
-                            });
+                        fontFomatt.call(this, {fonts: fonts}, function (value) {
+                            iframeDOM.execCommand('formatBlock', false, "<" + value + ">");
+                            setTimeout(function () {
+                                body.focus();
+                            }, 10);
+                        });
                     }
                     , fontSize: function (range) {
                         var fontSize = function () {
@@ -912,6 +894,7 @@ layui.define(['layer', 'form'], function (exports) {
                     }
                 });
         }
+        //字体颜色
         , colorpicker = function (callback) {
             var colors = function () {
                 var alt = ["#fff", "#000", "#800000", "#ffb800", "#1e9fff", "#5fb878", "#ff5722", "#999999", "#01aaed", "#cc0000", "#ff8c00", "#ffd700", "#90ee90", "#00ced1", "#1e90ff",
@@ -949,22 +932,15 @@ layui.define(['layer', 'form'], function (exports) {
                     }
                 });
         }
-        , fontFomatt = function (callback,set) {
-            var faces = function () {
-                var alt = set.fontFomatt || ["p", "h1", "h2", "h3", "h4", "h5", "h6", "div"], arr = {};
-                layui.each(alt, function (index, item) {
-                    arr[item] = item;
-                });
-                return arr;
-            }();
+        , fontFomatt = function (options,callback) {
             fontFomatt.hide = fontFomatt.hide || function (e) {
                 if ($(e.target).attr('layedit-event') !== 'fontFomatt') {
-                    layer.close(fontFomatt.index);
+                    layer.close( fontFomatt.index );
                 }
             }
-            return fontFomatt.index = layer.tips(function () {
+            fontFomatt.index = layer.tips(function () {
                 var content = [];
-                layui.each(faces, function (key, item) {
+                layui.each(options.fonts, function (key, item) {
                     content.push('<li title="' + key + '">' + item + '</li>');
                 });
                 return '<ul class="layui-clear">' + content.join('') + '</ul>';
@@ -972,13 +948,9 @@ layui.define(['layer', 'form'], function (exports) {
                     tips: 1
                     , time: 0
                     , skin: 'layui-box layui-util-face'
-                    //, maxWidth: 200
                     , success: function (layero, index) {
-                        layero.css({
-                            marginTop: -4
-                            , marginLeft: -10
-                        }).find('.layui-clear>li').on('click', function () {
-                            callback && callback(this.title);
+                        layero.css({marginTop: -4 , marginLeft: -10 }).find('.layui-clear>li').on('click', function () {
+                            callback && callback(this.title, options.fonts);
                             layer.close(index);
                         });
                         $(document).off('click', fontFomatt.hide).on('click', fontFomatt.hide);
