@@ -3,6 +3,7 @@
  @Name：layui.layedit 富文本编辑器
  @Author：贤心
  @editor:KnifeZ
+ @v:18.9.29
  @License：MIT
     
  */
@@ -425,10 +426,6 @@ layui.define(['layer', 'form'], function (exports) {
                         });
                     }
                     /*#Extens#*/
-                    //图片alt标签修改
-                    , altEdit: function (range) {
-                        layer.msg("待开发")
-                    }
                     //图片2
                     , image_alt: function (range) {
                         var that = this;
@@ -667,6 +664,7 @@ layui.define(['layer', 'form'], function (exports) {
                         if (this.parentElement.parentElement.getAttribute("style") == null || this.parentElement.parentElement.getAttribute("style") == "") {
                             this.parentElement.parentElement.setAttribute("style", "position: fixed;top: 0;left: 0;height: 100%;width: 100%;background-color: antiquewhite;z-index: 9999;");
                             this.parentElement.nextElementSibling.style = "height:100%";
+                            this.parentElement.nextElementSibling.firstElementChild.style = "height:100%";
                             this.parentElement.nextElementSibling.firstElementChild.allowFullscreen = true;
                         } else {
                             this.parentElement.parentElement.removeAttribute("style");
@@ -802,6 +800,45 @@ layui.define(['layer', 'form'], function (exports) {
                 layer.close(colorpicker.index);
                 layer.close(fontFomatt.index);
             });
+            //右键菜单自定义
+            body.on('contextmenu', function (event) {
+                debugger;
+                if (event != null) {
+                    switch (event.target.tagName) {
+                        case "IMG":
+                            layer.open({
+                                type: 1,
+                                title: false,
+                                area: ["485px", "160px"],
+                                offset: [event.clientY + "px", event.clientX + "px"],
+                                shadeClose: true,
+                                content: ['<ul class="layui-form layui-form-pane" style="margin: 20px;">'
+                                    , '<li class="layui-form-item">'
+                                    , '<label class="layui-form-label">描述</label>'
+                                    , '<input type="text" required name="altStr" placeholder="alt属性" style="width: 75%;" value="' + event.target.alt + '" class="layui-input">'
+                                    , '</li>'
+                                    , '<li class="layui-form-item" style="text-align: center;">'
+                                    , '<button type="button" lay-submit  class="layui-btn layedit-btn-yes"> 确定 </button>'
+                                    , '<button style="margin-left: 20px;" type="button" class="layui-btn layui-btn-primary"> 取消 </button>'
+                                    , '</li>'
+                                    , '</ul>'].join(''),
+                                success: function (layero, index) {
+                                    layero.find('.layui-btn-primary').on('click', function () {
+                                        layer.close(index);
+                                    });
+                                    layero.find('.layedit-btn-yes').on('click', function () {
+                                        event.target.alt = layero.find('input[name="altStr"]').val();
+                                        layer.close(index);
+                                    });
+                                }
+                            })
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                return false;
+            })
         }
 
         //超链接面板
@@ -1032,7 +1069,6 @@ layui.define(['layer', 'form'], function (exports) {
             , code: '<i class="layui-icon layedit-tool-code" title="插入代码" layedit-event="code" style="font-size:18px">&#xe64e;</i>'
 
             , image_alt: '<i class="layui-icon layedit-tool-image_alt" title="图片" layedit-event="image_alt" style="font-size:18px">&#xe64a;</i>'
-            , altEdit: '<i class="layui-icon layedit-tool-altEdit" title="图片属性" layedit-event="altEdit" style="font-size:18px">&#xe66e;</i>'
             , video: '<i class="layui-icon layedit-tool-video" title="插入视频" layedit-event="video" style="font-size:18px">&#xe6ed;</i>'
             , fullScreen: '<i class="layui-icon layedit-tool-fullScreen" title="全屏" layedit-event="fullScreen"style="font-size:18px">&#xe638;</i>'
             , colorpicker: '<i class="layui-icon layedit-tool-colorpicker" title="字体颜色选择" layedit-event="colorpicker" style="font-size:18px">&#xe66a;</i>'
