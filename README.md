@@ -20,21 +20,24 @@
 
 #### 使用说明
 配置信息
--     layui.use(['layedit','layer','jquery'],function() {
--         var $=layui.jquery;
--         var layedit = layui.layedit;
-- 	layedit.set({
--                 uploadImage: { url: '/Attachment/LayUpload' } //图片上传方法
--                 , uploadVideo: { url: '/Attachment/LayUpload' } //视频上传方法
--                 , //fontFomatt:["p","span"]  //自定义段落格式 ，如不填，默认为 ["p", "h1", "h2", "h3", "h4", "h5", "h6", "div"]
--                 , tool: [
--                     'html'
-- 					, 'strong', 'italic', 'underline', 'del', '|'
-- 					, 'fontFomatt','colorpicker' //段落格式，字体颜色
-- 					, 'face', '|', 'left', 'center', 'right', '|', 'link', 'unlink'
-- 					, 'image_alt', 'altEdit', 'video' //
--                     , '|', 'fullScreen'
--                 ]
--             });
--             var ieditor = layedit.build('layeditDemo');
--     })
+
+```
+     layui.use(['layedit','layer','jquery'],function() {
+         var $=layui.jquery;
+         var layedit = layui.layedit;
+ 	layedit.set({
+                 uploadImage: { url: '/Attachment/LayUpload' } //图片上传方法
+                 , uploadVideo: { url: '/Attachment/LayUpload' } //视频上传方法
+                 , //fontFomatt:["p","span"]  //自定义段落格式 ，如不填，默认为 ["p", "h1", "h2", "h3", "h4", "h5", "h6", "div"]
+                 , tool: [
+                     'html'
+ 					, 'strong', 'italic', 'underline', 'del', '|'
+ 					, 'fontFomatt','colorpicker' //段落格式，字体颜色
+ 					, 'face', '|', 'left', 'center', 'right', '|', 'link', 'unlink'
+ 					, 'image_alt', 'altEdit', 'video' //
+                     , '|', 'fullScreen'
+                 ]
+             });
+             var ieditor = layedit.build('layeditDemo');
+     })
+```
