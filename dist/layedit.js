@@ -3,7 +3,6 @@
  @Name：layui.layedit 富文本编辑器
  @Author：贤心
  @editor:KnifeZ
- @v:18.9.29
  @License：MIT
     
  */
@@ -302,18 +301,6 @@ layui.define(['layer', 'form'], function (exports) {
                 }
 
             if (othis) {
-                //if (othis[0].className.indexOf("layedit-tool-html")>-1) {
-                //    if (othis.hasClass(CHECK)) {
-                //        tools.find('>i').removeClass(ABLED);
-                //        item('html').removeClass(CHECK);
-                //    } else {
-                //        tools.find('>i').addClass(ABLED);
-                //        item('html').removeClass(ABLED);
-                //        item('html').addClass(CHECK);
-                //    }
-                //} else {
-                //    othis[othis.hasClass(CHECK) ? 'removeClass' : 'addClass'](CHECK);
-                //}
                 othis[othis.hasClass(CHECK) ? 'removeClass' : 'addClass'](CHECK);
 
             }
@@ -768,7 +755,7 @@ layui.define(['layer', 'form'], function (exports) {
                     if (command) {
                         iframeDOM.execCommand(command);
                         if (/justifyLeft|justifyCenter|justifyRight/.test(command)) {
-                            iframeDOM.execCommand('formatBlock', false, '<p>');
+                            iframeDOM.execCommand(command, false, null);
                         }
                         setTimeout(function () {
                             body.focus();
