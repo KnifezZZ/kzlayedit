@@ -357,14 +357,17 @@ layui.define(['layer', 'form'], function (exports) {
                         link.call(body, {
                             href: parentNode.attr('href')
                             , target: parentNode.attr('target')
+                            , rel: parentNode.attr('rel')
                         }, function (field) {
                             var parent = parentNode[0];
                             if (parent.tagName === 'A') {
                                 parent.href = field.url;
+                                parent.rel = field.rel;
                             } else {
                                 insertInline.call(iframeWin, 'a', {
                                     target: field.target
                                     , href: field.url
+                                    , rel: field.rel
                                     , text: field.url
                                 }, range);
                             }
@@ -613,6 +616,9 @@ layui.define(['layer', 'form'], function (exports) {
                                         layer.close(index);
                                     });
                                     layero.find('.layedit-btn-yes').on('click', function () {
+
+                                        var container = getContainer(range)
+                                            , parentNode = $(container).parent();
                                         insertInline.call(iframeWin, 'video', {
                                             src: video.val()
                                             , poster: cover.val()
@@ -819,13 +825,20 @@ layui.define(['layer', 'form'], function (exports) {
                             layer.open({
                                 type: 1,
                                 title: false,
-                                area: ["485px", "160px"],
+                                area: "485px",
                                 offset: [event.clientY + "px", event.clientX + "px"],
                                 shadeClose: true,
                                 content: ['<ul class="layui-form layui-form-pane" style="margin: 20px;">'
                                     , '<li class="layui-form-item">'
                                     , '<label class="layui-form-label">描述</label>'
                                     , '<input type="text" required name="altStr" placeholder="alt属性" style="width: 75%;" value="' + event.target.alt + '" class="layui-input">'
+                                    , '</li>'
+                                    , '</li>'
+                                    , '<li class="layui-form-item">'
+                                    , '<label class="layui-form-label">宽度</label>'
+                                    , '<input type="text" required name="imgWidth" placeholder="width" style="width: 25%;position: relative;float: left;" value="' + event.target.width + '" class="layui-input">'
+                                    , '<label class="layui-form-label">高度</label>'
+                                    , '<input type="text" required name="imgHeight" placeholder="height" style="width: 25%;" value="' + event.target.height + '" class="layui-input">'
                                     , '</li>'
                                     , '<li class="layui-form-item" style="text-align: center;">'
                                     , '<button type="button" lay-submit  class="layui-btn layedit-btn-yes"> 确定 </button>'
@@ -838,6 +851,8 @@ layui.define(['layer', 'form'], function (exports) {
                                     });
                                     layero.find('.layedit-btn-yes').on('click', function () {
                                         event.target.alt = layero.find('input[name="altStr"]').val();
+                                        event.target.width = layero.find('input[name="imgWidth"]').val();
+                                        event.target.height = layero.find('input[name="imgHeight"]').val(); 
                                         layer.close(index);
                                     });
                                 }
@@ -848,11 +863,10 @@ layui.define(['layer', 'form'], function (exports) {
                             layer.open({
                                 type: 1,
                                 title: false,
-                                area: ["460px", "140px"],
                                 offset: [event.clientY + "px", event.clientX + "px"],
                                 shadeClose: true,
-                                content: ['<ul class="layui-form layui-form-pane" style="margin: 20px;">'
-                                    , '<li class="layui-form-item" style="text-align: center;">'
+                                content: ['<ul class="layui-form layui-form-pane" style="margin: 5px;">'
+                                    , '<li style="text-align: center;">'
                                     , '<button type="button" class="layui-btn layui-btn-primary" lay-command="left"> 居左 </button>'
                                     , '<button type="button" class="layui-btn layui-btn-primary" lay-command="center"> 居中 </button>'
                                     , '<button type="button" class="layui-btn layui-btn-primary" lay-command="right"> 居右 </button>'
@@ -906,7 +920,7 @@ layui.define(['layer', 'form'], function (exports) {
                     , '<li class="layui-form-item">'
                     , '<label class="layui-form-label" style="width: 60px;">URL</label>'
                     , '<div class="layui-input-block" style="margin-left: 90px">'
-                    , '<input name="url" lay-verify="url" value="' + (options.href || '') + '" autofocus="true" autocomplete="off" class="layui-input">'
+                    , '<input name="url" value="' + (options.href || '') + '" autofocus="true" autocomplete="off" class="layui-input">'
                     , '</div>'
                     , '</li>'
                     , '<li class="layui-form-item">'
@@ -916,6 +930,15 @@ layui.define(['layer', 'form'], function (exports) {
                     + ((options.target === '_self' || !options.target) ? 'checked' : '') + '>'
                     , '<input type="radio" name="target" value="_blank" class="layui-input" title="新窗口" '
                     + (options.target === '_blank' ? 'checked' : '') + '>'
+                    , '</div>'
+                    , '</li>'
+                    , '<li class="layui-form-item">'
+                    , '<label class="layui-form-label" style="width: 60px;">rel属性</label>'
+                    , '<div class="layui-input-block" style="margin-left: 90px">'
+                    , '<input type="radio" name="rel" value="nofollow" class="layui-input" title="nofollow"'
+                    + ((options.rel === 'nofollow' || !options.target) ? 'checked' : '') + '>'
+                    , '<input type="radio" name="rel" value="" class="layui-input" title="无" '
+                    + (options.rel === '' ? 'checked' : '') + '>'
                     , '</div>'
                     , '</li>'
                     , '<li class="layui-form-item" style="text-align: center;">'
