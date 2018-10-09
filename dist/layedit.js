@@ -416,7 +416,7 @@ layui.define(['layer', 'form'], function (exports) {
                         });
                     }
                     /*#Extens#*/
-                    //图片2
+                    //图片2                    
                     , image_alt: function (range) {
                         var that = this;
                         layer.open({
@@ -436,6 +436,12 @@ layui.define(['layer', 'form'], function (exports) {
                                 , '<li class="layui-form-item">'
                                 , '<label class="layui-form-label">描述</label>'
                                 , '<input type="text" required name="altStr" placeholder="alt属性" style="width: 75%;" value="" class="layui-input">'
+                                , '</li>'
+                                , '<li class="layui-form-item">'
+                                , '<label class="layui-form-label">宽度</label>'
+                                , '<input type="text" required name="imgWidth" placeholder="width" style="width: 25%;position: relative;float: left;" value="" class="layui-input">'
+                                , '<label class="layui-form-label">高度</label>'
+                                , '<input type="text" required name="imgHeight" placeholder="height" style="width: 25%;" value="" class="layui-input">'
                                 , '</li>'
                                 , '<li class="layui-form-item" style="text-align: center;">'
                                 , '<button type="button" lay-submit  class="layui-btn layedit-btn-yes"> 确定 </button>'
@@ -467,7 +473,7 @@ layui.define(['layer', 'form'], function (exports) {
                                                     , title: '提示'
                                                     , area: ['390px', '260px']
                                                     , offset: 't'
-                                                    , content: res.msg + "<div><img src='" + res.data.src + "' style='max-height:80px'/></div><label class='layui-form - label'>确定使用该文件吗？</label>"
+                                                    , content: res.msg + "<div style='text-align:center;'><img src='" + res.data.src + "' style='max-height:80px'/></div><p style='text-align:center'>确定使用该文件吗？</p>"
                                                     , btn: ['确定', '取消']
                                                     , yes: function () {
                                                         res.data = res.data || {};
@@ -486,9 +492,17 @@ layui.define(['layer', 'form'], function (exports) {
                                         layer.close(index);
                                     });
                                     layero.find('.layedit-btn-yes').on('click', function () {
+                                        var styleStr = "";
+                                        if (layero.find('input[name="imgWidth"]').val() != "") {
+                                            styleStr += "width:" + layero.find('input[name="imgWidth"]').val() + ";";
+                                        }
+                                        if (layero.find('input[name="imgHeight"]').val() != "") {
+                                            styleStr += "height:" + layero.find('input[name="imgHeight"]').val() + ";";
+                                        }
                                         insertInline.call(iframeWin, 'img', {
                                             src: Imgsrc.val()
                                             , alt: altStr.val()
+                                            , style: styleStr
                                         }, range);
                                         layer.close(index);
                                     });
@@ -601,8 +615,10 @@ layui.define(['layer', 'form'], function (exports) {
                                     layero.find('.layedit-btn-yes').on('click', function () {
                                         insertInline.call(iframeWin, 'video', {
                                             src: video.val()
+                                            , poster: cover.val()
                                             , controls: 'controls'
                                         }, range);
+                                        iframeDOM.execCommand('formatBlock', false, "<p>");
                                         layer.close(index);
                                     });
                                 })
@@ -652,15 +668,16 @@ layui.define(['layer', 'form'], function (exports) {
                     }
                     //全屏
                     , fullScreen: function (range) {
-                        if (this.parentElement.parentElement.getAttribute("style") == null || this.parentElement.parentElement.getAttribute("style") == "") {
+                        if (this.parentElement.parentElement.getAttribute("style") == null || this.parentElement.parentElement.getAttribute("style") == "height: inherit") {
                             this.parentElement.parentElement.setAttribute("style", "position: fixed;top: 0;left: 0;height: 100%;width: 100%;background-color: antiquewhite;z-index: 9999;");
                             this.parentElement.nextElementSibling.style = "height:100%";
                             this.parentElement.nextElementSibling.firstElementChild.style = "height:100%";
-                            this.parentElement.nextElementSibling.firstElementChild.allowFullscreen = true;
+                            //this.parentElement.nextElementSibling.firstElementChild.allowFullscreen = true;
                         } else {
-                            this.parentElement.parentElement.removeAttribute("style");
-                            this.parentElement.nextElementSibling.removeAttribute("style");
-                            this.parentElement.nextElementSibling.firstElementChild.allowFullscreen = false;
+                            this.parentElement.parentElement.setAttribute("style", "height: inherit");
+                            //this.parentElement.parentElement.removeAttribute("style");
+                            //this.parentElement.nextElementSibling.removeAttribute("style");
+                            //this.parentElement.nextElementSibling.firstElementChild.allowFullscreen = false;
                         }
                     }
                     //字体颜色选择
@@ -831,7 +848,7 @@ layui.define(['layer', 'form'], function (exports) {
                             layer.open({
                                 type: 1,
                                 title: false,
-                                area: ["485px", "160px"],
+                                area: ["460px", "140px"],
                                 offset: [event.clientY + "px", event.clientX + "px"],
                                 shadeClose: true,
                                 content: ['<ul class="layui-form layui-form-pane" style="margin: 20px;">'
