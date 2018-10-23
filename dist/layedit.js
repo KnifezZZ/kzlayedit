@@ -674,16 +674,14 @@ layui.define(['layer', 'form'], function (exports) {
                     }
                     //全屏
                     , fullScreen: function (range) {
-                        if (this.parentElement.parentElement.getAttribute("style") == null || this.parentElement.parentElement.getAttribute("style") == "height: inherit") {
+                        if (this.parentElement.parentElement.getAttribute("style") == null) {
                             this.parentElement.parentElement.setAttribute("style", "position: fixed;top: 0;left: 0;height: 100%;width: 100%;background-color: antiquewhite;z-index: 9999;");
                             this.parentElement.nextElementSibling.style = "height:100%";
                             this.parentElement.nextElementSibling.firstElementChild.style = "height:100%";
-                            //this.parentElement.nextElementSibling.firstElementChild.allowFullscreen = true;
                         } else {
-                            this.parentElement.parentElement.setAttribute("style", "height: inherit");
-                            //this.parentElement.parentElement.removeAttribute("style");
-                            //this.parentElement.nextElementSibling.removeAttribute("style");
-                            //this.parentElement.nextElementSibling.firstElementChild.allowFullscreen = false;
+                            this.parentElement.parentElement.removeAttribute("style");
+                            this.parentElement.nextElementSibling.removeAttribute("style");
+                            this.parentElement.nextElementSibling.firstElementChild.style = "height:" + set.height;
                         }
                     }
                     //字体颜色选择
