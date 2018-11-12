@@ -1,23 +1,24 @@
 # Kz.layedit
 #### 更新日志
-- v18.9.29
-	1. 添加HTML源码模式
-	2. 图片插入添加alt属性
-	3. 新增 视频插入、全屏、字体颜色设置功能
-- v18.10.8
-	1. 添加右键触发事件 --居中，居左，居右，删除
-	2. 回车、居中居左等自动追加p标签
-- v18.10.9
-	1. 新增图片右键修改宽高功能
-	2. 优化右键面板样式，最大化最小化功能优化
-- v18.10.23
-	修复取消全屏后样式错误问题（部分情况下依旧会出现高度变矮情况）
 - v18.11.12
 	1. 新增图片右键修改功能，可重新上传图片
 	2. 修复上传视频什么也不选时也能成功添加bug，现在会提示上传视频(感谢<a href="https://gitee.com/herohill">hreohill</a>的反馈)
 	3. [已知bug] 字体大小设置目前不可用
-	4. 新增 添加水平线/hr功能
+	4. 新增 添加水平线/hr（<i>addhr</i>）功能
 	5. 插入代码新增自定义参数 codeConfig{hide:true|false,default:"javascript/c#/java..."} 设置hide为true时不显示代码选择框，可依据default设置默认语言格式。不设置codeConfig则为原版
+	6. [待完善]新增 插入锚点(<i>anchors</i>) 功能，前台展示默认为 $锚点$ ,保存和读取存在问题，暂不推荐使用
+- v18.10.23
+	修复取消全屏后样式错误问题（部分情况下依旧会出现高度变矮情况）
+- v18.10.9
+	1. 新增图片右键修改宽高功能
+	2. 优化右键面板样式，最大化最小化功能优化
+- v18.10.8
+	1. 添加右键触发事件 --居中，居左，居右，删除
+	2. 回车、居中居左等自动追加p标签
+- v18.9.29
+	1. 添加HTML源码模式
+	2. 图片插入添加alt属性
+	3. 新增 视频插入、全屏、字体颜色设置功能
 #### 项目介绍
 对layui.layedit的拓展，基于layui v2.4.3.
 - 增加了HTML源码模式，
@@ -49,11 +50,13 @@
                  , codeConfig:{hide:true,default:'javascript'}
                  , //fontFomatt:["p","span"]  //自定义段落格式 ，如不填，默认为 ["p", "h1", "h2", "h3", "h4", "h5", "h6", "div"]
                  , tool: [
-                     'html'
- 					, 'strong', 'italic', 'underline', 'del', '|'
- 					, 'fontFomatt','colorpicker' //段落格式，字体颜色
+                     'html','code'
+ 					, 'strong', 'italic', 'underline', 'del', 
+					,'addhr' //添加水平线
+					,'|', 'fontFomatt','colorpicker' //段落格式，字体颜色
  					, 'face', '|', 'left', 'center', 'right', '|', 'link', 'unlink'
- 					, 'image_alt', 'altEdit', 'video' //
+ 					, 'image_alt', 'altEdit', 'video' 
+					,'anchors' //锚点
                      , '|', 'fullScreen'
                  ]
              });
