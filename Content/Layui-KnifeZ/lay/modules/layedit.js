@@ -155,6 +155,7 @@ layui.define(['layer', 'form'], function (exports) {
                     , 'body{padding: 10px; line-height: 20px; overflow-x: hidden; word-wrap: break-word; font: 14px Helvetica Neue,Helvetica,PingFang SC,Microsoft YaHei,Tahoma,Arial,sans-serif; -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}'
                     , 'a{color:#01AAED; text-decoration:none;}a:hover{color:#c00}'
                     , 'p{margin-bottom: 10px;}'
+                    , 'video{max-width:400px;}'
                     , 'img{display: inline-block; border: none; vertical-align: middle;}'
                     , 'pre{margin: 10px 0; padding: 10px; line-height: 20px; border: 1px solid #ddd; border-left-width: 6px; background-color: #F2F2F2; color: #333; font-family: Courier New; font-size: 12px;}'
                     , '</style>'].join(''))
@@ -195,7 +196,6 @@ layui.define(['layer', 'form'], function (exports) {
                 var keycode = e.keyCode;
                 //处理回车
                 if (keycode === 13) {
-                    debugger;
                     var range = Range(iframeDOM);
                     var container = getContainer(range)
                         , parentNode = container.parentNode;
@@ -411,7 +411,9 @@ layui.define(['layer', 'form'], function (exports) {
                     }
                     //插入代码
                     , code: function (range) {
-                        code.call(body, function (pre) {
+                        debugger;
+                        var codeConfig = set.codeConfig || { hide: false };
+                        code.call(body, { hide: codeConfig.hide, default: codeConfig.default }, function (pre) {
                             insertInline.call(iframeWin, 'pre', {
                                 text: pre.code
                                 , 'lay-lang': pre.lang
@@ -584,6 +586,7 @@ layui.define(['layer', 'form'], function (exports) {
                                         , url: uploadfileurl.url
                                         , accept: 'file'
                                         , method: 'POST'
+                                        , size: 20480
                                         , before: function (obj) { loding = layer.msg('文件上传中,请稍等哦', { icon: 16, shade: 0.3, time: 0 }); }
                                         , done: function (res, input, upload) {
                                             layer.close(loding);
@@ -616,7 +619,10 @@ layui.define(['layer', 'form'], function (exports) {
                                         layer.close(index);
                                     });
                                     layero.find('.layedit-btn-yes').on('click', function () {
-
+                                        if (video.val() == "") {
+                                            layer.msg("请选择视频");
+                                            return false;
+                                        }
                                         var container = getContainer(range)
                                             , parentNode = $(container).parent();
                                         insertInline.call(iframeWin, 'video', {
@@ -738,10 +744,7 @@ layui.define(['layer', 'form'], function (exports) {
                                         marginTop: -4
                                         , marginLeft: -10
                                     }).find('.layui-clear>li').on('click', function () {
-                                        // iframeDOM.execCommand('formatBlock', false, "<p>");
-                                        insertInline.call(iframeWin, 'span', {
-                                            style:"font-size:"+this.title+"px;"
-                                        }, range);
+                                        iframeDOM.execCommand('fontSize', false, this.title);
                                         setTimeout(function () {
                                             body.focus();
                                         }, 10);
@@ -750,6 +753,17 @@ layui.define(['layer', 'form'], function (exports) {
                                     $(document).off('click', fontSize.hide).on('click', fontSize.hide);
                                 }
                             });
+                    }
+                    , anchors: function (range) {
+                        anchors.call(body, {}, function (field) {
+                            insertInline.call(iframeWin, 'a', {
+                                name: field.text
+                                , text: "$锚点$"
+                            }, range);
+                        });
+                    }
+                    , addhr: function (range) {
+                        insertInline.call(iframeWin, 'hr', {}, range);
                     }
                     /*End*/
                     //帮助
@@ -819,7 +833,6 @@ layui.define(['layer', 'form'], function (exports) {
             });
             //右键菜单自定义
             body.on('contextmenu', function (event) {
-                debugger;
                 if (event != null) {
                     switch (event.target.tagName) {
                         case "IMG":
@@ -830,6 +843,11 @@ layui.define(['layer', 'form'], function (exports) {
                                 offset: [event.clientY + "px", event.clientX + "px"],
                                 shadeClose: true,
                                 content: ['<ul class="layui-form layui-form-pane" style="margin: 20px;">'
+                                    , '<li class="layui-form-item">'
+                                    , '<label class="layui-form-label">图片</label>'
+                                    , '<button type="button" class="layui-btn" id="LayEdit_UpdateImage"> <i class="layui-icon"></i>上传图片</button>'
+                                    , '<input type="text" name="Imgsrc" placeholder="请选择文件" style="width: 49%;position: relative;float: right;" value="' + event.target.src + '" class="layui-input">'
+                                    , '</li>'
                                     , '<li class="layui-form-item">'
                                     , '<label class="layui-form-label">描述</label>'
                                     , '<input type="text" required name="altStr" placeholder="alt属性" style="width: 75%;" value="' + event.target.alt + '" class="layui-input">'
@@ -847,15 +865,57 @@ layui.define(['layer', 'form'], function (exports) {
                                     , '</li>'
                                     , '</ul>'].join(''),
                                 success: function (layero, index) {
+                                    var uploadImage = set.uploadImage || {};
+
+                                    layui.use('upload', function (upload) {
+                                        var loding, altStr = layero.find('input[name="altStr"]'), Imgsrc = layero.find('input[name="Imgsrc"]');
+                                        upload = layui.upload;
+                                        upload.render({
+                                            elem: '#LayEdit_UpdateImage'
+                                            , url: uploadImage.url
+                                            , method: uploadImage.type
+                                            , before: function (obj) { loding = layer.msg('文件上传中,请稍等哦', { icon: 16, shade: 0.3, time: 0 }); }
+                                            , done: function (res, input, upload) {
+                                                layer.close(loding);
+                                                if (res.code == 0) {
+                                                    res.data = res.data || {};
+                                                    Imgsrc.val(res.data.src);
+                                                    altStr.val(res.data.name);
+                                                } else {
+                                                    var curIndex = layer.open({
+                                                        type: 1
+                                                        , anim: 2
+                                                        , icon: 5
+                                                        , title: '提示'
+                                                        , area: ['390px', '260px']
+                                                        , offset: 't'
+                                                        , content: res.msg + "<div style='text-align:center;'><img src='" + res.data.src + "' style='max-height:80px'/></div><p style='text-align:center'>确定使用该文件吗？</p>"
+                                                        , btn: ['确定', '取消']
+                                                        , yes: function () {
+                                                            res.data = res.data || {};
+                                                            Imgsrc.val(res.data.src);
+                                                            altStr.val(res.data.name);
+                                                            layer.close(curIndex);
+                                                        }
+                                                        , btn2: function () {
+                                                            layer.close(curIndex);
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    })
                                     layero.find('.layui-btn-primary').on('click', function () {
                                         layer.close(index);
                                     });
                                     layero.find('.layedit-btn-yes').on('click', function () {
+                                        event.target.src = layero.find('input[name="Imgsrc"]').val();
                                         event.target.alt = layero.find('input[name="altStr"]').val();
                                         event.target.width = layero.find('input[name="imgWidth"]').val();
-                                        event.target.height = layero.find('input[name="imgHeight"]').val(); 
+                                        event.target.height = layero.find('input[name="imgHeight"]').val();
                                         layer.close(index);
                                     });
+                                    return false;
                                 }
                             })
                             break;
@@ -962,7 +1022,44 @@ layui.define(['layer', 'form'], function (exports) {
             });
             link.index = index;
         }
-
+        , anchors = function (options, callback) {
+            var body = this, index = layer.open({
+                type: 1
+                , id: 'LAY_layedit_addmd'
+                , area: '300px'
+                , offset: '100px'
+                , shade: 0.05
+                , shadeClose: true
+                , moveType: 1
+                , title: '添加锚点'
+                , skin: 'layui-layer-msg'
+                , content: ['<ul class="layui-form" style="margin: 15px;">'
+                    , '<li class="layui-form-item">'
+                    , '<label class="layui-form-label" style="width: 60px;">名称</label>'
+                    , '<div class="layui-input-block" style="margin-left: 90px">'
+                    , '<input name="text" value="' + (options.name || '') + '" autofocus="true" autocomplete="off" class="layui-input">'
+                    , '</div>'
+                    , '</li>'
+                    , '<li class="layui-form-item" style="text-align: center;">'
+                    , '<button type="button" lay-submit lay-filter="layedit-link-yes" class="layui-btn"> 确定 </button>'
+                    , '<button style="margin-left: 20px;" type="button" class="layui-btn layui-btn-primary"> 取消 </button>'
+                    , '</li>'
+                    , '</ul>'].join('')
+                , success: function (layero, index) {
+                    var eventFilter = 'submit(layedit-link-yes)';
+                    form.render('radio');
+                    layero.find('.layui-btn-primary').on('click', function () {
+                        layer.close(index);
+                        body.focus();
+                    });
+                    form.on(eventFilter, function (data) {
+                        layer.close(anchors.index);
+                        callback && callback(data.field);
+                    });
+                }
+            });
+            anchors.index = index;
+        }
         //表情面板
         , face = function (callback) {
             //表情库
@@ -1068,7 +1165,35 @@ layui.define(['layer', 'form'], function (exports) {
                 });
         }
         //插入代码面板
-        , code = function (callback) {
+        , code = function (options,callback) {
+            var objSel = ['<li class="layui-form-item objSel">'
+                , '<label class="layui-form-label">请选择语言</label>'
+                , '<div class="layui-input-block">'
+                , '<select name="lang">'
+                , '<option value="JavaScript">JavaScript</option>'
+                , '<option value="HTML">HTML</option>'
+                , '<option value="CSS">CSS</option>'
+                , '<option value="Java">Java</option>'
+                , '<option value="PHP">PHP</option>'
+                , '<option value="C#">C#</option>'
+                , '<option value="Python">Python</option>'
+                , '<option value="Ruby">Ruby</option>'
+                , '<option value="Go">Go</option>'
+                , '</select>'
+                , '</div>'
+                , '</li>'].join('');
+            if (options.hide) {
+                objSel = ['<li class="layui-form-item" style="display:none">'
+                    , '<label class="layui-form-label">请选择语言</label>'
+                    , '<div class="layui-input-block">'
+                    , '<select name="lang">'
+                    , '<option value="' + options.default+'" selected="selected">'
+                    , options.default
+                    , '</option>'
+                    , '</select>'
+                    , '</div>'
+                    , '</li>'].join('');
+            }
             var body = this, index = layer.open({
                 type: 1
                 , id: 'LAY_layedit_code'
@@ -1080,22 +1205,7 @@ layui.define(['layer', 'form'], function (exports) {
                 , title: '插入代码'
                 , skin: 'layui-layer-msg'
                 , content: ['<ul class="layui-form layui-form-pane" style="margin: 15px;">'
-                    , '<li class="layui-form-item">'
-                    , '<label class="layui-form-label">请选择语言</label>'
-                    , '<div class="layui-input-block">'
-                    , '<select name="lang">'
-                    , '<option value="JavaScript">JavaScript</option>'
-                    , '<option value="HTML">HTML</option>'
-                    , '<option value="CSS">CSS</option>'
-                    , '<option value="Java">Java</option>'
-                    , '<option value="PHP">PHP</option>'
-                    , '<option value="C#">C#</option>'
-                    , '<option value="Python">Python</option>'
-                    , '<option value="Ruby">Ruby</option>'
-                    , '<option value="Go">Go</option>'
-                    , '</select>'
-                    , '</div>'
-                    , '</li>'
+                    , objSel
                     , '<li class="layui-form-item layui-form-text">'
                     , '<label class="layui-form-label">代码</label>'
                     , '<div class="layui-input-block">'
@@ -1116,7 +1226,7 @@ layui.define(['layer', 'form'], function (exports) {
                     });
                     form.on(eventFilter, function (data) {
                         layer.close(code.index);
-                        callback && callback(data.field);
+                        callback && callback(data.field, options.hide, options.default);
                     });
                 }
             });
@@ -1148,8 +1258,8 @@ layui.define(['layer', 'form'], function (exports) {
             , fontFomatt: '<i class="layui-icon layedit-tool-fontFomatt" title="段落格式" layedit-event="fontFomatt" style="font-size:18px">&#xe639;</i>'
             , fontFamily: '<i class="layui-icon layedit-tool-fontFamily" title="字体" layedit-event="fontFamily" style="font-size:18px">&#xe702;</i>'
             , fontSize: '<i class="layui-icon layedit-tool-fontSize" title="字体大小" layedit-event="fontSize" style="font-size:18px">&#xe60b;</i>'
-
-
+            , anchors: '<i class="layui-icon layedit-tool-anchors" title="添加锚点" layedit-event="anchors" style="font-size:18px">&#xe60b;</i>'
+            , addhr:'<i class="layui-icon layui-icon-chart layedit-tool-addhr" title="添加水平线" layedit-event="addhr" style="font-size:18px"></i>'
             , help: '<i class="layui-icon layedit-tool-help" title="帮助" layedit-event="help">&#xe607;</i>'
         }
         , edit = new Edit();
