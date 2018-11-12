@@ -16,7 +16,7 @@
 	1. 新增图片右键修改功能，可重新上传图片
 	2. 修复上传视频什么也不选时也能成功添加bug，现在会提示上传视频(感谢<a href="https://gitee.com/herohill">hreohill</a>的反馈)
 	3. [已知bug] 字体大小设置目前不可用
-	4. 新增 添加水平线（<hr>）功能
+	4. 新增 添加水平线/hr功能
 	5. 插入代码新增自定义参数 codeConfig{hide:true|false,default:"javascript/c#/java..."} 设置hide为true时不显示代码选择框，可依据default设置默认语言格式。不设置codeConfig则为原版
 #### 项目介绍
 对layui.layedit的拓展，基于layui v2.4.3.
@@ -46,6 +46,7 @@
  	layedit.set({
                  uploadImage: { url: '/Attachment/LayUpload' } //图片上传方法
                  , uploadVideo: { url: '/Attachment/LayUpload' } //视频上传方法
+                 , codeConfig:{hide:true,default:'javascript'}
                  , //fontFomatt:["p","span"]  //自定义段落格式 ，如不填，默认为 ["p", "h1", "h2", "h3", "h4", "h5", "h6", "div"]
                  , tool: [
                      'html'
