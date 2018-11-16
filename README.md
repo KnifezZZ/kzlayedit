@@ -6,7 +6,7 @@
 3. [移除] 字体/字体大小设置
 4. [优化] 右键菜单/段落格式展示效果
 5. [优化] 插入视频同时插入p标签，并在左右各加一个空格符，以处理video标签无法选中问题。
-6. [新增] 图片上传和视频上传文件限制参数 file/filemine/exts --该参数引用自layupload，详细见[layuplaod基础参数](https://www.layui.com/doc/modules/upload.html#options "layuplaod基础参数")
+6. [新增] 图片上传和视频上传文件限制参数 file/filemine/exts --该参数引用自layupload，详细见<a href="https://www.layui.com/doc/modules/upload.html#options" target="_blank">layuplaod基础参数</a>
 7. [新增] 右键删除视频图片的回调方法设置 calldel:{url:''},该设置会调用post方法传递图片(imgpath)/视频地址(filepath)
 8. [新增] 开发者模式 devmode,默认为false,false时隐藏添加链接的 打开方式和rel属性
 9. [新增] 图片右键添加删除功能
@@ -16,9 +16,10 @@
 - ##### v18.11.12
 1. 新增图片右键修改功能，可重新上传图片
 2. 修复上传视频什么也不选时也能成功添加bug，现在会提示上传视频(感谢<a href="https://gitee.com/herohill">hreohill</a>的反馈)
-4. 新增 添加水平线/hr（<i>addhr</i>）功能
-5. 插入代码新增自定义参数 codeConfig{hide:true|false,default:"javascript/c#/java..."} 设置hide为true时不显示代码选择框，可依据default设置默认语言格式。不设置codeConfig则为原版
-~~3. [已知bug] 字体大小设置目前不可用~~
+3. 新增 添加水平线/hr（<i>addhr</i>）功能
+4. 插入代码新增自定义参数 codeConfig{hide:true|false,default:"javascript/c#/java..."} 设置hide为true时不显示代码选择框，可依据default设置默认语言格式。不设置codeConfig则为原版
+
+~~5. [已知bug] 字体大小设置目前不可用~~
 ~~6. [待完善]新增 插入锚点(<i>anchors</i>) 功能，前台展示默认为 $锚点$ ,保存和读取存在问题，暂不推荐使用~~
 - ##### v18.10.23
 修复取消全屏后样式错误问题（部分情况下依旧会出现高度变矮情况）
