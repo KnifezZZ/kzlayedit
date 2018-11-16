@@ -1,10 +1,10 @@
 /**
 
- @Name：layui.layedit 富文本编辑器
+ @Name：Kz.layedit 富文本编辑器
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
-    
+  @Version: V18.11.16
  */
 
 layui.define(['layer', 'form'], function (exports) {
@@ -32,6 +32,28 @@ layui.define(['layer', 'form'], function (exports) {
                     , '|'
                     , 'link', 'unlink', 'face', 'image'
                 ]
+                , uploadImage: {
+                    url: '',
+                    accept: 'image',
+                    acceptMime: 'image/*',
+                    exts: 'jpg|png|gif|bmp|jpeg',
+                    size: '10240'
+                }
+                , uploadVideo: {
+                    url: '',
+                    accept: 'video',
+                    acceptMime: 'video/*',
+                    exts: 'mp4|flv|avi|rm|rmvb',
+                    size: '20480'
+                }
+                , calldel: {
+                    url: ''
+                }
+                , quote: {
+                    style: [],
+                    js: []
+                }
+                , devmode: false
                 , hideTool: []
                 , height: 280 //默认高
             };
@@ -156,6 +178,7 @@ layui.define(['layer', 'form'], function (exports) {
                     , 'a{color:#01AAED; text-decoration:none;}a:hover{color:#c00}'
                     , 'p{margin-bottom: 10px;}'
                     , 'video{max-width:400px;}'
+                    , '.anchor:after{content:"¿";background-color:yellow;color: red;font - weight: bold;}'
                     , 'img{display: inline-block; border: none; vertical-align: middle;}'
                     , 'pre{margin: 10px 0; padding: 10px; line-height: 20px; border: 1px solid #ddd; border-left-width: 6px; background-color: #F2F2F2; color: #333; font-family: Courier New; font-size: 12px;}'
                     , '</style>'].join(''))
@@ -240,15 +263,15 @@ layui.define(['layer', 'form'], function (exports) {
 
             //清除影响版面的css属性
             body.find('*[style]').each(function () {
-                var textAlign = this.style.textAlign;
-                this.removeAttribute('style');
-                $(this).css({
-                    'text-align': textAlign || ''
-                })
+               var textAlign = this.style.textAlign;
+               this.removeAttribute('style');
+               $(this).css({
+                   'text-align': textAlign || ''
+               })
             });
 
-            //修饰表格
-            body.find('table').addClass('layui-table');
+            ////修饰表格
+            //body.find('table').addClass('layui-table');
 
             //移除不安全的标签
             body.find('script,link').remove();
@@ -358,17 +381,19 @@ layui.define(['layer', 'form'], function (exports) {
                             href: parentNode.attr('href')
                             , target: parentNode.attr('target')
                             , rel: parentNode.attr('rel')
+                            , text: parentNode.attr('text')
                         }, function (field) {
                             var parent = parentNode[0];
                             if (parent.tagName === 'A') {
                                 parent.href = field.url;
                                 parent.rel = field.rel;
+                                parent.text = field.text;
                             } else {
                                 insertInline.call(iframeWin, 'a', {
                                     target: field.target
                                     , href: field.url
                                     , rel: field.rel
-                                    , text: field.url
+                                    , text: field.text
                                 }, range);
                             }
                         });
@@ -394,6 +419,10 @@ layui.define(['layer', 'form'], function (exports) {
                             upload.render({
                                 url: uploadImage.url
                                 , method: uploadImage.type
+                                , accept: uploadImage.accept
+                                , acceptMime: uploadImage.acceptMime
+                                , exts: uploadImage.exts
+                                , size: uploadImage.size
                                 , elem: $(that).find('input')[0]
                                 , done: function (res) {
                                     if (res.code == 0) {
@@ -411,7 +440,6 @@ layui.define(['layer', 'form'], function (exports) {
                     }
                     //插入代码
                     , code: function (range) {
-                        debugger;
                         var codeConfig = set.codeConfig || { hide: false };
                         code.call(body, { hide: codeConfig.hide, default: codeConfig.default }, function (pre) {
                             insertInline.call(iframeWin, 'pre', {
@@ -463,6 +491,10 @@ layui.define(['layer', 'form'], function (exports) {
                                         elem: '#LayEdit_InsertImage'
                                         , url: uploadImage.url
                                         , method: uploadImage.type
+                                        , accept: uploadImage.accept
+                                        , acceptMime: uploadImage.acceptMime
+                                        , exts: uploadImage.exts
+                                        , size: uploadImage.size
                                         , before: function (obj) { loding = layer.msg('文件上传中,请稍等哦', { icon: 16, shade: 0.3, time: 0 }); }
                                         , done: function (res, input, upload) {
                                             layer.close(loding);
@@ -547,12 +579,16 @@ layui.define(['layer', 'form'], function (exports) {
                                     var loding, video = layero.find('input[name="video"]'), cover = layero.find('input[name="cover"]');
                                     var upload = layui.upload;
                                     var uploadImage = set.uploadImage || {};
-                                    var uploadfileurl = set.uploadVideo || {};
+                                    var uploadfile = set.uploadVideo || {};
                                     //执行实例
                                     upload.render({
                                         elem: '#LayEdit_InsertImage'
                                         , url: uploadImage.url
                                         , method: uploadImage.type
+                                        , accept: uploadImage.accept
+                                        , acceptMime: uploadImage.acceptMime
+                                        , exts: uploadImage.exts
+                                        , size: uploadImage.size
                                         , before: function (obj) { loding = layer.msg('文件上传中,请稍等哦', { icon: 16, shade: 0.3, time: 0 }); }
                                         , done: function (res, input, upload) {
                                             layer.close(loding);
@@ -583,10 +619,11 @@ layui.define(['layer', 'form'], function (exports) {
                                     });
                                     upload.render({
                                         elem: '#LayEdit_InsertVideo'
-                                        , url: uploadfileurl.url
-                                        , accept: 'file'
-                                        , method: 'POST'
-                                        , size: 20480
+                                        , url: uploadfile.url
+                                        , accept: uploadfile.accept
+                                        , acceptMime: uploadfile.acceptMime
+                                        , exts: uploadfile.exts
+                                        , size: uploadfile.size
                                         , before: function (obj) { loding = layer.msg('文件上传中,请稍等哦', { icon: 16, shade: 0.3, time: 0 }); }
                                         , done: function (res, input, upload) {
                                             layer.close(loding);
@@ -619,18 +656,12 @@ layui.define(['layer', 'form'], function (exports) {
                                         layer.close(index);
                                     });
                                     layero.find('.layedit-btn-yes').on('click', function () {
-                                        if (video.val() == "") {
-                                            layer.msg("请选择视频");
-                                            return false;
-                                        }
+
                                         var container = getContainer(range)
                                             , parentNode = $(container).parent();
-                                        insertInline.call(iframeWin, 'video', {
-                                            src: video.val()
-                                            , poster: cover.val()
-                                            , controls: 'controls'
+                                        insertInline.call(iframeWin, 'p', {
+                                            text: '&nbsp;<video src="' + video.val() + '" poster="' + cover.val() + '" controls="controls" >您的浏览器不支持video播放</video>&nbsp;'
                                         }, range);
-                                        iframeDOM.execCommand('formatBlock', false, "<p>");
                                         layer.close(index);
                                     });
                                 })
@@ -700,65 +731,37 @@ layui.define(['layer', 'form'], function (exports) {
                         });
                     }
                     , fontFomatt: function (range) {
+                        var alt = set.fontFomatt || {
+                            code: ["p", "h1", "h2", "h3", "h4", "div"],
+                            text: ["正文(p)", "一级标题(h1)", "二级标题(h2)", "三级标题(h3)", "四级标题(h4)", "块级元素(div)"]
+                        }, arr = {}, arr2 = {};
+                        var codes = alt.code;
+                        var texts = alt.text;
                         var fonts = function () {
-                            var alt = set.fontFomatt || ["p", "h1", "h2", "h3", "h4", "h5", "h6", "div"], arr = {};
-                            layui.each(alt, function (index, item) {
-                                arr[item] = item;
+                            layui.each(codes, function (index, item) {
+                                arr[index] = item;
                             });
                             return arr;
                         }();
-                        fontFomatt.call(this, { fonts: fonts }, function (value) {
+                        var fonttexts = function () {
+                            layui.each(texts, function (index, item) {
+                                arr2[index] = item;
+                            });
+                            return arr2;
+                        }();
+                        fontFomatt.call(this, { fonts: fonts, texts: fonttexts }, function (value) {
                             iframeDOM.execCommand('formatBlock', false, "<" + value + ">");
                             setTimeout(function () {
                                 body.focus();
                             }, 10);
                         });
                     }
-                    , fontSize: function (range) {
-                        var fontSize = function () {
-                            var alt = ["8", "10", "12", "14", "16", "18", "20", "22", "24", "26"], arr = {};
-                            layui.each(alt, function (index, item) {
-                                arr[item] = item;
-                            });
-                            return arr;
-                        }();
 
-                        fontSize.hide = fontSize.hide || function (e) {
-                            if ($(e.target).attr('layedit-event') !== 'fontSize') {
-                                layer.close(fontSize.index);
-                            }
-                        }
-                        return fontSize.index = layer.tips(function () {
-                            var content = [];
-                            layui.each(fontSize, function (key, item) {
-                                content.push('<li title="' + key + '">' + item + '</li>');
-                            });
-                            return '<ul class="layui-clear">' + content.join('') + '</ul>';
-                        }(), this, {
-                                tips: 1
-                                , time: 0
-                                , skin: 'layui-box layui-util-face'
-                                //, maxWidth: 200
-                                , success: function (layero, index) {
-                                    layero.css({
-                                        marginTop: -4
-                                        , marginLeft: -10
-                                    }).find('.layui-clear>li').on('click', function () {
-                                        iframeDOM.execCommand('fontSize', false, this.title);
-                                        setTimeout(function () {
-                                            body.focus();
-                                        }, 10);
-                                        layer.close(index);
-                                    });
-                                    $(document).off('click', fontSize.hide).on('click', fontSize.hide);
-                                }
-                            });
-                    }
                     , anchors: function (range) {
                         anchors.call(body, {}, function (field) {
                             insertInline.call(iframeWin, 'a', {
-                                name: field.text
-                                , text: "$锚点$"
+                                name: "#" + field.text
+                                , text: " ", class: 'anchor'
                             }, range);
                         });
                     }
@@ -862,6 +865,7 @@ layui.define(['layer', 'form'], function (exports) {
                                     , '<li class="layui-form-item" style="text-align: center;">'
                                     , '<button type="button" lay-submit  class="layui-btn layedit-btn-yes"> 确定 </button>'
                                     , '<button style="margin-left: 20px;" type="button" class="layui-btn layui-btn-primary"> 取消 </button>'
+                                    , '<button type="button" class="layui-btn layui-btn-danger" > 删除 </button>'
                                     , '</li>'
                                     , '</ul>'].join(''),
                                 success: function (layero, index) {
@@ -874,6 +878,10 @@ layui.define(['layer', 'form'], function (exports) {
                                             elem: '#LayEdit_UpdateImage'
                                             , url: uploadImage.url
                                             , method: uploadImage.type
+                                            , accept: uploadImage.accept
+                                            , acceptMime: uploadImage.acceptMime
+                                            , exts: uploadImage.exts
+                                            , size: uploadImage.size
                                             , before: function (obj) { loding = layer.msg('文件上传中,请稍等哦', { icon: 16, shade: 0.3, time: 0 }); }
                                             , done: function (res, input, upload) {
                                                 layer.close(loding);
@@ -915,6 +923,18 @@ layui.define(['layer', 'form'], function (exports) {
                                         event.target.height = layero.find('input[name="imgHeight"]').val();
                                         layer.close(index);
                                     });
+                                    layero.find('.layui-btn-danger').on('click', function () {
+                                        var callDel = set.calldel;
+                                        if (callDel.url != "") {
+                                            $.post(callDel.url, { "imgpath": event.target.src }, function (r) {
+                                                event.toElement.remove();
+                                            })
+                                        } else {
+                                            layer.msg("没有配置回调参数");
+                                            event.toElement.remove();
+                                        }
+                                        layer.close(index);
+                                    });
                                     return false;
                                 }
                             })
@@ -926,19 +946,17 @@ layui.define(['layer', 'form'], function (exports) {
                                 title: false,
                                 offset: [event.clientY + "px", event.clientX + "px"],
                                 shadeClose: true,
-                                content: ['<ul class="layui-form layui-form-pane" style="margin: 5px;">'
-                                    , '<li style="text-align: center;">'
-                                    , '<button type="button" class="layui-btn layui-btn-primary" lay-command="left"> 居左 </button>'
-                                    , '<button type="button" class="layui-btn layui-btn-primary" lay-command="center"> 居中 </button>'
-                                    , '<button type="button" class="layui-btn layui-btn-primary" lay-command="right"> 居右 </button>'
-                                    , '<button type="button" class="layui-btn layui-btn-danger"> 删除 </button>'
-                                    , '</li>'
+                                content: ['<ul style="width:100px">'
+                                    , '<li><a type="button" class="layui-btn layui-btn-primary layui-btn-sm" style="width:80%" lay-command="left"> 居左 </a></li>'
+                                    , '<li><a type="button" class="layui-btn layui-btn-primary layui-btn-sm" style="width:80%" lay-command="center"> 居中 </a></li>'
+                                    , '<li><a type="button" class="layui-btn layui-btn-primary layui-btn-sm" style="width:80%" lay-command="right"> 居右 </a></li>'
+                                    , '<li><a type="button" class="layui-btn layui-btn-danger layui-btn-sm"  style="width:80%"> 删除 </a></li>'
                                     , '</ul>'].join(''),
                                 success: function (layero, index) {
+                                    var callDel = set.calldel;
                                     layero.find('.layui-btn-primary').on('click', function () {
                                         var othis = $(this), command = othis.attr('lay-command');
                                         if (command) {
-
                                             if (currenNode.tagName == "VIDEO") {
                                                 parentNode.style = "text-align:" + command;
                                             } else {
@@ -948,9 +966,28 @@ layui.define(['layer', 'form'], function (exports) {
                                         layer.close(index);
                                     });
                                     layero.find('.layui-btn-danger').on('click', function () {
-
-                                        if (currenNode.tagName == "VIDEO") {
-                                            parentNode.remove();
+                                        if (currenNode.tagName == "BODY") {
+                                            layer.msg("不能再删除了")
+                                        }
+                                        else if (currenNode.tagName == "VIDEO") {
+                                            if (callDel.url != "") {
+                                                $.post(callDel.url, { "filepath": event.target.src, "imgpath": event.target.poster }, function (r) {
+                                                    parentNode.remove();
+                                                })
+                                            } else {
+                                                layer.msg("没有配置回调参数");
+                                                parentNode.remove();
+                                            }
+                                        }
+                                        else if (currenNode.tagName == "IMG") {
+                                            if (callDel.url != "") {
+                                                $.post(callDel.url, { para: event.target.src }, function (r) {
+                                                    currenNode.remove();
+                                                })
+                                            } else {
+                                                layer.msg("没有配置回调参数");
+                                                currenNode.remove();
+                                            }
                                         } else {
                                             currenNode.remove();
                                         }
@@ -964,13 +1001,13 @@ layui.define(['layer', 'form'], function (exports) {
                 return false;
             })
         }
-
         //超链接面板
         , link = function (options, callback) {
+            var dMode = options.dmode;
             var body = this, index = layer.open({
                 type: 1
                 , id: 'LAY_layedit_link'
-                , area: '350px'
+                , area: '460px'
                 , offset: '100px'
                 , shade: 0.05
                 , shadeClose: true
@@ -979,23 +1016,29 @@ layui.define(['layer', 'form'], function (exports) {
                 , skin: 'layui-layer-msg'
                 , content: ['<ul class="layui-form" style="margin: 15px;">'
                     , '<li class="layui-form-item">'
-                    , '<label class="layui-form-label" style="width: 60px;">URL</label>'
-                    , '<div class="layui-input-block" style="margin-left: 90px">'
+                    , '<label class="layui-form-label" style="width: 70px;">链接地址</label>'
+                    , '<div class="layui-input-block">'
                     , '<input name="url" value="' + (options.href || '') + '" autofocus="true" autocomplete="off" class="layui-input">'
                     , '</div>'
                     , '</li>'
                     , '<li class="layui-form-item">'
-                    , '<label class="layui-form-label" style="width: 60px;">打开方式</label>'
-                    , '<div class="layui-input-block" style="margin-left: 90px">'
-                    , '<input type="radio" name="target" value="_self" class="layui-input" title="当前窗口"'
-                    + ((options.target === '_self' || !options.target) ? 'checked' : '') + '>'
-                    , '<input type="radio" name="target" value="_blank" class="layui-input" title="新窗口" '
-                    + (options.target === '_blank' ? 'checked' : '') + '>'
+                    , '<label class="layui-form-label" style="width: 70px;">链接文本</label>'
+                    , '<div class="layui-input-block">'
+                    , '<input name="text" value="' + (options.text || '') + '" autofocus="true" autocomplete="off" class="layui-input">'
                     , '</div>'
                     , '</li>'
-                    , '<li class="layui-form-item">'
-                    , '<label class="layui-form-label" style="width: 60px;">rel属性</label>'
-                    , '<div class="layui-input-block" style="margin-left: 90px">'
+                    , '<li class="layui-form-item layui-hide">'
+                    , '<label class="layui-form-label" style="width: 70px;">打开方式</label>'
+                    , '<div class="layui-input-block">'
+                    , '<input type="radio" name="target" value="_blank" class="layui-input" title="新窗口" '
+                    + ((options.target === '_blank' || !options.target) ? 'checked' : '') + '>'
+                    , '<input type="radio" name="target" value="_self" class="layui-input" title="当前窗口"'
+                    + (options.target === '_self' ? 'checked' : '') + '>'
+                    , '</div>'
+                    , '</li>'
+                    , '<li class="layui-form-item layui-hide">'
+                    , '<label class="layui-form-label" style="width: 70px;">rel属性</label>'
+                    , '<div class="layui-input-block">'
                     , '<input type="radio" name="rel" value="nofollow" class="layui-input" title="nofollow"'
                     + ((options.rel === 'nofollow' || !options.target) ? 'checked' : '') + '>'
                     , '<input type="radio" name="rel" value="" class="layui-input" title="无" '
@@ -1008,11 +1051,16 @@ layui.define(['layer', 'form'], function (exports) {
                     , '</li>'
                     , '</ul>'].join('')
                 , success: function (layero, index) {
+                    if (dMode) {
+                        layero.find('.layui-hide').removeClass("layui-hide");
+                    }
                     var eventFilter = 'submit(layedit-link-yes)';
                     form.render('radio');
                     layero.find('.layui-btn-primary').on('click', function () {
                         layer.close(index);
-                        body.focus();
+                        setTimeout(function () {
+                            body.focus();
+                        }, 10);
                     });
                     form.on(eventFilter, function (data) {
                         layer.close(link.index);
@@ -1050,7 +1098,9 @@ layui.define(['layer', 'form'], function (exports) {
                     form.render('radio');
                     layero.find('.layui-btn-primary').on('click', function () {
                         layer.close(index);
-                        body.focus();
+                        setTimeout(function () {
+                            body.focus();
+                        }, 10);
                     });
                     form.on(eventFilter, function (data) {
                         layer.close(anchors.index);
@@ -1095,7 +1145,7 @@ layui.define(['layer', 'form'], function (exports) {
                                 src: faces[this.title]
                                 , alt: this.title
                             });
-                            layer.close(index);
+                            layer.close(index); 
                         });
                         $(document).off('click', face.hide).on('click', face.hide);
                     }
@@ -1147,14 +1197,14 @@ layui.define(['layer', 'form'], function (exports) {
             }
             fontFomatt.index = layer.tips(function () {
                 var content = [];
-                layui.each(options.fonts, function (key, item) {
-                    content.push('<li title="' + key + '">' + item + '</li>');
+                layui.each(options.fonts, function (index, item) {
+                    content.push('<li title="' + options.fonts[index] + '"><' + options.fonts[index] + '>' + options.texts[index] + '</' + options.fonts[index] + '></li>');
                 });
-                return '<ul class="layui-clear">' + content.join('') + '</ul>';
+                return '<ul class="layui-clear" style="line-height:26px">' + content.join('') + '</ul>';
             }(), this, {
                     tips: 1
                     , time: 0
-                    , skin: 'layui-box layui-util-face'
+                    , skin: 'layui-box layui-util-font'
                     , success: function (layero, index) {
                         layero.css({ marginTop: -4, marginLeft: -10 }).find('.layui-clear>li').on('click', function () {
                             callback && callback(this.title, options.fonts);
@@ -1165,7 +1215,7 @@ layui.define(['layer', 'form'], function (exports) {
                 });
         }
         //插入代码面板
-        , code = function (options,callback) {
+        , code = function (options, callback) {
             var objSel = ['<li class="layui-form-item objSel">'
                 , '<label class="layui-form-label">请选择语言</label>'
                 , '<div class="layui-input-block">'
@@ -1187,7 +1237,7 @@ layui.define(['layer', 'form'], function (exports) {
                     , '<label class="layui-form-label">请选择语言</label>'
                     , '<div class="layui-input-block">'
                     , '<select name="lang">'
-                    , '<option value="' + options.default+'" selected="selected">'
+                    , '<option value="' + options.default + '" selected="selected">'
                     , options.default
                     , '</option>'
                     , '</select>'
@@ -1257,9 +1307,9 @@ layui.define(['layer', 'form'], function (exports) {
             , colorpicker: '<i class="layui-icon layedit-tool-colorpicker" title="字体颜色选择" layedit-event="colorpicker" style="font-size:18px">&#xe66a;</i>'
             , fontFomatt: '<i class="layui-icon layedit-tool-fontFomatt" title="段落格式" layedit-event="fontFomatt" style="font-size:18px">&#xe639;</i>'
             , fontFamily: '<i class="layui-icon layedit-tool-fontFamily" title="字体" layedit-event="fontFamily" style="font-size:18px">&#xe702;</i>'
-            , fontSize: '<i class="layui-icon layedit-tool-fontSize" title="字体大小" layedit-event="fontSize" style="font-size:18px">&#xe60b;</i>'
+            , addhr: '<i class="layui-icon layui-icon-chart layedit-tool-addhr" title="添加水平线" layedit-event="addhr" style="font-size:18px"></i>'
             , anchors: '<i class="layui-icon layedit-tool-anchors" title="添加锚点" layedit-event="anchors" style="font-size:18px">&#xe60b;</i>'
-            , addhr:'<i class="layui-icon layui-icon-chart layedit-tool-addhr" title="添加水平线" layedit-event="addhr" style="font-size:18px"></i>'
+
             , help: '<i class="layui-icon layedit-tool-help" title="帮助" layedit-event="help">&#xe607;</i>'
         }
         , edit = new Edit();
@@ -1632,4 +1682,557 @@ function style_html(html_source, indent_size, indent_character, max_char) {
         multi_parser.last_text = multi_parser.token_text;
     }
     return multi_parser.output.join('');
+}
+function js_beautify(js_source_text, indent_size, indent_character, indent_level) {
+
+    var input, output, token_text, last_type, last_text, last_word, current_mode, modes, indent_string;
+    var whitespace, wordchar, punct, parser_pos, line_starters, in_case;
+    var prefix, token_type, do_block_just_closed, var_line, var_line_tainted;
+
+
+
+    function trim_output() {
+        while (output.length && (output[output.length - 1] === ' ' || output[output.length - 1] === indent_string)) {
+            output.pop();
+        }
+    }
+
+    function print_newline(ignore_repeated) {
+        ignore_repeated = typeof ignore_repeated === 'undefined' ? true : ignore_repeated;
+
+        trim_output();
+
+        if (!output.length) {
+            return; // no newline on start of file
+        }
+
+        if (output[output.length - 1] !== "\n" || !ignore_repeated) {
+            output.push("\n");
+        }
+        for (var i = 0; i < indent_level; i++) {
+            output.push(indent_string);
+        }
+    }
+
+
+
+    function print_space() {
+        var last_output = output.length ? output[output.length - 1] : ' ';
+        if (last_output !== ' ' && last_output !== '\n' && last_output !== indent_string) { // prevent occassional duplicate space
+            output.push(' ');
+        }
+    }
+
+
+    function print_token() {
+        output.push(token_text);
+    }
+
+    function indent() {
+        indent_level++;
+    }
+
+
+    function unindent() {
+        if (indent_level) {
+            indent_level--;
+        }
+    }
+
+
+    function remove_indent() {
+        if (output.length && output[output.length - 1] === indent_string) {
+            output.pop();
+        }
+    }
+
+
+    function set_mode(mode) {
+        modes.push(current_mode);
+        current_mode = mode;
+    }
+
+
+    function restore_mode() {
+        do_block_just_closed = current_mode === 'DO_BLOCK';
+        current_mode = modes.pop();
+    }
+
+
+    function in_array(what, arr) {
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i] === what) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+    function get_next_token() {
+        var n_newlines = 0;
+        var c = '';
+
+        do {
+            if (parser_pos >= input.length) {
+                return ['', 'TK_EOF'];
+            }
+            c = input.charAt(parser_pos);
+
+            parser_pos += 1;
+            if (c === "\n") {
+                n_newlines += 1;
+            }
+        }
+        while (in_array(c, whitespace));
+
+        if (n_newlines > 1) {
+            for (var i = 0; i < 2; i++) {
+                print_newline(i === 0);
+            }
+        }
+        var wanted_newline = (n_newlines === 1);
+
+
+        if (in_array(c, wordchar)) {
+            if (parser_pos < input.length) {
+                while (in_array(input.charAt(parser_pos), wordchar)) {
+                    c += input.charAt(parser_pos);
+                    parser_pos += 1;
+                    if (parser_pos === input.length) {
+                        break;
+                    }
+                }
+            }
+
+            // small and surprisingly unugly hack for 1E-10 representation
+            if (parser_pos !== input.length && c.match(/^[0-9]+[Ee]$/) && input.charAt(parser_pos) === '-') {
+                parser_pos += 1;
+
+                var t = get_next_token(parser_pos);
+                c += '-' + t[0];
+                return [c, 'TK_WORD'];
+            }
+
+            if (c === 'in') { // hack for 'in' operator
+                return [c, 'TK_OPERATOR'];
+            }
+            return [c, 'TK_WORD'];
+        }
+
+        if (c === '(' || c === '[') {
+            return [c, 'TK_START_EXPR'];
+        }
+
+        if (c === ')' || c === ']') {
+            return [c, 'TK_END_EXPR'];
+        }
+
+        if (c === '{') {
+            return [c, 'TK_START_BLOCK'];
+        }
+
+        if (c === '}') {
+            return [c, 'TK_END_BLOCK'];
+        }
+
+        if (c === ';') {
+            return [c, 'TK_END_COMMAND'];
+        }
+
+        if (c === '/') {
+            var comment = '';
+            // peek for comment /* ... */
+            if (input.charAt(parser_pos) === '*') {
+                parser_pos += 1;
+                if (parser_pos < input.length) {
+                    while (!(input.charAt(parser_pos) === '*' && input.charAt(parser_pos + 1) && input.charAt(parser_pos + 1) === '/') && parser_pos < input.length) {
+                        comment += input.charAt(parser_pos);
+                        parser_pos += 1;
+                        if (parser_pos >= input.length) {
+                            break;
+                        }
+                    }
+                }
+                parser_pos += 2;
+                return ['/*' + comment + '*/', 'TK_BLOCK_COMMENT'];
+            }
+            // peek for comment // ...
+            if (input.charAt(parser_pos) === '/') {
+                comment = c;
+                while (input.charAt(parser_pos) !== "\x0d" && input.charAt(parser_pos) !== "\x0a") {
+                    comment += input.charAt(parser_pos);
+                    parser_pos += 1;
+                    if (parser_pos >= input.length) {
+                        break;
+                    }
+                }
+                parser_pos += 1;
+                if (wanted_newline) {
+                    print_newline();
+                }
+                return [comment, 'TK_COMMENT'];
+            }
+
+        }
+
+        if (c === "'" || // string
+            c === '"' || // string
+            (c === '/' &&
+                ((last_type === 'TK_WORD' && last_text === 'return') || (last_type === 'TK_START_EXPR' || last_type === 'TK_END_BLOCK' || last_type === 'TK_OPERATOR' || last_type === 'TK_EOF' || last_type === 'TK_END_COMMAND')))) { // regexp
+            var sep = c;
+            var esc = false;
+            c = '';
+
+            if (parser_pos < input.length) {
+
+                while (esc || input.charAt(parser_pos) !== sep) {
+                    c += input.charAt(parser_pos);
+                    if (!esc) {
+                        esc = input.charAt(parser_pos) === '\\';
+                    } else {
+                        esc = false;
+                    }
+                    parser_pos += 1;
+                    if (parser_pos >= input.length) {
+                        break;
+                    }
+                }
+
+            }
+
+            parser_pos += 1;
+            if (last_type === 'TK_END_COMMAND') {
+                print_newline();
+            }
+            return [sep + c + sep, 'TK_STRING'];
+        }
+
+        if (in_array(c, punct)) {
+            while (parser_pos < input.length && in_array(c + input.charAt(parser_pos), punct)) {
+                c += input.charAt(parser_pos);
+                parser_pos += 1;
+                if (parser_pos >= input.length) {
+                    break;
+                }
+            }
+            return [c, 'TK_OPERATOR'];
+        }
+
+        return [c, 'TK_UNKNOWN'];
+    }
+
+
+    //----------------------------------
+
+    indent_character = indent_character || ' ';
+    indent_size = indent_size || 4;
+
+    indent_string = '';
+    while (indent_size--) {
+        indent_string += indent_character;
+    }
+
+    input = js_source_text;
+
+    last_word = ''; // last 'TK_WORD' passed
+    last_type = 'TK_START_EXPR'; // last token type
+    last_text = ''; // last token text
+    output = [];
+
+    do_block_just_closed = false;
+    var_line = false;
+    var_line_tainted = false;
+
+    whitespace = "\n\r\t ".split('');
+    wordchar = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$'.split('');
+    punct = '+ - * / % & ++ -- = += -= *= /= %= == === != !== > < >= <= >> << >>> >>>= >>= <<= && &= | || ! !! , : ? ^ ^= |='.split(' ');
+
+    // words which should always start on new line.
+    line_starters = 'continue,try,throw,return,var,if,switch,case,default,for,while,break,function'.split(',');
+
+    // states showing if we are currently in expression (i.e. "if" case) - 'EXPRESSION', or in usual block (like, procedure), 'BLOCK'.
+    // some formatting depends on that.
+    current_mode = 'BLOCK';
+    modes = [current_mode];
+
+    indent_level = indent_level || 0;
+    parser_pos = 0; // parser position
+    in_case = false; // flag for parser that case/default has been processed, and next colon needs special attention
+    while (true) {
+        var t = get_next_token(parser_pos);
+        token_text = t[0];
+        token_type = t[1];
+        if (token_type === 'TK_EOF') {
+            break;
+        }
+
+        switch (token_type) {
+
+            case 'TK_START_EXPR':
+                var_line = false;
+                set_mode('EXPRESSION');
+                if (last_type === 'TK_END_EXPR' || last_type === 'TK_START_EXPR') {
+                    // do nothing on (( and )( and ][ and ]( ..
+                } else if (last_type !== 'TK_WORD' && last_type !== 'TK_OPERATOR') {
+                    print_space();
+                } else if (in_array(last_word, line_starters) && last_word !== 'function') {
+                    print_space();
+                }
+                print_token();
+                break;
+
+            case 'TK_END_EXPR':
+                print_token();
+                restore_mode();
+                break;
+
+            case 'TK_START_BLOCK':
+
+                if (last_word === 'do') {
+                    set_mode('DO_BLOCK');
+                } else {
+                    set_mode('BLOCK');
+                }
+                if (last_type !== 'TK_OPERATOR' && last_type !== 'TK_START_EXPR') {
+                    if (last_type === 'TK_START_BLOCK') {
+                        print_newline();
+                    } else {
+                        print_space();
+                    }
+                }
+                print_token();
+                indent();
+                break;
+
+            case 'TK_END_BLOCK':
+                if (last_type === 'TK_START_BLOCK') {
+                    // nothing
+                    trim_output();
+                    unindent();
+                } else {
+                    unindent();
+                    print_newline();
+                }
+                print_token();
+                restore_mode();
+                break;
+
+            case 'TK_WORD':
+
+                if (do_block_just_closed) {
+                    print_space();
+                    print_token();
+                    print_space();
+                    break;
+                }
+
+                if (token_text === 'case' || token_text === 'default') {
+                    if (last_text === ':') {
+                        // switch cases following one another
+                        remove_indent();
+                    } else {
+                        // case statement starts in the same line where switch
+                        unindent();
+                        print_newline();
+                        indent();
+                    }
+                    print_token();
+                    in_case = true;
+                    break;
+                }
+
+
+                prefix = 'NONE';
+                if (last_type === 'TK_END_BLOCK') {
+                    if (!in_array(token_text.toLowerCase(), ['else', 'catch', 'finally'])) {
+                        prefix = 'NEWLINE';
+                    } else {
+                        prefix = 'SPACE';
+                        print_space();
+                    }
+                } else if (last_type === 'TK_END_COMMAND' && (current_mode === 'BLOCK' || current_mode === 'DO_BLOCK')) {
+                    prefix = 'NEWLINE';
+                } else if (last_type === 'TK_END_COMMAND' && current_mode === 'EXPRESSION') {
+                    prefix = 'SPACE';
+                } else if (last_type === 'TK_WORD') {
+                    prefix = 'SPACE';
+                } else if (last_type === 'TK_START_BLOCK') {
+                    prefix = 'NEWLINE';
+                } else if (last_type === 'TK_END_EXPR') {
+                    print_space();
+                    prefix = 'NEWLINE';
+                }
+
+                if (last_type !== 'TK_END_BLOCK' && in_array(token_text.toLowerCase(), ['else', 'catch', 'finally'])) {
+                    print_newline();
+                } else if (in_array(token_text, line_starters) || prefix === 'NEWLINE') {
+                    if (last_text === 'else') {
+                        // no need to force newline on else break
+                        print_space();
+                    } else if ((last_type === 'TK_START_EXPR' || last_text === '=') && token_text === 'function') {
+                        // no need to force newline on 'function': (function
+                        // DONOTHING
+                    } else if (last_type === 'TK_WORD' && (last_text === 'return' || last_text === 'throw')) {
+                        // no newline between 'return nnn'
+                        print_space();
+                    } else if (last_type !== 'TK_END_EXPR') {
+                        if ((last_type !== 'TK_START_EXPR' || token_text !== 'var') && last_text !== ':') {
+                            // no need to force newline on 'var': for (var x = 0...)
+                            if (token_text === 'if' && last_type === 'TK_WORD' && last_word === 'else') {
+                                // no newline for } else if {
+                                print_space();
+                            } else {
+                                print_newline();
+                            }
+                        }
+                    } else {
+                        if (in_array(token_text, line_starters) && last_text !== ')') {
+                            print_newline();
+                        }
+                    }
+                } else if (prefix === 'SPACE') {
+                    print_space();
+                }
+                print_token();
+                last_word = token_text;
+
+                if (token_text === 'var') {
+                    var_line = true;
+                    var_line_tainted = false;
+                }
+
+                break;
+
+            case 'TK_END_COMMAND':
+
+                print_token();
+                var_line = false;
+                break;
+
+            case 'TK_STRING':
+
+                if (last_type === 'TK_START_BLOCK' || last_type === 'TK_END_BLOCK') {
+                    print_newline();
+                } else if (last_type === 'TK_WORD') {
+                    print_space();
+                }
+                print_token();
+                break;
+
+            case 'TK_OPERATOR':
+
+                var start_delim = true;
+                var end_delim = true;
+                if (var_line && token_text !== ',') {
+                    var_line_tainted = true;
+                    if (token_text === ':') {
+                        var_line = false;
+                    }
+                }
+
+                if (token_text === ':' && in_case) {
+                    print_token(); // colon really asks for separate treatment
+                    print_newline();
+                    break;
+                }
+
+                in_case = false;
+
+                if (token_text === ',') {
+                    if (var_line) {
+                        if (var_line_tainted) {
+                            print_token();
+                            print_newline();
+                            var_line_tainted = false;
+                        } else {
+                            print_token();
+                            print_space();
+                        }
+                    } else if (last_type === 'TK_END_BLOCK') {
+                        print_token();
+                        print_newline();
+                    } else {
+                        if (current_mode === 'BLOCK') {
+                            print_token();
+                            print_newline();
+                        } else {
+                            // EXPR od DO_BLOCK
+                            print_token();
+                            print_space();
+                        }
+                    }
+                    break;
+                } else if (token_text === '--' || token_text === '++') { // unary operators special case
+                    if (last_text === ';') {
+                        // space for (;; ++i)
+                        start_delim = true;
+                        end_delim = false;
+                    } else {
+                        start_delim = false;
+                        end_delim = false;
+                    }
+                } else if (token_text === '!' && last_type === 'TK_START_EXPR') {
+                    // special case handling: if (!a)
+                    start_delim = false;
+                    end_delim = false;
+                } else if (last_type === 'TK_OPERATOR') {
+                    start_delim = false;
+                    end_delim = false;
+                } else if (last_type === 'TK_END_EXPR') {
+                    start_delim = true;
+                    end_delim = true;
+                } else if (token_text === '.') {
+                    // decimal digits or object.property
+                    start_delim = false;
+                    end_delim = false;
+
+                } else if (token_text === ':') {
+                    // zz: xx
+                    // can't differentiate ternary op, so for now it's a ? b: c; without space before colon
+                    if (last_text.match(/^\d+$/)) {
+                        // a little help for ternary a ? 1 : 0;
+                        start_delim = true;
+                    } else {
+                        start_delim = false;
+                    }
+                }
+                if (start_delim) {
+                    print_space();
+                }
+
+                print_token();
+
+                if (end_delim) {
+                    print_space();
+                }
+                break;
+
+            case 'TK_BLOCK_COMMENT':
+
+                print_newline();
+                print_token();
+                print_newline();
+                break;
+
+            case 'TK_COMMENT':
+
+                // print_newline();
+                print_space();
+                print_token();
+                print_newline();
+                break;
+
+            case 'TK_UNKNOWN':
+                print_token();
+                break;
+        }
+
+        last_type = token_type;
+        last_text = token_text;
+    }
+
+    return output.join('');
+
 }
