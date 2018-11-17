@@ -382,6 +382,7 @@ layui.define(['layer', 'form'], function (exports) {
                             , target: parentNode.attr('target')
                             , rel: parentNode.attr('rel')
                             , text: parentNode.attr('text')
+                            , dmode: set.devmode
                         }, function (field) {
                             var parent = parentNode[0];
                             if (parent.tagName === 'A') {
@@ -680,8 +681,8 @@ layui.define(['layer', 'form'], function (exports) {
                             , title: '源码模式'
                             , shade: 0.3
                             //, maxmin: true
-                            , area: ['900px', '600px']
-                            , offset: '100px'
+                            , area: ['1366px', '700px']
+                            , offset: '0px'
                             , content: ['<div id ="aceHtmleditor" style="width:100%;height:80%"></div>'
                                 , '<div style="text-align:center">'
                                 , '<button type="button" class="layui-btn layedit-btn-yes"> 确定 </button>'
@@ -930,7 +931,6 @@ layui.define(['layer', 'form'], function (exports) {
                                                 event.toElement.remove();
                                             })
                                         } else {
-                                            layer.msg("没有配置回调参数");
                                             event.toElement.remove();
                                         }
                                         layer.close(index);
@@ -975,7 +975,6 @@ layui.define(['layer', 'form'], function (exports) {
                                                     parentNode.remove();
                                                 })
                                             } else {
-                                                layer.msg("没有配置回调参数");
                                                 parentNode.remove();
                                             }
                                         }
@@ -985,7 +984,6 @@ layui.define(['layer', 'form'], function (exports) {
                                                     currenNode.remove();
                                                 })
                                             } else {
-                                                layer.msg("没有配置回调参数");
                                                 currenNode.remove();
                                             }
                                         } else {
@@ -1200,7 +1198,7 @@ layui.define(['layer', 'form'], function (exports) {
                 layui.each(options.fonts, function (index, item) {
                     content.push('<li title="' + options.fonts[index] + '"><' + options.fonts[index] + '>' + options.texts[index] + '</' + options.fonts[index] + '></li>');
                 });
-                return '<ul class="layui-clear" style="line-height:26px">' + content.join('') + '</ul>';
+                return '<ul class="layui-clear" style="width: max-content;">' + content.join('') + '</ul>';
             }(), this, {
                     tips: 1
                     , time: 0
