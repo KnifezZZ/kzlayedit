@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -20,17 +20,17 @@
                 //暴露layupload参数设置接口 --详细查看layupload参数说明
                 uploadImage: {
                     url: '/Attachment/LayUploadFile',
-                    accept: 'video',
-                    acceptMime: 'video/*',
-                    exts: 'mp4|flv|avi|rm|rmvb',
-                    size: '20480'
-                }
-                , uploadVideo: {
-                    url: '/Attachment/LayUploadFile',
                     accept: 'image',
                     acceptMime: 'image/*',
                     exts: 'jpg|png|gif|bmp|jpeg',
                     size: '10240'
+                }
+                , uploadVideo: {
+                    url: '/Attachment/LayUploadFile',
+                    accept: 'video',
+                    acceptMime: 'video/*',
+                    exts: 'mp4|flv|avi|rm|rmvb',
+                    size: '20480'
                 }
                 //右键删除图片/视频时的回调参数，post到后台删除服务器文件等操作，
                 //传递参数：
