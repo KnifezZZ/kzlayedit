@@ -49,7 +49,7 @@
 1. HTML源码模式 引用第三方插件ace,优化源码展示样式。
 2. 引用ace编辑器仅保留了html源码样式和tomorrow主题，如有需要可自行更换
 #### 安装教程
-1. demo下为示例文件，可供查看演示功能
+1. index.html下为示例文件，可供查看演示功能
 2. 将dist下文件layedit.js替换掉layui/lay/modules/layedit.js
 3. 正常调用layedit即可
 
