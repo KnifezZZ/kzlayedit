@@ -1,4 +1,6 @@
 # Kz.layedit
+### 在线预览
+[码云Gitee Pages](http://knifez.gitee.io/kz.layedit/demo/index.html )
 #### 更新日志
 - ##### V18.11.16
 1. [修复] 空编辑器上传视频并删除后编辑器无法操作问题
