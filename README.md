@@ -2,6 +2,8 @@
 ### 在线预览
 [码云Gitee Pages](http://knifez.gitee.io/kz.layedit/index.html )
 #### 更新日志
+- ##### V18.11.23
+1. [新增] 多图上传功能[images],配置参数同uploadImage，删除回调同 calldel
 - ##### V18.11.16
 1. [修复] 空编辑器上传视频并删除后编辑器无法操作问题
 2. [修复] 插入锚点功能
