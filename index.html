@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -24,14 +24,20 @@
                     accept: 'image',
                     acceptMime: 'image/*',
                     exts: 'jpg|png|gif|bmp|jpeg',
-                    size: '10240'
+                    size: '10240',
+                    done: function (data) {
+                        console.log(data);
+                    }
                 }
                 , uploadVideo: {
                     url: 'your url',
                     accept: 'video',
                     acceptMime: 'video/*',
                     exts: 'mp4|flv|avi|rm|rmvb',
-                    size: '20480'
+                    size: '20480',
+                    done: function (data) {
+                        console.log(data);
+                    }
                 }
                 //右键删除图片/视频时的回调参数，post到后台删除服务器文件等操作，
                 //传递参数：
