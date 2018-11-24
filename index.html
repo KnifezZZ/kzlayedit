@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>layedit demo</title>
     <link href="Content/Layui-KnifeZ/css/layui.css" rel="stylesheet" />
     <script src="Content/Layui-KnifeZ/layui.js"></script>
@@ -19,14 +20,14 @@
             layedit.set({
                 //暴露layupload参数设置接口 --详细查看layupload参数说明
                 uploadImage: {
-                    url: '/Attachment/LayUploadFile',
+                    url: 'your url',
                     accept: 'image',
                     acceptMime: 'image/*',
                     exts: 'jpg|png|gif|bmp|jpeg',
                     size: '10240'
                 }
                 , uploadVideo: {
-                    url: '/Attachment/LayUploadFile',
+                    url: 'your url',
                     accept: 'video',
                     acceptMime: 'video/*',
                     exts: 'mp4|flv|avi|rm|rmvb',
@@ -37,7 +38,7 @@
                 //图片： imgpath --图片路径
                 //视频： filepath --视频路径 imgpath --封面路径
                 , calldel: {
-                    url: '/Attachment/DeleteFile'
+                    url: 'your url'
                 }
                 //开发者模式 --默认为false
                 , devmode: true
@@ -47,7 +48,7 @@
                     default: 'javascript' //hide为true时的默认语言格式
                 }
                 , tool: [
-                    'html', 'code', 'strong', 'italic', 'underline', 'del', 'addhr', '|', 'fontFomatt', 'colorpicker', 'face'
+                    'html', 'code', 'strong', 'italic', 'underline', 'del', 'addhr', '|', 'fontFomatt', 'fontBackColor','colorpicker', 'face'
                     , '|', 'left', 'center', 'right', '|', 'link', 'unlink', 'images','image_alt', 'video', 'anchors'
                     , '|', 'fullScreen'
                 ]

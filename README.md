@@ -2,6 +2,10 @@
 ### 在线预览
 [码云Gitee Pages](http://knifez.gitee.io/kz.layedit/)
 #### 更新日志
+- ##### V18.11.24
+1. [新增]  文字背景色设置[fontBackColor]
+2. [优化] uploadimage/uploadfile可只设置url，其余均设置可读取默认值。
+3. [已知问题] IE模式下插入表情图片视频等功能均不可用，仅支持少许设置。
 - ##### V18.11.23
 1. [新增] 多图上传功能[images],配置参数同uploadImage，删除回调同 calldel
 - ##### V18.11.16

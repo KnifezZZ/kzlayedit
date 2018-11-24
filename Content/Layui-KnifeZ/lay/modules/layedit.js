@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
-  @Version: V18.11.16
+  @Version: V18.11.24
  */
 
 layui.define(['layer', 'form'], function (exports) {
@@ -38,16 +38,6 @@ layui.define(['layer', 'form'], function (exports) {
                     acceptMime: 'image/*',
                     exts: 'jpg|png|gif|bmp|jpeg',
                     size: '10240'
-                }
-                , uploadVideo: {
-                    url: '',
-                    accept: 'video',
-                    acceptMime: 'video/*',
-                    exts: 'mp4|flv|avi|rm|rmvb',
-                    size: '20480'
-                }
-                , calldel: {
-                    url: ''
                 }
                 , quote: {
                     style: [],
@@ -297,15 +287,16 @@ layui.define(['layer', 'form'], function (exports) {
                 elem.setAttribute(key, attr[key]);
             }
             elem.removeAttribute('text');
-
-            if (iframeDOM.selection) { //IE
+            // be fix
+            if (device.ie) { //IE
                 var text = range.text || attr.text;
                 if (tagName === 'a' && !text) return;
                 if (text) {
                     elem.innerHTML = text;
                 }
-                range.pasteHTML($(elem).prop('outerHTML'));
-                range.select();
+                layer.msg("暂不支持IE浏览器");
+                range.selectNode(this.document.body.childNodes.item(0));
+                range.insertNode(elem);
             } else { //非IE
                 var text = range.toString() || attr.text;
                 if (tagName === 'a' && !text) return;
@@ -332,23 +323,23 @@ layui.define(['layer', 'form'], function (exports) {
             }
             tools.find('>i').removeClass(CHECK);
             item('unlink').addClass(ABLED);
-
+            
             $(container).parents().each(function () {
                 var tagName = this.tagName.toLowerCase()
                     , textAlign = this.style.textAlign;
                 //文字
-                //if (tagName === 'b' || tagName === 'strong') {
-                //    item('b').addClass(CHECK)
-                //}
-                //if (tagName === 'i' || tagName === 'em') {
-                //    item('i').addClass(CHECK)
-                //}
-                //if (tagName === 'u') {
-                //    item('u').addClass(CHECK)
-                //}
-                //if (tagName === 'strike') {
-                //    item('d').addClass(CHECK)
-                //}
+                if (tagName === 'b' || tagName === 'strong') {
+                    item('b').addClass(CHECK)
+                }
+                if (tagName === 'i' || tagName === 'em') {
+                    item('i').addClass(CHECK)
+                }
+                if (tagName === 'u') {
+                    item('u').addClass(CHECK)
+                }
+                if (tagName === 'strike') {
+                    item('d').addClass(CHECK)
+                }
                 //对齐
                 if (tagName === 'p') {
                     if (textAlign === 'center') {
@@ -410,6 +401,7 @@ layui.define(['layer', 'form'], function (exports) {
                                 src: img.src
                                 , alt: img.alt
                             }, range);
+                            setTimeout(function () { body.focus(); }, 100);
                         });
                     }
                     //图片
@@ -419,11 +411,10 @@ layui.define(['layer', 'form'], function (exports) {
                             var uploadImage = set.uploadImage || {};
                             upload.render({
                                 url: uploadImage.url
-                                , method: uploadImage.type
-                                , accept: uploadImage.accept
-                                , acceptMime: uploadImage.acceptMime
-                                , exts: uploadImage.exts
-                                , size: uploadImage.size
+                                , accept: uploadImage.accept || 'image'
+                                , acceptMime: uploadImage.acceptMime || 'image/*'
+                                , exts: uploadImage.exts || 'jpg|png|gif|bmp|jpeg'
+                                , size: uploadImage.size || '10240'
                                 , elem: $(that).find('input')[0]
                                 , done: function (res) {
                                     if (res.code == 0) {
@@ -432,6 +423,7 @@ layui.define(['layer', 'form'], function (exports) {
                                             src: res.data.src
                                             , alt: res.data.title
                                         }, range);
+                                        setTimeout(function () { body.focus(); }, 100);
                                     } else {
                                         layer.msg(res.msg || '上传失败');
                                     }
@@ -447,6 +439,7 @@ layui.define(['layer', 'form'], function (exports) {
                                 text: pre.code
                                 , 'lay-lang': pre.lang
                             }, range);
+                            setTimeout(function () { body.focus(); }, 100);
                         });
                     }
                     /*#Extens#*/
@@ -489,11 +482,10 @@ layui.define(['layer', 'form'], function (exports) {
                                     upload.render({
                                         elem: '#LayEdit_InsertImages'
                                         , url: uploadImage.url
-                                        , method: uploadImage.type
-                                        , accept: uploadImage.accept
-                                        , acceptMime: uploadImage.acceptMime
-                                        , exts: uploadImage.exts
-                                        , size: uploadImage.size
+                                        , accept: uploadImage.accept || 'image'
+                                        , acceptMime: uploadImage.acceptMime || 'image/*'
+                                        , exts: uploadImage.exts || 'jpg|png|gif|bmp|jpeg'
+                                        , size: uploadImage.size || '10240'
                                         , multiple: true
                                         , before: function (obj) {
                                             obj.preview(function (index, file, result) {
@@ -557,6 +549,7 @@ layui.define(['layer', 'form'], function (exports) {
                                         insertInline.call(iframeWin, 'p', {
                                             text: layero.find('#imgsPrev').html().replace(new RegExp(/(max-width:70px;margin:2px)/g), styleStr)
                                         }, range);
+                                        setTimeout(function () { body.focus(); }, 100);
                                         layer.close(index);
                                     });
                                 })
@@ -605,11 +598,10 @@ layui.define(['layer', 'form'], function (exports) {
                                     upload.render({
                                         elem: '#LayEdit_InsertImage'
                                         , url: uploadImage.url
-                                        , method: uploadImage.type
-                                        , accept: uploadImage.accept
-                                        , acceptMime: uploadImage.acceptMime
-                                        , exts: uploadImage.exts
-                                        , size: uploadImage.size
+                                        , accept: uploadImage.accept || 'image'
+                                        , acceptMime: uploadImage.acceptMime || 'image/*'
+                                        , exts: uploadImage.exts || 'jpg|png|gif|bmp|jpeg'
+                                        , size: uploadImage.size || '10240'
                                         , before: function (obj) { loding = layer.msg('文件上传中,请稍等哦', { icon: 16, shade: 0.3, time: 0 }); }
                                         , done: function (res, input, upload) {
                                             layer.close(loding);
@@ -656,6 +648,7 @@ layui.define(['layer', 'form'], function (exports) {
                                             , alt: altStr.val()
                                             , style: styleStr
                                         }, range);
+                                        setTimeout(function () { body.focus(); }, 100);
                                         layer.close(index);
                                     });
                                 })
@@ -683,6 +676,10 @@ layui.define(['layer', 'form'], function (exports) {
                                 , '<button type="button" class="layui-btn" id="LayEdit_InsertImage"> <i class="layui-icon"></i>上传封面</button>'
                                 , '<input type="text" name="cover" placeholder="请选择文件" style="width: 79%;position: relative;float: right;" class="layui-input">'
                                 , '</li>'
+                                , '<li class="layui-form-item">'
+                                , '<button type="button" class="layui-btn" id="LayEdit_InsertImage"> <i class="layui-icon"></i>上传封面</button>'
+                                , '<input type="text" name="cover" placeholder="请选择文件" style="width: 79%;position: relative;float: right;" class="layui-input">'
+                                , '</li>'
                                 , '<li class="layui-form-item" style="text-align: center;">'
                                 , '<button type="button" lay-submit  class="layui-btn layedit-btn-yes"> 确定 </button>'
                                 , '<button style="margin-left: 20px;" type="button" class="layui-btn layui-btn-primary"> 取消 </button>'
@@ -699,11 +696,10 @@ layui.define(['layer', 'form'], function (exports) {
                                     upload.render({
                                         elem: '#LayEdit_InsertImage'
                                         , url: uploadImage.url
-                                        , method: uploadImage.type
-                                        , accept: uploadImage.accept
-                                        , acceptMime: uploadImage.acceptMime
-                                        , exts: uploadImage.exts
-                                        , size: uploadImage.size
+                                        , accept: uploadImage.accept || 'image'
+                                        , acceptMime: uploadImage.acceptMime || 'image/*'
+                                        , exts: uploadImage.exts || 'jpg|png|gif|bmp|jpeg'
+                                        , size: uploadImage.size || '10240'
                                         , before: function (obj) { loding = layer.msg('文件上传中,请稍等哦', { icon: 16, shade: 0.3, time: 0 }); }
                                         , done: function (res, input, upload) {
                                             layer.close(loding);
@@ -735,10 +731,10 @@ layui.define(['layer', 'form'], function (exports) {
                                     upload.render({
                                         elem: '#LayEdit_InsertVideo'
                                         , url: uploadfile.url
-                                        , accept: uploadfile.accept
-                                        , acceptMime: uploadfile.acceptMime
-                                        , exts: uploadfile.exts
-                                        , size: uploadfile.size
+                                        , accept: uploadfile.accept || 'video'
+                                        , acceptMime: uploadfile.acceptMime || 'video/*'
+                                        , exts: uploadfile.exts || 'mp4|flv|avi|rm|rmvb'
+                                        , size: uploadfile.size || '20480'
                                         , before: function (obj) { loding = layer.msg('文件上传中,请稍等哦', { icon: 16, shade: 0.3, time: 0 }); }
                                         , done: function (res, input, upload) {
                                             layer.close(loding);
@@ -775,8 +771,9 @@ layui.define(['layer', 'form'], function (exports) {
                                         var container = getContainer(range)
                                             , parentNode = $(container).parent();
                                         insertInline.call(iframeWin, 'p', {
-                                            text: '&nbsp;<video src="' + video.val() + '" poster="' + cover.val() + '" controls="controls" >您的浏览器不支持video播放</video>&nbsp;'
+                                            text: '<video src="' + video.val() + '" poster="' + cover.val() + '" controls="controls" >您的浏览器不支持video播放</video>'
                                         }, range);
+                                        setTimeout(function () { body.focus(); }, 100);
                                         layer.close(index);
                                     });
                                 })
@@ -840,9 +837,17 @@ layui.define(['layer', 'form'], function (exports) {
                     , colorpicker: function (range) {
                         colorpicker.call(this, function (color) {
                             iframeDOM.execCommand('forecolor', false, color);
-                            setTimeout(function () {
-                                body.focus();
-                            }, 10);
+                            setTimeout(function () { body.focus(); }, 100);
+                        });
+                    }
+                    , fontBackColor: function (range) {
+                        colorpicker.call(this, function (color) {
+                            if (device.ie)
+                                iframeDOM.execCommand('backColor', false, color);
+                            else
+                                iframeDOM.execCommand('hiliteColor', false, color);
+                            
+                            setTimeout(function () { body.focus(); }, 100);
                         });
                     }
                     , fontFomatt: function (range) {
@@ -866,22 +871,21 @@ layui.define(['layer', 'form'], function (exports) {
                         }();
                         fontFomatt.call(this, { fonts: fonts, texts: fonttexts }, function (value) {
                             iframeDOM.execCommand('formatBlock', false, "<" + value + ">");
-                            setTimeout(function () {
-                                body.focus();
-                            }, 10);
+                            setTimeout(function () { body.focus(); }, 100);
                         });
                     }
-
                     , anchors: function (range) {
                         anchors.call(body, {}, function (field) {
                             insertInline.call(iframeWin, 'a', {
                                 name: "#" + field.text
                                 , text: " ", class: 'anchor'
                             }, range);
+                            setTimeout(function () { body.focus(); }, 100);
                         });
                     }
                     , addhr: function (range) {
                         insertInline.call(iframeWin, 'hr', {}, range);
+                        setTimeout(function () { body.focus(); }, 100);
                     }
                     /*End*/
                     //帮助
@@ -919,9 +923,6 @@ layui.define(['layer', 'form'], function (exports) {
                             }
                         }
                         iframeDOM.execCommand(command);
-                        setTimeout(function () {
-                            body.focus();
-                        }, 10);
                     } else {
                         toolEvent[events] && toolEvent[events].call(this, range, iframeDOM);
                     }
@@ -992,11 +993,10 @@ layui.define(['layer', 'form'], function (exports) {
                                         upload.render({
                                             elem: '#LayEdit_UpdateImage'
                                             , url: uploadImage.url
-                                            , method: uploadImage.type
-                                            , accept: uploadImage.accept
-                                            , acceptMime: uploadImage.acceptMime
-                                            , exts: uploadImage.exts
-                                            , size: uploadImage.size
+                                            , accept: uploadImage.accept || 'image'
+                                            , acceptMime: uploadImage.acceptMime || 'image/*'
+                                            , exts: uploadImage.exts || 'jpg|png|gif|bmp|jpeg'
+                                            , size: uploadImage.size || '10240'
                                             , before: function (obj) { loding = layer.msg('文件上传中,请稍等哦', { icon: 16, shade: 0.3, time: 0 }); }
                                             , done: function (res, input, upload) {
                                                 layer.close(loding);
@@ -1170,9 +1170,6 @@ layui.define(['layer', 'form'], function (exports) {
                     form.render('radio');
                     layero.find('.layui-btn-primary').on('click', function () {
                         layer.close(index);
-                        setTimeout(function () {
-                            body.focus();
-                        }, 10);
                     });
                     form.on(eventFilter, function (data) {
                         layer.close(link.index);
@@ -1210,9 +1207,6 @@ layui.define(['layer', 'form'], function (exports) {
                     form.render('radio');
                     layero.find('.layui-btn-primary').on('click', function () {
                         layer.close(index);
-                        setTimeout(function () {
-                            body.focus();
-                        }, 10);
                     });
                     form.on(eventFilter, function (data) {
                         layer.close(anchors.index);
@@ -1274,7 +1268,7 @@ layui.define(['layer', 'form'], function (exports) {
                 return arr;
             }();
             colorpicker.hide = colorpicker.hide || function (e) {
-                if ($(e.target).attr('layedit-event') !== 'colorpicker') {
+                if ($(e.target).attr('layedit-event') == 'colorpicker' || $(e.target).attr('layedit-event') == 'fontBackColor') { } else {
                     layer.close(colorpicker.index);
                 }
             }
@@ -1418,6 +1412,7 @@ layui.define(['layer', 'form'], function (exports) {
             , video: '<i class="layui-icon layedit-tool-video" title="插入视频" layedit-event="video" style="font-size:18px">&#xe6ed;</i>'
             , fullScreen: '<i class="layui-icon layedit-tool-fullScreen" title="全屏" layedit-event="fullScreen"style="font-size:18px">&#xe638;</i>'
             , colorpicker: '<i class="layui-icon layedit-tool-colorpicker" title="字体颜色选择" layedit-event="colorpicker" style="font-size:18px">&#xe66a;</i>'
+            , fontBackColor: '<i class="layui-icon layedit-tool-fontBackColor" title="字体背景色选择" layedit-event="fontBackColor" style="font-size:18px;">&#xe60f;</i>'
             , fontFomatt: '<i class="layui-icon layedit-tool-fontFomatt" title="段落格式" layedit-event="fontFomatt" style="font-size:18px">&#xe639;</i>'
             , fontFamily: '<i class="layui-icon layedit-tool-fontFamily" title="字体" layedit-event="fontFamily" style="font-size:18px">&#xe702;</i>'
             , addhr: '<i class="layui-icon layui-icon-chart layedit-tool-addhr" title="添加水平线" layedit-event="addhr" style="font-size:18px"></i>'
