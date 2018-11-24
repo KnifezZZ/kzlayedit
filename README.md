@@ -1,6 +1,6 @@
 # Kz.layedit
 ### 在线预览
-[码云Gitee Pages](http://knifez.gitee.io/kz.layedit/index.html )
+[码云Gitee Pages](http://knifez.gitee.io/kz.layedit/)
 #### 更新日志
 - ##### V18.11.23
 1. [新增] 多图上传功能[images],配置参数同uploadImage，删除回调同 calldel
