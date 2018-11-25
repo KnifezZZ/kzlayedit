@@ -480,7 +480,7 @@ layui.define(['layer', 'form'], function (exports) {
                         , shade: 0.05
                         , shadeClose: true
                         , area: function () {
-                            if (/mobile/i.test(navigator.userAgent)) {
+                            if (/mobile/i.test(navigator.userAgent) || $(window).width() <= 485) {
                                 return ['90%']
                             } else {
                                 return ['485px']
@@ -604,7 +604,7 @@ layui.define(['layer', 'form'], function (exports) {
                         , shade: 0.05
                         , shadeClose: true
                         , area: function () {
-                            if (/mobile/i.test(navigator.userAgent)) {
+                            if (/mobile/i.test(navigator.userAgent) || $(window).width() <= 485) {
                                 return ['90%']
                             } else {
                                 return ['485px']
@@ -727,7 +727,7 @@ layui.define(['layer', 'form'], function (exports) {
                         , shade: 0.05
                         , shadeClose: true
                         , area: function () {
-                            if (/mobile/i.test(navigator.userAgent)) {
+                            if (/mobile/i.test(navigator.userAgent) || $(window).width() <= 485) {
                                 return ['90%']
                             } else {
                                 return ['485px']
@@ -1063,7 +1063,7 @@ layui.define(['layer', 'form'], function (exports) {
                                 id: 'fly-jie-image-upload',
                                 title: '图片管理',
                                 area: function () {
-                                    if (/mobile/i.test(navigator.userAgent)) {
+                                    if (/mobile/i.test(navigator.userAgent) || $(window).width() <= 485) {
                                         return ['90%']
                                     } else {
                                         return ['485px']
@@ -1258,7 +1258,7 @@ layui.define(['layer', 'form'], function (exports) {
                 type: 1
                 , id: 'LAY_layedit_link'
                 , area: function () {
-                    if (/mobile/i.test(navigator.userAgent)) {
+                    if (/mobile/i.test(navigator.userAgent) || $(window).width() <= 460) {
                         return ['90%']
                     } else {
                         return ['460px']
@@ -1458,36 +1458,14 @@ layui.define(['layer', 'form'], function (exports) {
                     layer.close(colorpicker.index);
                 }
             };
-            if (!/mobile/i.test(navigator.userAgent)) {
-                return colorpicker.index = layer.tips(function () {
-                    var content = [];
-                    layui.each(colors, function (key, item) {
-                        content.push('<li title="' + item + '" style="background-color:' + item + '"><span style="background-' + item + '" alt="' + key + '"/></li>');
-                    });
-                    return '<ul class="layui-clear" style="width: 279px;">' + content.join('') + '</ul>';
-                }(), this, {
-                    tips: 1
-                    , time: 0
-                    , skin: 'layui-box layui-util-face'
-                    //, maxWidth: 300
-                    , success: function (layero, index) {
-                        layero.css({
-                            marginTop: -4
-                            , marginLeft: -10
-                        }).find('.layui-clear>li').on('click', function () {
-                            callback && callback(this.title);
-                            layer.close(index);
-                        });
-                        $(document).off('click', colorpicker.hide).on('click', colorpicker.hide);
-                    }
-                });
-            } else {
+            if (/mobile/i.test(navigator.userAgent)) {
                 return colorpicker.index = layer.open({
                     type: 1
                     , title: false
                     , closeBtn: 0
                     , shade: 0.05
                     , shadeClose: true
+                    , area: ['auto']
                     , content: function () {
                         var content = [];
                         layui.each(colors, function (key, item) {
@@ -1501,6 +1479,30 @@ layui.define(['layer', 'form'], function (exports) {
                             callback && callback(this.title);
                             layer.close(index);
                         });
+                    }
+                });
+            } else {
+                return colorpicker.index = layer.tips(function () {
+                    var content = [];
+                    layui.each(colors, function (key, item) {
+                        content.push('<li title="' + item + '" style="background-color:' + item + '"><span style="background-' + item + '" alt="' + key + '"/></li>');
+                    });
+                    return '<ul class="layui-clear" style="width: 279px;">' + content.join('') + '</ul>';
+                }(), this, {
+                    tips: 1
+                    , time: 0
+                    , skin: 'layui-box layui-util-face'
+                    , area: ['auto']
+                    //, maxWidth: 300
+                    , success: function (layero, index) {
+                        layero.css({
+                            marginTop: -4
+                            , marginLeft: -10
+                        }).find('.layui-clear>li').on('click', function () {
+                            callback && callback(this.title);
+                            layer.close(index);
+                        });
+                        $(document).off('click', colorpicker.hide).on('click', colorpicker.hide);
                     }
                 });
             }
@@ -1534,8 +1536,9 @@ layui.define(['layer', 'form'], function (exports) {
         , code = function (options, callback) {
             var objSel = ['<li class="layui-form-item objSel">'
                 , '<label class="layui-form-label">请选择语言</label>'
+                , '<style>#selectCodeLanguage ~ .layui-form-select > dl {max-height: 192px} </style>'
                 , '<div class="layui-input-block">'
-                , '<select name="lang">'
+                , '<select name="lang" id="selectCodeLanguage">'
                 , '<option value="JavaScript">JavaScript</option>'
                 , '<option value="HTML">HTML</option>'
                 , '<option value="CSS">CSS</option>'
@@ -1564,7 +1567,7 @@ layui.define(['layer', 'form'], function (exports) {
                 type: 1
                 , id: 'LAY_layedit_code'
                 , area: function () {
-                    if (/mobile/i.test(navigator.userAgent)) {
+                    if (/mobile/i.test(navigator.userAgent) || $(window).width() <= 650) {
                         return ['90%']
                     } else {
                         return ['650px']
