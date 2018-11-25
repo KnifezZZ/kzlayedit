@@ -80,30 +80,38 @@
                 //暴露layupload参数设置接口 --详细查看layupload参数说明
                 uploadImage: {
                     url: '/Attachment/LayUploadFile',
+                    field: 'file',//上传时的文件参数字段名
                     accept: 'image',
                     acceptMime: 'image/*',
                     exts: 'jpg|png|gif|bmp|jpeg',
-                    size: '10240'
+                    size: 1024 * 10,
+                    done: function (data) {//文件上传接口返回code为0时的回调
+                    }
                 }
                 , uploadVideo: {
                     url: '/Attachment/LayUploadFile',
+                    field: 'file',//上传时的文件参数字段名
                     accept: 'video',
                     acceptMime: 'video/*',
                     exts: 'mp4|flv|avi|rm|rmvb',
-                    size: '20480'
+                    size: 1024 * 2 * 10,
+                    done: function (data) {//文件上传接口返回code为0时的回调
+                    }
                 }
                 //右键删除图片/视频时的回调参数，post到后台删除服务器文件等操作，
                 //传递参数：
                 //图片： imgpath --图片路径
                 //视频： filepath --视频路径 imgpath --封面路径
                 , calldel: {
-                    url: '/Attachment/DeleteFile'
+                    url: '/Attachment/DeleteFile',
+                    done: function (data) {//data删除文件接口返回返回的数据
+                    }
                 }
                 //开发者模式 --默认为false
                 , devmode: true
                 //插入代码设置
                 , codeConfig: {
-                    hide: true,  //是否显示编码语言选择框
+                    hide: false,  //是否显示编码语言选择框
                     default: 'javascript' //hide为true时的默认语言格式
                 }
                  , //fontFomatt:["p","span"]  //自定义段落格式 ，如不填，默认为 ["p", "h1", "h2", "h3", "h4", "h5", "h6", "div"]~~
