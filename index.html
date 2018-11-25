@@ -51,10 +51,15 @@
             }
             //开发者模式 --默认为false
             , devmode: true
-            //插入代码设置
+            //插入代码设置 --hide:true 等同于不配置codeConfig
             , codeConfig: {
                 hide: false,  //是否显示编码语言选择框
                 default: 'javascript' //hide为true时的默认语言格式
+            }
+            //新增iframe外置样式和js
+            , quote:{
+                style: ['/Content/Layui-KnifeZ/css/layui.css','/others'],
+                js: ['/Content/Layui-KnifeZ/lay/modules/jquery.js']
             }
             , tool: [
                 'html', 'code', 'strong', 'italic', 'underline', 'del', 'addhr', '|', 'fontFomatt', 'fontBackColor', 'colorpicker', 'face'

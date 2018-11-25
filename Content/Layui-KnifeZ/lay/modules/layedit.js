@@ -182,18 +182,28 @@ layui.define(['layer', 'form'], function (exports) {
                     , iframeWin = iframe.prop('contentWindow')
                     , head = conts.find('head')
                     , style = $(['<style>'
-                    , '*{margin: 0; padding: 0;}'
-                    , 'body{padding: 10px; line-height: 20px; overflow-x: hidden; word-wrap: break-word; font: 14px Helvetica Neue,Helvetica,PingFang SC,Microsoft YaHei,Tahoma,Arial,sans-serif; -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}'
-                    , 'a{color:#01AAED; text-decoration:none;}a:hover{color:#c00}'
-                    , 'p{margin-bottom: 10px;}'
-                    , 'video{max-width:400px;}'
-                    , '.anchor:after{content:"¿";background-color:yellow;color: red;font - weight: bold;}'
-                    , 'img{display: inline-block; border: none; vertical-align: middle;}'
-                    , 'pre{margin: 10px 0; padding: 10px; line-height: 20px; border: 1px solid #ddd; border-left-width: 6px; background-color: #F2F2F2; color: #333; font-family: Courier New; font-size: 12px;}'
-                    , '</style>'].join(''))
-                    , body = conts.find('body');
-
+                        , '*{margin: 0; padding: 0;}'
+                        , 'body{padding: 10px; line-height: 20px; overflow-x: hidden; word-wrap: break-word; font: 14px Helvetica Neue,Helvetica,PingFang SC,Microsoft YaHei,Tahoma,Arial,sans-serif; -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}'
+                        , 'a{color:#01AAED; text-decoration:none;}a:hover{color:#c00}'
+                        , 'p{margin-bottom: 10px;}'
+                        , 'video{max-width:400px;}'
+                        , '.anchor:after{content:"¿";background-color:yellow;color: red;font - weight: bold;}'
+                        , 'img{display: inline-block; border: none; vertical-align: middle;}'
+                        , 'pre{margin: 10px 0; padding: 10px; line-height: 20px; border: 1px solid #ddd; border-left-width: 6px; background-color: #F2F2F2; color: #333; font-family: Courier New; font-size: 12px;}'
+                        , '</style>'].join(''))
+                        , body = conts.find('body');
+                var quoteStyle = function () {
+                    var content = [];
+                    layui.each(set.quote.style, function (index, item) {
+                        content.push('<link href="' + item + '" rel="stylesheet"/>');
+                    });
+                    layui.each(set.quote.js, function (index, item) {
+                        content.push('<script src="' + item + '"></script>');
+                    });
+                    return content.join('');
+                }();
                 head.append(style);
+                head.append(quoteStyle);
                 body.attr('contenteditable', 'true').css({
                     'min-height': set.height
                 }).html(textArea.value || '');
@@ -306,7 +316,7 @@ layui.define(['layer', 'form'], function (exports) {
                 elem.setAttribute(key, attr[key]);
             }
             elem.removeAttribute('text');
-            // be fix
+            // be fix by knifeZ
             if (device.ie) { //IE
                 var text = range.text || attr.text;
                 if (tagName === 'a' && !text) return;
@@ -346,6 +356,7 @@ layui.define(['layer', 'form'], function (exports) {
             $(container).parents().each(function () {
                 var tagName = this.tagName.toLowerCase()
                     , textAlign = this.style.textAlign;
+                //be fix by kinfeZ
                 //文字
                 //if (tagName === 'b' || tagName === 'strong') {
                 //    item('b').addClass(CHECK)
@@ -805,7 +816,7 @@ layui.define(['layer', 'form'], function (exports) {
                                                 ,
                                                 offset: 't'
                                                 ,
-                                                content: res.msg + "<div><img src='" + res.data.src + "' style='max-height:100px'/></div><label class='layui-form-label'>确定使用该文件吗？</label>"
+                                                content: res.msg + "<div><img src='" + res.data.src + "' style='max-height:100px'/></div><p style='text-align:center'>确定使用该文件吗？</p>"
                                                 ,
                                                 btn: ['确定', '取消']
                                                 ,
@@ -851,7 +862,7 @@ layui.define(['layer', 'form'], function (exports) {
                                                 ,
                                                 offset: 't'
                                                 ,
-                                                content: res.msg + "<div><video src='" + res.data.src + "' style='max-height:100px' controls='controls'/></div>确定使用该文件吗？"
+                                                content: res.msg + "<div><video src='" + res.data.src + "' style='max-height:100px' controls='controls'/></div><p style='text-align:center'>确定使用该文件吗？</p>"
                                                 ,
                                                 btn: ['确定', '取消']
                                                 ,
