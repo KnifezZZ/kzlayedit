@@ -114,6 +114,11 @@
                 , codeConfig: {
                     hide: false,  //是否显示编码语言选择框
                     default: 'javascript' //hide为true时的默认语言格式
+                }           
+                //新增iframe外置样式和js
+                , quote:{
+                    style: ['/Content/Layui-KnifeZ/css/layui.css','/others'],
+                    js: ['/Content/Layui-KnifeZ/lay/modules/jquery.js']
                 }
                  , //fontFomatt:["p","span"]  //自定义段落格式 ，如不填，默认为 ["p", "h1", "h2", "h3", "h4", "h5", "h6", "div"]~~
                  , tool: [
