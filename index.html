@@ -64,21 +64,28 @@
             //自定义样式-暂只支持video添加
             //, customTheme: {
             //    video: {
-            //        title: ['原版', 'theme_1', 'class_1']
-            //        , content: ['', '<div class=videodiv >nomarlobj</div>', 'theme2']
-            //        , preview: ['', '/images/2012081310360529812793.jpg', '']
+            //        title: ['原版', 'custom_1', 'custom_2']
+            //        , content: ['', 'theme1', 'theme2']
+            //        , preview: ['', '/images/prive.jpg', '/images/prive2.jpg']
             //    }
             //}
+            //插入自定义链接
+            , customlink:{
+                title: '插入layui官网'
+                , href: 'https://www.layui.com'
+                ,onmouseup:''
+            }
             , tool: [
                 'html', 'code', 'strong', 'italic', 'underline', 'del', 'addhr', '|', 'fontFomatt', 'fontBackColor', 'colorpicker', 'face'
                 , '|', 'left', 'center', 'right', '|', 'link', 'unlink', 'images', 'image_alt', 'video', 'anchors'
                 , '|'
-                , 'table'
+                , 'table','customlink'
                 , 'fullScreen'
             ]
             , height: '90%'
         });
         var ieditor = layedit.build('layeditDemo');
+        //设置编辑器内容
         layedit.setContent(ieditor, "<h1>hello layedit</h1>", false);
     })
 </script>

@@ -68,6 +68,11 @@ layui.define(['layer', 'form'], function (exports) {
                         , preview: []
                     }
                 }
+                , customlink: {
+                    title:'自定义链接'
+                    , href: ''
+                    , onmouseup: ''
+                }
                 , devmode: false
                 , hideTool: []
                 , height: 280 //默认高
@@ -787,18 +792,14 @@ layui.define(['layer', 'form'], function (exports) {
                                     layer.msg('请选择一个视频或输入视频地址')
                                 } else {
                                     var txt = '&nbsp;<video src="' + video.val() + '" poster="' + cover.val() + '" controls="controls" >您的浏览器不支持video播放</video>&nbsp;';
+                                    var custclass = '';
                                     if (customTheme.video.title.length > 0 && theme.length > 0) {
-                                        var themes = theme[0].options[theme[0].selectedIndex].value;
                                         //追加样式
-                                        if (theme[0].options[theme[0].selectedIndex].text.indexOf("class_") > -1) {
-                                            txt = '&nbsp;<video src="' + video.val() + '" poster="' + cover.val() + '" class="' + themes + '" controls="controls" >您的浏览器不支持video播放</video>&nbsp;';
-                                        } else {
-                                            //外加元素
-                                            txt = themes.replace("nomarlobj", '&nbsp;<video src="' + video.val() + '" poster="' + cover.val() + '" controls="controls" >您的浏览器不支持video播放</video>&nbsp;');
-                                        }
+                                        custclass = theme[0].options[theme[0].selectedIndex].value;
                                     }
-                                    insertInline.call(iframeWin, 'p', {
+                                    insertInline.call(iframeWin, 'div', {
                                         text: txt
+                                        , class: custclass
                                     }, range);
                                     layer.close(index);
                                 }
@@ -1005,7 +1006,25 @@ layui.define(['layer', 'form'], function (exports) {
                             }, 100);
                         });
                     }
-                    
+                    , customlink: function (range) {
+                        var container = getContainer(range)
+                            , parentNode = $(container).parent();
+                        customlink.call(body, {}, function (field) {
+                            var parent = parentNode[0];
+                            if (parent.tagName === 'A') {
+                                parent.href = field.url;
+                                parent.rel = field.rel;
+                            } else {
+                                insertInline.call(iframeWin, 'a', {
+                                    target: "_blank"
+                                    , href: set.customlink.href
+                                    , rel: "nofollow"
+                                    , text: field.text
+                                    , onmouseup: set.customlink.onmouseup
+                                }, range);
+                            }
+                        });
+                    }
                     , anchors: function (range) {
                         anchors.call(body, {}, function (field) {
                             insertInline.call(iframeWin, 'a', {
@@ -1422,7 +1441,48 @@ layui.define(['layer', 'form'], function (exports) {
             });
             link.index = index;
         }
-        
+
+        , customlink = function (options, callback) {
+            var body = this, index = layer.open({
+                type: 1
+                , id: 'LAY_layedit_customlink'
+                , area: '350px'
+                , offset: '100px'
+                , shade: 0.05
+                , shadeClose: true
+                , moveType: 1
+                , title: options.title
+                , skin: 'layui-layer-msg'
+                , content: ['<ul class="layui-form" style="margin: 15px;">'
+                    , '<li class="layui-form-item">'
+                    , '<label class="layui-form-label" style="width: 60px;">名称</label>'
+                    , '<div class="layui-input-block" style="margin-left: 90px">'
+                    , '<input name="text" value="" autofocus="true" autocomplete="off" class="layui-input">'
+                    , '</div>'
+                    , '</li>'
+                    , '<li class="layui-form-item" style="display:none">'
+                    , '<button type="button" lay-submit lay-filter="layedit-link-yes" id="layedit-link-yes"> 确定 </button>'
+                    , '</li>'
+                    , '</ul>'].join('')
+                , btn: ['确定', '取消']
+                , btnAlign: 'c'
+                , yes: function (index, layero) {
+                    $('#layedit-link-yes').click();
+                }
+                , success: function (layero, index) {
+                    var eventFilter = 'submit(layedit-link-yes)';
+                    form.render('radio');
+                    layero.find('.layui-btn-primary').on('click', function () {
+                        layer.close(index);
+                    });
+                    form.on(eventFilter, function (data) {
+                        layer.close(customlink.index);
+                        callback && callback(data.field);
+                    });
+                }
+            });
+            customlink.index = index;
+        }
         , anchors = function (options, callback) {
             var body = this, index = layer.open({
                 type: 1
@@ -1854,6 +1914,8 @@ layui.define(['layer', 'form'], function (exports) {
             addhr: '<i class="layui-icon layui-icon-chart layedit-tool-addhr" title="添加水平线" layedit-event="addhr" style="font-size:18px"></i>'
             ,
             anchors: '<i class="layui-icon layedit-tool-anchors" title="添加锚点" layedit-event="anchors" style="font-size:18px">&#xe60b;</i>'
+            ,
+            customlink: '<i class="layui-icon layedit-tool-customlink" title="添加自定义链接" layedit-event="customlink" style="font-size:18px">&#xe606;</i>'
             ,
             table: '<i class="layui-icon layedit-tool-table" title="插入表格" layedit-event="table" style="font-size:18px">&#xe62d;</i>'
             ,

@@ -4,10 +4,10 @@
 #### 更新日志
 - ##### V18.11.27
 1. [优化] 段落格式选择样式，背景改为白色，鼠标加手;
-2. [新增] 自定义样式【CustomTheme】,暂时只支持video添加时进行主题样式选择，提供三个参数，title(下拉框展示项),content（自定义样式html内容）.preview（预览图地址）,
-				title分为两类，theme_xxx,class_xxx,一类时video外部包裹div,p,等其他元素的插入（插入视频元素用’nomarlobj‘代替），class_xxx为给video标签添加样式，暂时还不太完善，不推荐使用
+2. [新增] 自定义样式【CustomTheme】,暂时只支持video添加时进行主题样式选择，提供三个参数，title(下拉框展示项),content（自定义class）.preview（预览图地址）
 3. [优化] 修改多图上传图标
 4. [新增] 插入表格功能【table】,最大支持10X10，支持右键删除行\新增行，暂不支持合并单元格
+5. [新增] 插入自定义链接【customlink】,提供title（弹出层名称），href(添加链接url),onmouseup(onmouseup触发事件)三个参数，添加的链接默认target='_blank',rel='nofollow'
 - ##### V18.11.25
 感谢来自<a href="https://gitee.com/yhl452493373">杨黄林</a>的反馈
 1. [合并优化]  图片上传时图片的宽度，高度单位为px，输入时不需输入单位；
@@ -137,6 +137,7 @@
 					,'anchors' //锚点
                      , '|'
 					 , 'table'//插入表格
+					 ,'customlink'//插入自定义链接
 					 ,'fullScreen'
                  ]
          });
