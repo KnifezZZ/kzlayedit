@@ -57,10 +57,10 @@
                 default: 'javascript' //hide为true时的默认语言格式
             }
             //新增iframe外置样式和js
-            , quote:{
-                style: ['/Content/Layui-KnifeZ/css/layui.css','/others'],
-                js: ['/Content/Layui-KnifeZ/lay/modules/jquery.js']
-            }
+            //, quote:{
+            //    style: ['/Content/Layui-KnifeZ/css/layui.css','/others'],
+            //    js: ['/Content/Layui-KnifeZ/lay/modules/jquery.js']
+            //}
             //自定义样式-暂只支持video添加
             //, customTheme: {
             //    video: {
@@ -73,12 +73,13 @@
                 'html', 'code', 'strong', 'italic', 'underline', 'del', 'addhr', '|', 'fontFomatt', 'fontBackColor', 'colorpicker', 'face'
                 , '|', 'left', 'center', 'right', '|', 'link', 'unlink', 'images', 'image_alt', 'video', 'anchors'
                 , '|'
-                //, 'table'
+                , 'table'
                 , 'fullScreen'
             ]
             , height: '90%'
         });
         var ieditor = layedit.build('layeditDemo');
+        layedit.setContent(ieditor, "<h1>hello layedit</h1>", false);
     })
 </script>
 </body>

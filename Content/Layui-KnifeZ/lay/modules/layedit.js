@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V18.11.25
+ @Version: V18.11.27
  */
 
 layui.define(['layer', 'form'], function (exports) {
@@ -194,7 +194,7 @@ layui.define(['layer', 'form'], function (exports) {
                     , 'a{color:#01AAED; text-decoration:none;}a:hover{color:#c00}'
                     , 'p{margin-bottom: 10px;}'
                     , 'video{max-width:400px;}'
-                    , 'tr th{border: 1px solid #DDD;}'
+                    , 'td{border: 1px solid #DDD;width:80px}'
                     , 'table{border-collapse: collapse;}'
                     , '.anchor:after{content:"¿";background-color:yellow;color: red;font - weight: bold;}'
                     , 'img{display: inline-block; border: none; vertical-align: middle;}'
@@ -1014,19 +1014,25 @@ layui.define(['layer', 'form'], function (exports) {
                             }, range);
                         });
                     }
-                    //be fix by knifeZ
                     , table: function (range) {
-                        table.call(this, function (img) {
-                            insertInline.call(iframeWin, 'img', {
-                                src: img.src
-                                , alt: img.alt
+                        table.call(this, function (opts) {
+                            debugger;
+                            var tbody = "<tr>";
+                            for (var i = 0; i < opts.cells; i++) {
+                                tbody += "<td></td>";
+                            }
+                            tbody += "</tr>";
+                            var tmptr = tbody;
+                            for (var i = 0; i < opts.rows; i++) {
+                                tbody += tmptr;
+                            }
+                            insertInline.call(iframeWin, 'table', {
+                                text: tbody
                             }, range);
                             setTimeout(function () {
                                 body.focus();
                             }, 10);
                         });
-                        //layer.tips('<div class="edui-tablepicker-body edui-default"><div class="edui-infoarea edui-default"><span id="edui253_label" class="edui-label edui-default">0列 x 0行</span></div><div class="edui-pickarea edui-default" onmousemove="$EDITORUI[&quot;edui253&quot;]._onMouseMove(event, this);" onmouseover="$EDITORUI[&quot;edui253&quot;]._onMouseOver(event, this);" onmouseout="$EDITORUI[&quot;edui253&quot;]._onMouseOut(event, this);" onclick="$EDITORUI[&quot;edui253&quot;]._onClick(event, this);"><div id="edui253_overlay" class="edui-overlay edui-default" style="width: 132px; height: 44px; visibility: hidden;"></div></div></div>', this, function () {       
-                        //});
                     }
                     , addhr: function (range) {
                         insertInline.call(iframeWin, 'hr', {}, range);
@@ -1099,11 +1105,14 @@ layui.define(['layer', 'form'], function (exports) {
                 layer.close(fontFomatt.index);
             });
             //右键菜单自定义
+            var rbtnIndex = null;
             body.on('contextmenu', function (event) {
                 if (event != null) {
+                    layer.close(rbtnIndex);
+                    var currenNode = event.toElement, parentNode = event.toElement.parentNode;
                     switch (event.target.tagName) {
                         case "IMG":
-                            layer.open({
+                            rbtnIndex=layer.open({
                                 type: 1,
                                 id: 'fly-jie-image-upload',
                                 title: '图片管理',
@@ -1121,8 +1130,8 @@ layui.define(['layer', 'form'], function (exports) {
                                         return '100px'
                                     }
                                 }(),
-                                shade: 0.05,
-                                shadeClose: true,
+                                shade: 0,
+                                closeBtn: false,
                                 content: ['<ul class="layui-form layui-form-pane" style="margin: 20px 20px 0 20px">'
                                     , '<li class="layui-form-item" style="position: relative">'
                                     , '<button type="button" class="layui-btn" id="LayEdit_UpdateImage" style="width: 110px;position: relative;z-index: 10;"> <i class="layui-icon"></i>上传图片</button>'
@@ -1231,18 +1240,55 @@ layui.define(['layer', 'form'], function (exports) {
                                 }
                             })
                             break;
+                        case "TD":
+                            rbtnIndex = layer.open({
+                                type: 1
+                                , title: false         
+                                , shade: 0
+                                , offset: [event.clientY + "px", event.clientX + "px"]
+                                , skin: 'layui-box layui-util-face'
+                                , content: function () {
+                                    var content = [
+                                        , '<li  style="float: initial;width:100%;"><a type="button"  style="width:100%" lay-command="addnewtr"> 新增行 </a></li>'
+                                        , '<li  style="float: initial;width:100%;"><a type="button" style="width:100%" lay-command="deltr"> 删除行 </a></li>'].join('');
+                                    return '<ul class="layui-clear" style="width: max-content;">' + content + '</ul>';
+                                }()
+                                , success: function (layero, index) {
+
+                                    layero.find('a').on('click', function () {
+                                        var othis = $(this), command = othis.attr('lay-command');
+                                        if (command) {
+                                            switch (command) {
+                                                case 'deltr':
+                                                    parentNode.remove();
+                                                    break;
+                                                case 'addnewtr':
+                                                    var html = "<tr>";
+                                                    for (var i = 0; i < parentNode.children.length; i++) {
+                                                        html += "<td></td>";
+                                                    }
+                                                    html += "</tr>";
+                                                    $(parentNode).after(html)
+                                                    break;
+                                            }
+                                        }
+                                        layer.close(index);
+                                    });
+                                }
+                            });
+                            break;
                         default:
-                            var currenNode = event.toElement, parentNode = event.toElement.parentNode;
-                            layer.open({
+                            rbtnIndex =layer.open({
                                 type: 1,
                                 title: false,
-                                offset: [event.clientY + "px", event.clientX + "px"],
-                                shadeClose: true,
+                                closeBtn: false,
+                                offset: [event.clientY + "px", event.clientX + "px"],   
+                                shade: 0,
                                 content: ['<ul style="width:100px">'
-                                    , '<li><a type="button" class="layui-btn layui-btn-primary layui-btn-sm" style="width:80%" lay-command="left"> 居左 </a></li>'
-                                    , '<li><a type="button" class="layui-btn layui-btn-primary layui-btn-sm" style="width:80%" lay-command="center"> 居中 </a></li>'
-                                    , '<li><a type="button" class="layui-btn layui-btn-primary layui-btn-sm" style="width:80%" lay-command="right"> 居右 </a></li>'
-                                    , '<li><a type="button" class="layui-btn layui-btn-danger layui-btn-sm"  style="width:80%"> 删除 </a></li>'
+                                    , '<li><a type="button" class="layui-btn layui-btn-primary layui-btn-sm" style="width:100%" lay-command="left"> 居左 </a></li>'
+                                    , '<li><a type="button" class="layui-btn layui-btn-primary layui-btn-sm" style="width:100%" lay-command="center"> 居中 </a></li>'
+                                    , '<li><a type="button" class="layui-btn layui-btn-primary layui-btn-sm" style="width:100%" lay-command="right"> 居右 </a></li>'
+                                    , '<li><a type="button" class="layui-btn layui-btn-danger layui-btn-sm"  style="width:100%"> 删除 </a></li>'
                                     , '</ul>'].join(''),
                                 success: function (layero, index) {
                                     var callDel = set.calldel;
@@ -1422,22 +1468,44 @@ layui.define(['layer', 'form'], function (exports) {
         , table = function (callback) {
             if (!/mobile/i.test(navigator.userAgent)) {
                 return table.index = layer.tips(function () {
-                    var content = [];
-                    return '<ul class="layui-clear" style="width: 279px;">' + content.join('') + '</ul>';
+                    return '<div style="padding: 5px;border: 1px solid #e6e6e6;"><span id="laytable_label" class="layui-label">0列 x 0行</span>'
+                        + '<table class="layui-table" lay-size="sm">'
+                        + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                        + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                        + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                        + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                        + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                        + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                        + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                        + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                        + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                        + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                        +'</table ></div></div > ';
                 }(), this, {
                         tips: 1
                         , time: 0
                         , skin: 'layui-box layui-util-face'
                         , maxWidth: 500
                         , success: function (layero, index) {
-                            layero.css({
-                                marginTop: -4
-                                , marginLeft: -10
-                            }).find('.layui-clear>li').on('click', function () {
-                                //callback && callback({
-                                //    src: faces[this.title]
-                                //    , alt: this.title
-                                //});
+                            layero.find('td').on('mouseover', function () {
+                                layero.find('#laytable_label')[0].innerText = (this.cellIndex + 1) + "列X" + (this.parentElement.rowIndex + 1) + "行";
+                                layero.find('td').removeAttr("style");
+
+                                $(this).attr('style', 'background-color:linen;');
+                                $(this).prevAll().attr('style', 'background-color:linen;');
+                                for (var i = 0; i < $(this.parentElement).prevAll().length; i++) {
+                                    for (var j = 0; j < $(this.parentElement).prevAll()[i].childNodes.length; j++) {
+                                        if (j <= this.cellIndex) {
+                                            $(this.parentElement).prevAll()[i].children[j].style = "background-color:linen;";
+                                        }
+                                    }
+                                }
+                            })
+                            layero.find('td').on('click', function () {
+                                callback && callback({
+                                    cells: this.cellIndex+1
+                                    , rows: this.parentElement.rowIndex
+                                });
                                 layer.close(index);
                             });
                             $(document).off('click', table.hide).on('click', table.hide);
@@ -1451,16 +1519,41 @@ layui.define(['layer', 'form'], function (exports) {
                     , shade: 0.05
                     , shadeClose: true
                     , content: function () {
-                        var content = [];
-                        return '<ul class="layui-clear" style="width: 279px;">' + content.join('') + '</ul>';
+                        return '<div style="padding: 5px;border: 1px solid #e6e6e6;"><span id="laytable_label" class="layui-label">0列 x 0行</span>'
+                            + '<table class="layui-table" lay-size="sm">'
+                            + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '</table ></div></div > ';
                     }()
                     , skin: 'layui-box layui-util-face'
                     , success: function (layero, index) {
-                        layero.find('.layui-clear>li').on('click', function () {
-                            //callback && callback({
-                            //    src: faces[this.title]
-                            //    , alt: this.title
-                            //});
+                        layero.find('td').on('mouseover', function () {
+                            layero.find('#laytable_label')[0].innerText = (this.cellIndex + 1) + "列X" + (this.parentElement.rowIndex + 1) + "行";
+                            layero.find('td').removeAttr("style");
+
+                            $(this).attr('style', 'background-color:linen;');
+                            $(this).prevAll().attr('style', 'background-color:linen;');
+                            for (var i = 0; i < $(this.parentElement).prevAll().length; i++) {
+                                for (var j = 0; j < $(this.parentElement).prevAll()[i].childNodes.length; j++) {
+                                    if (j <= this.cellIndex) {
+                                        $(this.parentElement).prevAll()[i].children[j].style = "background-color:linen;";
+                                    }
+                                }
+                            }
+                        })
+                        layero.find('td').on('click', function () {
+                            callback && callback({
+                                cells: this.cellIndex + 1
+                                , rows: this.parentElement.rowIndex
+                            });
                             layer.close(index);
                         });
                     }
@@ -1762,7 +1855,7 @@ layui.define(['layer', 'form'], function (exports) {
             ,
             anchors: '<i class="layui-icon layedit-tool-anchors" title="添加锚点" layedit-event="anchors" style="font-size:18px">&#xe60b;</i>'
             ,
-            table: '<i class="layui-icon layedit-tool-table" title="添加表格" layedit-event="table" style="font-size:18px">&#xe62d;</i>'
+            table: '<i class="layui-icon layedit-tool-table" title="插入表格" layedit-event="table" style="font-size:18px">&#xe62d;</i>'
             ,
             help: '<i class="layui-icon layedit-tool-help" title="帮助" layedit-event="help">&#xe607;</i>'
         }
