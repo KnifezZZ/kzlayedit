@@ -6,7 +6,7 @@
 1. [修复] 自定义链接宽度错误设置为3500px问题,修复合并冲突customlink.title设置无效问题
 2. [优化] 锚点不再采用class控制，兼容非本编辑器编辑锚点，修改锚点展示样式为<span style="color:#01aaed">§</span>
 3. [优化] 插入锚点弹窗兼容移动端
-4. [新增] 撤销【undo】 重做【redo】功能
+4. [新增] 简单撤销【undo】 重做【redo】功能， 仅对编辑器内文本操作有效，，插入锚点等功能无法撤销重做
 - ##### V18.11.27
 1. [优化] 段落格式选择样式，背景改为白色，鼠标加手;
 2. [新增] 自定义样式【CustomTheme】,暂时只支持video添加时进行主题样式选择，提供三个参数，title(下拉框展示项),content（自定义class）.preview（预览图地址）
@@ -133,7 +133,7 @@
                 }
                  , //fontFomatt:["p","span"]  //自定义段落格式 ，如不填，默认为 ["p", "h1", "h2", "h3", "h4", "h5", "h6", "div"]~~
                  , tool: [
-                     'html','code'
+                     'html','undo','redo','code'
  					, 'strong', 'italic', 'underline', 'del', 
 					,'addhr' //添加水平线
 					,'|', 'fontFomatt','colorpicker' //段落格式，字体颜色
