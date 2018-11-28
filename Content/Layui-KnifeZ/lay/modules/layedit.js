@@ -204,17 +204,17 @@ layui.define(['layer', 'form'], function (exports) {
                     , iframeWin = iframe.prop('contentWindow')
                     , head = conts.find('head')
                     , style = $(['<style>'
-                    , '*{margin: 0; padding: 0;}'
-                    , 'body{padding: 10px; line-height: 20px; overflow-x: hidden; word-wrap: break-word; font: 14px Helvetica Neue,Helvetica,PingFang SC,Microsoft YaHei,Tahoma,Arial,sans-serif; -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}'
-                    , 'a{color:#01AAED; text-decoration:none;}a:hover{color:#c00}'
-                    , 'p{margin-bottom: 10px;}'
-                    , 'video{max-width:400px;}'
-                    , 'td{border: 1px solid #DDD;width:80px}'
-                    , 'table{border-collapse: collapse;}'
-                    , '.anchor:after{content:"¿";background-color:yellow;color: red;font - weight: bold;}'
-                    , 'img{display: inline-block; border: none; vertical-align: middle;}'
-                    , 'pre{margin: 10px 0; padding: 10px; line-height: 20px; border: 1px solid #ddd; border-left-width: 6px; background-color: #F2F2F2; color: #333; font-family: Courier New; font-size: 12px;}'
-                    , '</style>'].join(''))
+                        , '*{margin: 0; padding: 0;}'
+                        , 'body{padding: 10px; line-height: 20px; overflow-x: hidden; word-wrap: break-word; font: 14px Helvetica Neue,Helvetica,PingFang SC,Microsoft YaHei,Tahoma,Arial,sans-serif; -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}'
+                        , 'a{color:#01AAED; text-decoration:none;}a:hover{color:#c00}'
+                        , 'p{margin-bottom: 10px;}'
+                        , 'video{max-width:400px;}'
+                        , 'td{border: 1px solid #DDD;width:80px}'
+                        , 'table{border-collapse: collapse;}'
+                        , 'a[name]:before{content:"§";color: #01aaed;font-weight: bold;}'
+                        , 'img{display: inline-block; border: none; vertical-align: middle;}'
+                        , 'pre{margin: 10px 0; padding: 10px; line-height: 20px; border: 1px solid #ddd; border-left-width: 6px; background-color: #F2F2F2; color: #333; font-family: Courier New; font-size: 12px;}'
+                        , '</style>'].join(''))
                     , body = conts.find('body');
                 var quoteStyle = function () {
                     var content = [];
@@ -1019,7 +1019,7 @@ layui.define(['layer', 'form'], function (exports) {
                 , customlink: function (range) {
                     var container = getContainer(range)
                         , parentNode = $(container).parent();
-                    customlink.call(body, {}, function (field) {
+                    customlink.call(body, { title: set.customlink.title }, function (field) {
                         var parent = parentNode[0];
                         if (parent.tagName === 'A') {
                             parent.href = field.url;
@@ -1039,7 +1039,7 @@ layui.define(['layer', 'form'], function (exports) {
                     anchors.call(body, {}, function (field) {
                         insertInline.call(iframeWin, 'a', {
                             name: "#" + field.text
-                            , text: " ", class: 'anchor'
+                            , text: " "
                         }, range);
                     });
                 }
@@ -1500,7 +1500,7 @@ layui.define(['layer', 'form'], function (exports) {
                     if (/mobile/i.test(navigator.userAgent) || $(window).width() <= 350) {
                         return ['90%']
                     } else {
-                        return ['3500px']
+                        return ['350px']
                     }
                 }()
                 , offset: function () {
@@ -1534,12 +1534,9 @@ layui.define(['layer', 'form'], function (exports) {
                 , success: function (layero, index) {
                     var eventFilter = 'submit(layedit-link-yes)';
                     form.render('radio');
-                    layero.find('.layui-btn-primary').on('click', function () {
-                        layer.close(index);
-                    });
                     form.on(eventFilter, function (data) {
-                        layer.close(customlink.index);
                         callback && callback(data.field);
+                        layer.close(customlink.index);
                     });
                 }
             });
@@ -1549,8 +1546,20 @@ layui.define(['layer', 'form'], function (exports) {
             var body = this, index = layer.open({
                 type: 1
                 , id: 'LAY_layedit_addmd'
-                , area: '300px'
-                , offset: '100px'
+                , area: function () {
+                    if (/mobile/i.test(navigator.userAgent) || $(window).width() <= 350) {
+                        return ['90%']
+                    } else {
+                        return ['350px']
+                    }
+                }()
+                , offset: function () {
+                    if (/mobile/i.test(navigator.userAgent)) {
+                        return 'auto'
+                    } else {
+                        return '100px'
+                    }
+                }()
                 , shade: 0.05
                 , shadeClose: true
                 , moveType: 1
@@ -1573,12 +1582,6 @@ layui.define(['layer', 'form'], function (exports) {
                 , success: function (layero, index) {
                     var eventFilter = 'submit(layedit-link-yes)';
                     form.render('radio');
-                    layero.find('.layui-btn-primary').on('click', function () {
-                        layer.close(index);
-                        setTimeout(function () {
-                            body.focus();
-                        }, 10);
-                    });
                     form.on(eventFilter, function (data) {
                         layer.close(anchors.index);
                         callback && callback(data.field);

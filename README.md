@@ -2,6 +2,10 @@
 ### 在线预览
 [码云Gitee Pages](http://knifez.gitee.io/kz.layedit/)
 #### 更新日志
+- ##### V18.11.28
+1. [修复] 自定义链接宽度错误设置为3500px问题,修复合并冲突customlink.title设置无效问题
+2. [优化] 锚点不再采用class控制，兼容非本编辑器编辑锚点，修改锚点展示样式为<span style="color:#01aaed">§</span>
+3. [优化] 插入锚点弹窗兼容移动端
 - ##### V18.11.27
 1. [优化] 段落格式选择样式，背景改为白色，鼠标加手;
 2. [新增] 自定义样式【CustomTheme】,暂时只支持video添加时进行主题样式选择，提供三个参数，title(下拉框展示项),content（自定义class）.preview（预览图地址）
