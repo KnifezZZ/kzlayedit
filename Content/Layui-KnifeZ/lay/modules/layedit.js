@@ -204,17 +204,17 @@ layui.define(['layer', 'form'], function (exports) {
                     , iframeWin = iframe.prop('contentWindow')
                     , head = conts.find('head')
                     , style = $(['<style>'
-                        , '*{margin: 0; padding: 0;}'
-                        , 'body{padding: 10px; line-height: 20px; overflow-x: hidden; word-wrap: break-word; font: 14px Helvetica Neue,Helvetica,PingFang SC,Microsoft YaHei,Tahoma,Arial,sans-serif; -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}'
-                        , 'a{color:#01AAED; text-decoration:none;}a:hover{color:#c00}'
-                        , 'p{margin-bottom: 10px;}'
-                        , 'video{max-width:400px;}'
-                        , 'td{border: 1px solid #DDD;width:80px}'
-                        , 'table{border-collapse: collapse;}'
-                        , 'a[name]:before{content:"§";color: #01aaed;font-weight: bold;}'
-                        , 'img{display: inline-block; border: none; vertical-align: middle;}'
-                        , 'pre{margin: 10px 0; padding: 10px; line-height: 20px; border: 1px solid #ddd; border-left-width: 6px; background-color: #F2F2F2; color: #333; font-family: Courier New; font-size: 12px;}'
-                        , '</style>'].join(''))
+                    , '*{margin: 0; padding: 0;}'
+                    , 'body{padding: 10px; line-height: 20px; overflow-x: hidden; word-wrap: break-word; font: 14px Helvetica Neue,Helvetica,PingFang SC,Microsoft YaHei,Tahoma,Arial,sans-serif; -webkit-box-sizing: border-box !important; -moz-box-sizing: border-box !important; box-sizing: border-box !important;}'
+                    , 'a{color:#01AAED; text-decoration:none;}a:hover{color:#c00}'
+                    , 'p{margin-bottom: 10px;}'
+                    , 'video{max-width:400px;}'
+                    , 'td{border: 1px solid #DDD;width:80px}'
+                    , 'table{border-collapse: collapse;}'
+                    , 'a[name]:before{content:"§";color: #01aaed;font-weight: bold;}'
+                    , 'img{display: inline-block; border: none; vertical-align: middle;}'
+                    , 'pre{margin: 10px 0; padding: 10px; line-height: 20px; border: 1px solid #ddd; border-left-width: 6px; background-color: #F2F2F2; color: #333; font-family: Courier New; font-size: 12px;}'
+                    , '</style>'].join(''))
                     , body = conts.find('body');
                 var quoteStyle = function () {
                     var content = [];
@@ -1019,7 +1019,7 @@ layui.define(['layer', 'form'], function (exports) {
                 , customlink: function (range) {
                     var container = getContainer(range)
                         , parentNode = $(container).parent();
-                    customlink.call(body, { title: set.customlink.title }, function (field) {
+                    customlink.call(body, {title: set.customlink.title}, function (field) {
                         var parent = parentNode[0];
                         if (parent.tagName === 'A') {
                             parent.href = field.url;
@@ -1315,25 +1315,34 @@ layui.define(['layer', 'form'], function (exports) {
                                 closeBtn: false,
                                 offset: function () {
                                     if (/mobile/i.test(navigator.userAgent)) {
-                                        var touchElement = event.originalEvent.changedTouches[0] || event;
-                                        return [touchElement.clientY + $('.layui-layedit-tool').height() - 80 + "px", function () {
-                                            var x = touchElement.clientX;
-                                            if (x + 100 > $('.layui-layedit').width()) {
-                                                x = x - 100;
+                                        return 'auto'
+                                    } else {
+                                        return [event.clientY + parent.document.getElementsByClassName('layui-layedit')[0].getBoundingClientRect().y + "px", function () {
+                                            var x = event.clientX;
+                                            if (x + 100 + 30 > parent.document.getElementsByClassName('layui-layedit')[0].getBoundingClientRect().width) {
+                                                x = x - 100 - 30;
                                             }
                                             return x + "px";
-                                        }()];
-                                    } else {
-                                        return [event.clientY + "px", event.clientX + "px"];
+                                        }];
                                     }
                                 }(),
-                                shade: 0.05,
+                                shade: function () {
+                                    if (/mobile/i.test(navigator.userAgent)) {
+                                        return 0.1
+                                    }
+                                    return 0;
+                                },
                                 shadeClose: true,
-                                content: ['<ul style="width:100px">'
+                                content: ['<style>'
+                                    , 'ul.context-menu > li > a{border: none;border-bottom: 1px solid rgba(0,0,0,.2);border-radius: 0}'
+                                    , 'ul.context-menu > li > a:hover{border-color: rgba(0,0,0,.2);background:#eaeaea}'
+                                    , 'ul.context-menu > li:last-child > a{border: none;}'
+                                    , '</style>'
+                                    , '<ul style="width:100px" class="context-menu">'
                                     , '<li><a type="button" class="layui-btn layui-btn-primary layui-btn-sm" style="width:100%" lay-command="left"> 居左 </a></li>'
                                     , '<li><a type="button" class="layui-btn layui-btn-primary layui-btn-sm" style="width:100%" lay-command="center"> 居中 </a></li>'
                                     , '<li><a type="button" class="layui-btn layui-btn-primary layui-btn-sm" style="width:100%" lay-command="right"> 居右 </a></li>'
-                                    , '<li><a type="button" class="layui-btn layui-btn-danger layui-btn-sm"  style="width:100%"> 删除 </a></li>'
+                                    , '<li><a type="button" class="layui-btn layui-btn-primary layui-btn-sm context-menu-delete" style="width:100%" lay-command="right"> 删除 </a></li>'
                                     , '</ul>'].join(''),
                                 success: function (layero, index) {
                                     var callDel = set.calldel;
@@ -1348,11 +1357,10 @@ layui.define(['layer', 'form'], function (exports) {
                                         }
                                         layer.close(index);
                                     });
-                                    layero.find('.layui-btn-danger').on('click', function () {
+                                    layero.find('.context-menu-delete').on('click', function () {
                                         if (currenNode.tagName == "BODY") {
                                             layer.msg("不能再删除了")
-                                        }
-                                        else if (currenNode.tagName == "VIDEO") {
+                                        } else if (currenNode.tagName == "VIDEO") {
                                             if (callDel.url != "") {
                                                 $.post(callDel.url, {
                                                     "filepath": event.target.src,
@@ -1364,8 +1372,7 @@ layui.define(['layer', 'form'], function (exports) {
                                             } else {
                                                 parentNode.remove();
                                             }
-                                        }
-                                        else if (currenNode.tagName == "IMG") {
+                                        } else if (currenNode.tagName == "IMG") {
                                             if (callDel.url != "") {
                                                 $.post(callDel.url, {para: event.target.src}, function (res) {
                                                     currenNode.remove();
@@ -1394,7 +1401,7 @@ layui.define(['layer', 'form'], function (exports) {
                             contextmenu(e);
                             clearTimeout(timeOutEvent);
                         }, 300);
-                        //长按400毫秒
+                        //长按300毫秒
                         e.preventDefault();
                     },
                     touchmove: function () {
@@ -2061,16 +2068,14 @@ function style_html(html_source, indent_size, indent_character, max_char) {
                     }
                     this.line_char_count--;
                     continue;
-                }
-                else if (space) {
+                } else if (space) {
                     if (this.line_char_count >= this.max_char) {
                         content.push('\n');
                         for (var i = 0; i < this.indent_level; i++) {
                             content.push(this.indent_string);
                         }
                         this.line_char_count = 0;
-                    }
-                    else {
+                    } else {
                         content.push(' ');
                         this.line_char_count++;
                     }
@@ -2107,8 +2112,7 @@ function style_html(html_source, indent_size, indent_character, max_char) {
             if (this.tags[tag + 'count']) {
                 this.tags[tag + 'count']++;
                 this.tags[tag + this.tags[tag + 'count']] = this.indent_level;
-            }
-            else {
+            } else {
                 this.tags[tag + 'count'] = 1;
                 this.tags[tag + this.tags[tag + 'count']] = this.indent_level;
             }
@@ -2133,8 +2137,7 @@ function style_html(html_source, indent_size, indent_character, max_char) {
                 delete this.tags[tag + this.tags[tag + 'count']];
                 if (this.tags[tag + 'count'] == 1) {
                     delete this.tags[tag + 'count'];
-                }
-                else {
+                } else {
                     this.tags[tag + 'count']--;
                 }
             }
@@ -2169,8 +2172,7 @@ function style_html(html_source, indent_size, indent_character, max_char) {
                     if (this.line_char_count >= this.max_char) {
                         this.print_newline(false, content);
                         this.line_char_count = 0;
-                    }
-                    else {
+                    } else {
                         content.push(' ');
                         this.line_char_count++;
                     }
@@ -2183,52 +2185,43 @@ function style_html(html_source, indent_size, indent_character, max_char) {
             var tag_index;
             if (tag_complete.indexOf(' ') != -1) {
                 tag_index = tag_complete.indexOf(' ');
-            }
-            else {
+            } else {
                 tag_index = tag_complete.indexOf('>');
             }
             var tag_check = tag_complete.substring(1, tag_index).toLowerCase();
             if (tag_complete.charAt(tag_complete.length - 2) === '/' ||
                 this.Utils.in_array(tag_check, this.Utils.single_token)) {
                 this.tag_type = 'SINGLE';
-            }
-            else if (tag_check === 'script') {
+            } else if (tag_check === 'script') {
                 this.record_tag(tag_check);
                 this.tag_type = 'SCRIPT';
-            }
-            else if (tag_check === 'style') {
+            } else if (tag_check === 'style') {
                 this.record_tag(tag_check);
                 this.tag_type = 'STYLE';
-            }
-            else if (tag_check.charAt(0) === '!') {
+            } else if (tag_check.charAt(0) === '!') {
                 if (tag_check.indexOf('[if') != -1) {
                     if (tag_complete.indexOf('!IE') != -1) {
                         var comment = this.get_unformatted('-->', tag_complete);
                         content.push(comment);
                     }
                     this.tag_type = 'START';
-                }
-                else if (tag_check.indexOf('[endif') != -1) {
+                } else if (tag_check.indexOf('[endif') != -1) {
                     this.tag_type = 'END';
                     this.unindent();
-                }
-                else if (tag_check.indexOf('[cdata[') != -1) {
+                } else if (tag_check.indexOf('[cdata[') != -1) {
                     var comment = this.get_unformatted(']]>', tag_complete);
                     content.push(comment);
                     this.tag_type = 'SINGLE';
-                }
-                else {
+                } else {
                     var comment = this.get_unformatted('-->', tag_complete);
                     content.push(comment);
                     this.tag_type = 'SINGLE';
                 }
-            }
-            else {
+            } else {
                 if (tag_check.charAt(0) === '/') {
                     this.retrieve_tag(tag_check.substring(1));
                     this.tag_type = 'END';
-                }
-                else {
+                } else {
                     this.record_tag(tag_check);
                     this.tag_type = 'START';
                 }
@@ -2285,8 +2278,7 @@ function style_html(html_source, indent_size, indent_character, max_char) {
                 token = this.get_content();
                 if (typeof token !== 'string') {
                     return token;
-                }
-                else {
+                } else {
                     return [token, 'TK_CONTENT'];
                 }
             }
@@ -2294,8 +2286,7 @@ function style_html(html_source, indent_size, indent_character, max_char) {
                 token = this.get_tag();
                 if (typeof token !== 'string') {
                     return token;
-                }
-                else {
+                } else {
                     var tag_name_type = 'TK_TAG_' + this.tag_type;
                     return [token, tag_name_type];
                 }
