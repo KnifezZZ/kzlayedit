@@ -39,6 +39,15 @@
                     console.log(data);
                 }
             }
+            , uploadFiles: {
+                url: 'your url',
+                accept: 'file',
+                acceptMime: 'file/*',
+                size: '20480',
+                done: function (data) {
+                    console.log(data);
+                }
+            }
             //右键删除图片/视频时的回调参数，post到后台删除服务器文件等操作，
             //传递参数：
             //图片： imgpath --图片路径
@@ -75,9 +84,10 @@
                 , href: 'https://www.layui.com'
                 ,onmouseup:''
             }
+            ,facePath:'/Content/Layui-KnifeZ/'
             , tool: [
-                'html','undo','redo' ,'code', 'strong', 'italic', 'underline', 'del', 'addhr', '|', 'fontFomatt', 'fontBackColor', 'colorpicker', 'face'
-                , '|', 'left', 'center', 'right', '|', 'link', 'unlink', 'images', 'image_alt', 'video', 'anchors'
+                'html', 'undo', 'redo', 'code', 'strong', 'italic', 'underline', 'del', 'addhr', '|', 'fontFomatt','fontfamily', 'fontBackColor', 'colorpicker', 'face'
+                , '|', 'left', 'center', 'right', '|', 'link', 'unlink', 'images', 'image_alt', 'video','attachment', 'anchors'
                 , '|'
                 , 'table','customlink'
                 , 'fullScreen'
