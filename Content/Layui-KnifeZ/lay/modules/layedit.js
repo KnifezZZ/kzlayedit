@@ -1735,7 +1735,9 @@ layui.define(['layer', 'form'], function (exports) {
                                 }
                             });
                             break;
+                            //return true;
                     }
+                    return false;
                 }
             };
             if (/mobile/i.test(navigator.userAgent)) {
@@ -1759,8 +1761,7 @@ layui.define(['layer', 'form'], function (exports) {
                 });
             } else {
                 body.on('contextmenu', function (event) {
-                    contextmenu(event);
-                    return false;
+                    return contextmenu(event);
                 })
             }
         }
