@@ -156,7 +156,7 @@ layui.define(['layer', 'form'], function (exports) {
 
         setIframe.call(that, editor, textArea[0], set)
         textArea.addClass('layui-hide').after(editor);
-        //colorpicker
+        //tool bind
         layui.use(['colorpicker', 'jquery'], function () {
             var colorpicker = layui.colorpicker, $ = layui.jquery;
             var iframeWin = getWin(that.index);
@@ -188,7 +188,7 @@ layui.define(['layer', 'form'], function (exports) {
                 }
             });
         })
-
+        //end
         return that.index;
     };
 
