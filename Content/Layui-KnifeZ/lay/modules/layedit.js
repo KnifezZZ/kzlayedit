@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V18.12.01
+ @Version: V18.12.06
  */
 
 layui.define(['layer', 'form'], function (exports) {
@@ -156,6 +156,38 @@ layui.define(['layer', 'form'], function (exports) {
 
         setIframe.call(that, editor, textArea[0], set)
         textArea.addClass('layui-hide').after(editor);
+        //colorpicker
+        layui.use(['colorpicker', 'jquery'], function () {
+            var colorpicker = layui.colorpicker, $ = layui.jquery;
+            var iframeWin = getWin(that.index);
+            colorpicker.render({
+                elem: '#layEditfontBkcolor'  //绑定元素
+                , predefine: true
+                , size: 'xs'
+                , done: function (color) {
+                    if (device.ie)
+                        iframeWin[0].document.execCommand('backColor', false, color);
+                    else
+                        iframeWin[0].document.execCommand('hiliteColor', false, color);
+
+                    setTimeout(function () {
+                        iframeWin[0].document.body.focus();
+                    }, 10);
+                }
+            });
+            colorpicker.render({
+                elem: '#layEditfontcolor'  //绑定元素
+                , predefine: true
+                , size: 'xs'
+                , color: '#000'
+                , done: function (color) {
+                    iframeWin[0].document.execCommand('forecolor', false, color);
+                    setTimeout(function () {
+                        iframeWin[0].document.body.focus();
+                    }, 10);
+                }
+            });
+        })
 
         return that.index;
     };
@@ -1102,27 +1134,6 @@ layui.define(['layer', 'form'], function (exports) {
                         this.parentElement.nextElementSibling.firstElementChild.style = "height:" + set.height;
                     }
                 }
-                //字体颜色选择
-                , colorpicker: function (range) {
-                    colorpicker.call(this, function (color) {
-                        iframeDOM.execCommand('forecolor', false, color);
-                        setTimeout(function () {
-                            body.focus();
-                        }, 100);
-                    });
-                }
-                , fontBackColor: function (range) {
-                    colorpicker.call(this, function (color) {
-                        if (device.ie)
-                            iframeDOM.execCommand('backColor', false, color);
-                        else
-                            iframeDOM.execCommand('hiliteColor', false, color);
-
-                        setTimeout(function () {
-                            body.focus();
-                        }, 100);
-                    });
-                }
                 , fontFomatt: function (range) {
                     var alt = set.fontFomatt || {
                         code: ["p", "h1", "h2", "h3", "h4", "div"],
@@ -1288,7 +1299,6 @@ layui.define(['layer', 'form'], function (exports) {
                 toolCheck.call(iframeWin, tools);
                 layer.close(face.index);
                 layer.close(table.index);
-                layer.close(colorpicker.index);
                 layer.close(fontFomatt.index);
             });
             //右键菜单自定义
@@ -2114,71 +2124,6 @@ layui.define(['layer', 'form'], function (exports) {
                 });
             }
         }
-        //字体颜色
-        , colorpicker = function (callback) {
-            var colors = function () {
-                var alt = ["#fff", "#000", "#800000", "#ffb800", "#1e9fff", "#5fb878", "#ff5722", "#999999", "#01aaed", "#cc0000", "#ff8c00", "#ffd700", "#90ee90", "#00ced1", "#1e90ff",
-                    "#c71585", "#00babd", "#ff7800"], arr = {};
-                layui.each(alt, function (index, item) {
-                    arr[item] = item;
-                });
-                return arr;
-            }();
-            colorpicker.hide = colorpicker.hide || function (e) {
-                if ($(e.target).attr('layedit-event') == 'colorpicker' || $(e.target).attr('layedit-event') == 'fontBackColor') {
-                } else {
-                    layer.close(colorpicker.index);
-                }
-            };
-            if (/mobile/i.test(navigator.userAgent)) {
-                return colorpicker.index = layer.open({
-                    type: 1
-                    , title: false
-                    , closeBtn: 0
-                    , shade: 0.05
-                    , shadeClose: true
-                    , area: ['auto']
-                    , content: function () {
-                        var content = [];
-                        layui.each(colors, function (key, item) {
-                            content.push('<li title="' + item + '" style="background-color:' + item + '"><span style="background-' + item + '" alt="' + key + '"/></li>');
-                        });
-                        return '<ul class="layui-clear" style="width: 279px;">' + content.join('') + '</ul>';
-                    }()
-                    , skin: 'layui-box layui-util-face'
-                    , success: function (layero, index) {
-                        layero.find('.layui-clear>li').on('click', function () {
-                            callback && callback(this.title);
-                            layer.close(index);
-                        });
-                    }
-                });
-            } else {
-                return colorpicker.index = layer.tips(function () {
-                    var content = [];
-                    layui.each(colors, function (key, item) {
-                        content.push('<li title="' + item + '" style="background-color:' + item + '"><span style="background-' + item + '" alt="' + key + '"/></li>');
-                    });
-                    return '<ul class="layui-clear" style="width: 279px;">' + content.join('') + '</ul>';
-                }(), this, {
-                    tips: 1
-                    , time: 0
-                    , skin: 'layui-box layui-util-face'
-                    , area: ['auto']
-                    //, maxWidth: 300
-                    , success: function (layero, index) {
-                        layero.css({
-                            marginTop: -4
-                            , marginLeft: -10
-                        }).find('.layui-clear>li').on('click', function () {
-                            callback && callback(this.title);
-                            layer.close(index);
-                        });
-                        $(document).off('click', colorpicker.hide).on('click', colorpicker.hide);
-                    }
-                });
-            }
-        }
         , fontFomatt = function (options, callback) {
             fontFomatt.hide = fontFomatt.hide || function (e) {
                 if ($(e.target).attr('layedit-event') == 'fontFomatt' || $(e.target).attr('layedit-event') == 'fontfamily') {
@@ -2359,9 +2304,9 @@ layui.define(['layer', 'form'], function (exports) {
             ,
             fullScreen: '<i class="layui-icon layedit-tool-fullScreen" title="全屏" layedit-event="fullScreen"style="font-size:18px">&#xe638;</i>'
             ,
-            colorpicker: '<i class="layui-icon layedit-tool-colorpicker" title="字体颜色选择" layedit-event="colorpicker" style="font-size:18px">&#xe66a;</i>'
+            colorpicker: '<i class="layui-icon" title="字体颜色选择" id="layEditfontcolor">&#xe66a;</i>'
             ,
-            fontBackColor: '<i class="layui-icon layedit-tool-fontBackColor" title="字体背景色选择" layedit-event="fontBackColor" style="font-size:18px;">&#xe60f;</i>'
+            fontBackColor: '<i class="layui-icon" title="字体背景色选择" id="layEditfontBkcolor"></i>'
             ,
             fontFomatt: '<i class="layui-icon layedit-tool-fontFomatt" title="段落格式" layedit-event="fontFomatt" style="font-size:18px">&#xe639;</i>'
             ,
