@@ -162,6 +162,7 @@ layui.define(['layer', 'form'], function (exports) {
                 colorpicker.render({
                     elem: '#layBkColor_' + i  //绑定元素
                     , predefine: true
+                    , colors: ['#800000', '#cc0000', '#999999', '#ff8c00', '#ffb800', '#ff7800', '#1e90ff', '#009688', '#5fb878', '#ffffff', '#000000'] 
                     , size: 'xs'
                     , done: function (color) {
                         debugger;
@@ -179,6 +180,7 @@ layui.define(['layer', 'form'], function (exports) {
                 colorpicker.render({
                     elem: '#layFontColor_' + i  //绑定元素
                     , predefine: true
+                    , colors: ['#800000', '#cc0000', '#999999', '#ff8c00', '#ffb800', '#ff7800', '#1e90ff', '#009688', '#5fb878', '#ffffff','#000000'] 
                     , size: 'xs'
                     , color: '#000'
                     , done: function (color) {
@@ -190,33 +192,6 @@ layui.define(['layer', 'form'], function (exports) {
                     }
                 });
             }
-            //colorpicker.render({
-            //    elem: '#layBkColor_' + that.index  //绑定元素
-            //    , predefine: true
-            //    , size: 'xs'
-            //    , done: function (color) {
-            //        if (device.ie)
-            //            iframeWin[0].document.execCommand('backColor', false, color);
-            //        else
-            //            iframeWin[0].document.execCommand('hiliteColor', false, color);
-
-            //        setTimeout(function () {
-            //            iframeWin[0].document.body.focus();
-            //        }, 10);
-            //    }
-            //});
-            //colorpicker.render({
-            //    elem: '#layFontColor_' + that.index  //绑定元素
-            //    , predefine: true
-            //    , size: 'xs'
-            //    , color: '#000'
-            //    , done: function (color) {
-            //        iframeWin[0].document.execCommand('forecolor', false, color);
-            //        setTimeout(function () {
-            //            iframeWin[0].document.body.focus();
-            //        }, 10);
-            //    }
-            //});
         })
         //end
         return that.index;
@@ -1886,7 +1861,7 @@ layui.define(['layer', 'form'], function (exports) {
                     , '<li class="layui-form-item">'
                     , '<label class="layui-form-label" style="width: 70px;">链接文本</label>'
                     , '<div class="layui-input-block">'
-                    , '<input name="text" value="' + (options.text || '') + '" autofocus="true" autocomplete="off" class="layui-input" ' + (options.text !== undefined ? 'readonly="readonly"' : '') + '>'
+                    , '<input name="text" value="' + (options.text || '') + '" autofocus="true" autocomplete="off" class="layui-input" ' + (options.text !== "" ? 'readonly="readonly"' : '') + '>'
                     , '</div>'
                     , '</li>'
                     , '<li class="layui-form-item ' + (dMode ? '' : 'layui-hide') + '">'
