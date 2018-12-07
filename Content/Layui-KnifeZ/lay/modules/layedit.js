@@ -1162,6 +1162,7 @@ layui.define(['layer', 'form'], function (exports) {
                                 editor.setTheme("ace/theme/tomorrow");
                                 editor.setValue(docs);
                                 editor.setOption("wrap", "free");
+                                editor.execCommand('find');
                                 editor.gotoLine(0);
                             }
                         });
