@@ -3,6 +3,8 @@
 [码云Gitee Pages](http://knifez.gitee.io/kz.layedit/)
 ### 虽然对移动端做了适配,但是使用体验不咋的,已经放弃治疗.以后估计只会优化界面,避免出现宽,高溢出的情况.但是操作体验上基本无法改进了...不建议移动端做富文本编辑....
 #### 更新日志
+- ##### V18.12.08
+1. [新增] videoAttr配置参数，供插入视频时的自定义属性，如 preload="none"。
 - ##### V18.12.07
 1. [修复] 一个页面多个编辑器时字体颜色、背景色无效问题
 2. [修复] 添加超链接无法正确获取选中文本，不选rel和target属性时不添加rel和target,tartget设置为_self时不添加target,取消默认nofollow
@@ -97,7 +99,7 @@
 3. 正常调用layedit即可
 
 #### 使用说明
-配置信息
+配置信息(具体查看示例文件)
 
 ```
      layui.use(['layedit','layer','jquery'],function() {

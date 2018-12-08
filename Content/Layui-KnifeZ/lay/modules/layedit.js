@@ -873,7 +873,7 @@ layui.define(['layer', 'form'], function (exports) {
                                 if (video.val() == '') {
                                     layer.msg('请选择一个视频或输入视频地址')
                                 } else {
-                                    var txt = '&nbsp;<video src="' + video.val() + '" poster="' + cover.val() + '" controls="controls" >您的浏览器不支持video播放</video>&nbsp;';
+                                    var txt = '&nbsp;<video src="' + video.val() + '" poster="' + cover.val() + '" ' + set.videoAttr + ' controls="controls" >您的浏览器不支持video播放</video>&nbsp;';
                                     var custclass = '';
                                     if (customTheme.video.title.length > 0 && theme.length > 0) {
                                         //追加样式
