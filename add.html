@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<title>layedit demo</title>
+	<link href="Content/Layui-KnifeZ/css/layui.css" rel="stylesheet" />
+	<script src="Content/Layui-KnifeZ/layui.js"></script>
+	<script src="Content/ace/ace.js"></script>
+</head>
+<body>
+	<form class="layui-form">
+		<div class="layui-form-item">
+			<textarea id="layeditDemo"></textarea>
+		</div>
+	</form>
+
+	<script>
+    layui.use(['layedit', 'layer','form', 'jquery'], function () {
+        var $ = layui.jquery
+            , layer = layui.layer
+            , layedit = layui.layedit;
+        layedit.set({
+            uploadImage: {
+                url: 'your url',
+                accept: 'image',
+                acceptMime: 'image/*',
+                exts: 'jpg|png|gif|bmp|jpeg',
+                size: 1024 * 10,
+                done: function (data) {
+                    console.log(data);
+                }
+            }
+            , uploadVideo: {
+                url: 'your url',
+                accept: 'video',
+                acceptMime: 'video/*',
+                exts: 'mp4|flv|avi|rm|rmvb',
+                size: 1024 * 10 * 2,
+                done: function (data) {
+                    console.log(data);
+                }
+            }
+            , uploadFiles: {
+                url: 'your url',
+                accept: 'file',
+                acceptMime: 'file/*',
+                size: '20480',
+                done: function (data) {
+                    console.log(data);
+                }
+            }
+            , calldel: {
+                url: 'your url',
+                done: function (data) {
+                    console.log(data);
+                }
+            }
+            , facePath: 'http://knifez.gitee.io/kz.layedit/Content/Layui-KnifeZ/'
+            , devmode: true
+            , tool: [
+                'html', 'undo', 'redo', 'code', 'strong', 'italic', 'underline', 'del', 'addhr', '|', 'fontFomatt', 'fontfamily','fontSize', 'fontBackColor', 'colorpicker', 'face'
+                , '|', 'left', 'center', 'right', '|', 'link', 'unlink', 'images', 'image_alt', 'video','attachment', 'anchors'
+                , '|'
+                , 'table', 'fullScreen'
+            ]
+            , height: '90%'
+        });
+        var ieditor = layedit.build('layeditDemo');
+        layedit.setContent(ieditor, "<h1>hello layedit</h1>", false);
+    })
+	</script>
+</body>
+</html>

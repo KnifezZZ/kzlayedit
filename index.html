@@ -10,13 +10,20 @@
     <script src="Content/ace/ace.js"></script>
 </head>
 <body>
-<div>
-    <textarea id="layeditDemo"></textarea>
-</div>
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <button id="openlayer" class="layui-btn layui-btn-normal">Click Me</button>
+        </div>
+        <div class="layui-form-item">
+            <textarea id="layeditDemo"></textarea>
+        </div>
+    </div>
+
 <script>
     layui.use(['layedit', 'layer', 'jquery'], function () {
-        var $ = layui.jquery;
-        var layedit = layui.layedit;
+        var $ = layui.jquery
+            , layer = layui.layer
+            , layedit = layui.layedit;
         layedit.set({
             //暴露layupload参数设置接口 --详细查看layupload参数说明
             uploadImage: {
@@ -98,6 +105,18 @@
         var ieditor = layedit.build('layeditDemo');
         //设置编辑器内容
         layedit.setContent(ieditor, "<h1>hello layedit</h1>", false);
+        $("#openlayer").click(function () {
+            layer.open({
+                type: 2,
+                area: ['700px', '500px'],
+                fix: false, //不固定
+                maxmin: true,
+                shadeClose: true,
+                shade: 0.5,
+                title: "title",
+                content: 'add.html'
+            });
+        })
     })
 </script>
 </body>
