@@ -417,7 +417,7 @@ layui.define(['layer', 'form'], function (exports) {
                     elep = elem;
                 }
                 //处理换行
-                if (container.innerHTML == "<br>" || tagName != "div") {
+                if (container.innerHTML == "<br>" || tagName == "div") {
                     range.selectNode(container);
                     range.deleteContents();
                 }
