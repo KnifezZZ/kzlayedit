@@ -162,7 +162,7 @@ layui.define(['layer', 'form'], function (exports) {
                 colorpicker.render({
                     elem: '#layBkColor_' + i  //绑定元素
                     , predefine: true
-                    , colors: ['#800000', '#cc0000', '#999999', '#ff8c00', '#ffb800', '#ff7800', '#1e90ff', '#009688', '#5fb878', '#ffffff', '#000000'] 
+                    , colors: ['#800000', '#cc0000', '#999999', '#ff8c00', '#ffb800', '#ff7800', '#1e90ff', '#009688', '#5fb878', '#ffffff', '#000000']
                     , size: 'xs'
                     , done: function (color) {
                         debugger;
@@ -180,7 +180,7 @@ layui.define(['layer', 'form'], function (exports) {
                 colorpicker.render({
                     elem: '#layFontColor_' + i  //绑定元素
                     , predefine: true
-                    , colors: ['#800000', '#cc0000', '#999999', '#ff8c00', '#ffb800', '#ff7800', '#1e90ff', '#009688', '#5fb878', '#ffffff','#000000'] 
+                    , colors: ['#800000', '#cc0000', '#999999', '#ff8c00', '#ffb800', '#ff7800', '#1e90ff', '#009688', '#5fb878', '#ffffff', '#000000']
                     , size: 'xs'
                     , color: '#000'
                     , done: function (color) {
@@ -314,7 +314,6 @@ layui.define(['layer', 'form'], function (exports) {
                     var range = Range(iframeDOM);
                     var container = getContainer(range)
                         , parentNode = container.parentNode;
-
                     if (parentNode.tagName.toLowerCase() === 'pre') {
                         if (e.shiftKey) return
                         layer.msg('请暂时用shift+enter');
@@ -323,6 +322,9 @@ layui.define(['layer', 'form'], function (exports) {
                     if (parentNode.tagName.toLowerCase() === 'body') {
                         iframeDOM.execCommand('formatBlock', false, '<p>');
                     }
+                    setTimeout(function () {
+                        iframeDOM.execCommand('formatBlock', false, '<p>');
+                    }, 10);
                 }
             });
 
@@ -384,7 +386,8 @@ layui.define(['layer', 'form'], function (exports) {
         //在选区插入内联元素
         , insertInline = function (tagName, attr, range) {
             var iframeDOM = this.document
-                , elem = document.createElement(tagName)
+                , elem = document.createElement(tagName);
+            var elep = document.createElement('p');
             for (var key in attr) {
                 elem.setAttribute(key, attr[key]);
             }
@@ -405,8 +408,29 @@ layui.define(['layer', 'form'], function (exports) {
                 if (text) {
                     elem.innerHTML = text;
                 }
+                debugger;
+                var container = getContainer(range), parentNode = container.parentNode;
+
+                if (tagName != "p" && tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
+                    elep.appendChild(elem);
+                } else {
+                    elep = elem;
+                }
+                //处理换行
+                if (container.innerHTML == "<br>" || tagName != "div") {
+                    range.selectNode(container);
+                    range.deleteContents();
+                }
                 range.deleteContents();
-                range.insertNode(elem);
+                range.insertNode(elep);
+                //图片默认居中
+                if (tagName == "img" && container.innerHTML == "<br>") {
+                    iframeDOM.execCommand('formatBlock', false, '<p>');
+                    iframeDOM.execCommand('justifyCenter');
+                    setTimeout(function () {
+                        body.focus();
+                    }, 10);
+                }
             }
         }
 
@@ -654,7 +678,7 @@ layui.define(['layer', 'form'], function (exports) {
                                             obj.preview(function (index, file, result) {
                                                 //由于有时预览会在allDone之后回调，此时所有单个文件的error已经执行，即已经出错的文件id以有，因此需要判断此预览文件id是否是上传出错文件的id，不是才预览
                                                 if (errorIndex.indexOf(index) === -1)
-                                                    $('#imgsPrev').append('<img data-index="' + index + '" src="' + result + '" alt="' + file.name + '" style="max-width:70px;margin:2px" class="layui-upload-img">')
+                                                    $('#imgsPrev').append('<img data-index="' + index + '" src="' + result + '" alt="' + file.name + '" style="max-width:70px;margin:2px" class="layui-upload-img"/>>')
                                             });
                                         }
                                         , allDone: function () {
@@ -1115,43 +1139,57 @@ layui.define(['layer', 'form'], function (exports) {
                         var that = this;
                         var docs = that.parentElement.nextElementSibling.firstElementChild.contentDocument.body.innerHTML;
                         docs = style_html(docs, 4, ' ', 80);
-                        layer.open({
-                            type: 1
-                            , id: 'knife-z-html'
-                            , title: '源码模式'
-                            , shade: 0.3
-                            //, maxmin: true
-                            , area: ['85%', '85%']
-                            , content: '<div id ="aceHtmleditor" style="width:100%;height:100%"></div>'
-                            , btn: ['确定', '取消']
-                            , btnAlign: 'c'
-                            , yes: function (index) {
-                                var editor = ace.edit('aceHtmleditor');
-                                iframeWin.document.body.innerHTML = editor.getValue();
-                                layer.close(index);
-                            }
-                            , success: function (layero, index) {
-                                var editor = ace.edit('aceHtmleditor');
-                                editor.setFontSize(14);
-                                editor.session.setMode("ace/mode/html");
-                                editor.setTheme("ace/theme/tomorrow");
-                                editor.setValue(docs);
-                                editor.setOption("wrap", "free");
-                                editor.execCommand('find');
-                                editor.gotoLine(0);
-                            }
-                        });
+                        if (that.parentElement.nextElementSibling.lastElementChild.id.indexOf('aceHtmleditor') == -1) {
+                            that.parentElement.nextElementSibling.setAttribute("style", "z-index: 999; overflow: hidden;height:" + set.height);
+                            if (this.parentElement.parentElement.getAttribute("style") !== null)
+                                that.parentElement.nextElementSibling.setAttribute("style", "z-index: 999; overflow: hidden;height:100%");
+
+                            that.parentElement.nextElementSibling.firstElementChild.style = "position: absolute;left: -32768px;top: -32768px;";
+                            var htmlPanel = document.createElement("div");
+                            htmlPanel.setAttribute("id", that.parentElement.nextElementSibling.firstElementChild.id + "aceHtmleditor");
+                            htmlPanel.setAttribute("style", "left: 0px;top: 0px;width: 100%;height: 100%");
+                            that.parentElement.nextElementSibling.appendChild(htmlPanel);
+                            var editor = ace.edit(that.parentElement.nextElementSibling.firstElementChild.id + 'aceHtmleditor');
+                            editor.setFontSize(14);
+                            editor.session.setMode("ace/mode/html");
+                            editor.setTheme("ace/theme/tomorrow");
+                            editor.setValue(docs);
+                            editor.setOption("wrap", "free");
+                            editor.gotoLine(0);
+                            editor.execCommand('find');
+                            //工具栏屏蔽
+                            $(that).siblings('i').addClass("layui-disabled");
+                            $(that).siblings('.layedit-tool-fullScreen').removeClass("layui-disabled");
+                            $(that).removeClass("layui-disabled");
+                        } else {
+                            var editor = ace.edit(that.parentElement.nextElementSibling.firstElementChild.id + 'aceHtmleditor');
+                            iframeWin.document.body.innerHTML = editor.getValue();
+                            that.parentElement.nextElementSibling.removeAttribute("style");
+                            this.parentElement.nextElementSibling.firstElementChild.style = "height:" + set.height;
+                            this.parentElement.nextElementSibling.lastElementChild.remove();
+                            $(that).siblings('i').removeClass("layui-disabled");
+                        }
                     }
                     //全屏
                     , fullScreen: function (range) {
+
                         if (this.parentElement.parentElement.getAttribute("style") == null) {
                             this.parentElement.parentElement.setAttribute("style", "position: fixed;top: 0;left: 0;height: 100%;width: 100%;background-color: antiquewhite;z-index: 9999;");
                             this.parentElement.nextElementSibling.style = "height:100%";
                             this.parentElement.nextElementSibling.firstElementChild.style = "height:100%";
+                            //是否源码模式
+                            if (this.parentElement.nextElementSibling.lastElementChild.id.indexOf('aceHtmleditor') > -1) {
+                                this.parentElement.nextElementSibling.firstElementChild.style = "position: absolute;left: -32768px;top: -32768px;";
+                                this.parentElement.nextElementSibling.setAttribute("style", "z-index: 999; overflow: hidden;height:100%");
+                            }
                         } else {
                             this.parentElement.parentElement.removeAttribute("style");
                             this.parentElement.nextElementSibling.removeAttribute("style");
                             this.parentElement.nextElementSibling.firstElementChild.style = "height:" + set.height;
+                            if (this.parentElement.nextElementSibling.lastElementChild.id.indexOf('aceHtmleditor') > -1) {
+                                this.parentElement.nextElementSibling.firstElementChild.style = "position: absolute;left: -32768px;top: -32768px;";
+                                this.parentElement.nextElementSibling.setAttribute("style", "z-index: 999; overflow: hidden;height:" + set.height);
+                            }
                         }
                     }
                     , fontFomatt: function (range) {
@@ -1689,13 +1727,13 @@ layui.define(['layer', 'form'], function (exports) {
                                 , skin: 'layui-box layui-util-face'
                                 , content: function () {
                                     var content = [
-                                        , '<li  style="float: initial;width:100%;"><a type="button"  style="width:100%" lay-command="addnewtr"> 新增行 </a></li>'
-                                        , '<li  style="float: initial;width:100%;"><a type="button" style="width:100%" lay-command="deltr"> 删除行 </a></li>'].join('');
+                                        , '<li  style="float: initial;width:100%;" lay-command="addnewtr"> 新增行 </li>'
+                                        , '<li  style="float: initial;width:100%;"  lay-command="deltr"> 删除行 </li>'].join('');
                                     return '<ul class="layui-clear" style="width: max-content;">' + content + '</ul>';
                                 }()
                                 , success: function (layero, index) {
 
-                                    layero.find('a').on('click', function () {
+                                    layero.find('li').on('click', function () {
                                         var othis = $(this), command = othis.attr('lay-command');
                                         if (command) {
                                             switch (command) {
