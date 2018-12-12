@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V18.12.07
+ @Version: V18.12.12 beta
  */
 
 layui.define(['layer', 'form'], function (exports) {
@@ -165,7 +165,6 @@ layui.define(['layer', 'form'], function (exports) {
                     , colors: ['#800000', '#cc0000', '#999999', '#ff8c00', '#ffb800', '#ff7800', '#1e90ff', '#009688', '#5fb878', '#ffffff', '#000000']
                     , size: 'xs'
                     , done: function (color) {
-                        debugger;
                         var iframeWin = getWin(this.elem.split('_')[1]);
                         if (device.ie)
                             iframeWin[0].document.execCommand('backColor', false, color);
@@ -408,7 +407,6 @@ layui.define(['layer', 'form'], function (exports) {
                 if (text) {
                     elem.innerHTML = text;
                 }
-                debugger;
                 var container = getContainer(range), parentNode = container.parentNode;
 
                 if (tagName != "p" && tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
@@ -549,7 +547,7 @@ layui.define(['layer', 'form'], function (exports) {
                             }, range);
                             setTimeout(function () {
                                 body.focus();
-                            }, 100);
+                            }, 10);
                         });
                     }
                     //图片
@@ -575,7 +573,7 @@ layui.define(['layer', 'form'], function (exports) {
                                         uploadImage.done(res);
                                         setTimeout(function () {
                                             body.focus();
-                                        }, 100);
+                                        }, 10);
                                     } else {
                                         layer.msg(res.msg || '上传失败');
                                     }
@@ -593,7 +591,7 @@ layui.define(['layer', 'form'], function (exports) {
                             }, range);
                             setTimeout(function () {
                                 body.focus();
-                            }, 100);
+                            }, 10);
                         });
                     }
                     /*#Extens#*/
@@ -658,6 +656,34 @@ layui.define(['layer', 'form'], function (exports) {
                                     layer.close(index);
                                 }
                             }
+                            , btn2: function (index, layero) {
+                                if (layero.find("#imgsPrev img").length > 0) {
+                                    var imgPaths = "";
+                                    for (var i = 0; i < layero.find("#imgsPrev img").length; i++) {
+                                        imgPaths += layero.find("#imgsPrev img")[i].src;
+                                    }
+                                    var callDel = set.calldel;
+                                    if (callDel.url != "") {
+                                        $.post(callDel.url, { "imgpath": imgPaths }, function (res) {
+                                            callDel.done(res);
+                                        })
+                                    }
+                                }
+                            }
+                            , cancel: function () {
+                                if (layero.find("#imgsPrev img").length > 0) {
+                                    var imgPaths = "";
+                                    for (var i = 0; i < layero.find("#imgsPrev img").length; i++) {
+                                        imgPaths += layero.find("#imgsPrev img")[i].src;
+                                    }
+                                    var callDel = set.calldel;
+                                    if (callDel.url != "") {
+                                        $.post(callDel.url, { "imgpath": imgPaths }, function (res) {
+                                            callDel.done(res);
+                                        })
+                                    }
+                                }
+                            }
                             , success: function (layero, index) {
                                 layui.use('upload', function () {
                                     var upload = layui.upload;
@@ -678,7 +704,7 @@ layui.define(['layer', 'form'], function (exports) {
                                             obj.preview(function (index, file, result) {
                                                 //由于有时预览会在allDone之后回调，此时所有单个文件的error已经执行，即已经出错的文件id以有，因此需要判断此预览文件id是否是上传出错文件的id，不是才预览
                                                 if (errorIndex.indexOf(index) === -1)
-                                                    $('#imgsPrev').append('<img data-index="' + index + '" src="' + result + '" alt="' + file.name + '" style="max-width:70px;margin:2px" class="layui-upload-img"/>>')
+                                                    $('#imgsPrev').append('<img data-index="' + index + '" src="' + result + '" alt="' + file.name + '" style="max-width:70px;margin:2px" class="layui-upload-img"/> ')
                                             });
                                         }
                                         , allDone: function () {
@@ -705,16 +731,18 @@ layui.define(['layer', 'form'], function (exports) {
                                             }
 
                                             layero.find('.layui-upload-img').on('click', function () {
+                                                var imgsrc = this.src;
+                                                var dataIndex = this.getAttribute("data-index");
                                                 layer.confirm('是否删除该图片?', { icon: 3, title: '提示' }, function (index) {
                                                     var callDel = set.calldel;
                                                     if (callDel.url != "") {
-                                                        $.post(callDel.url, { "imgpath": this.src }, function (res) {
-                                                            $("#imgsPrev img:last")[0].remove();
+                                                        $.post(callDel.url, { "imgpath": imgsrc }, function (res) {
+                                                            $("#imgsPrev img[data-index=" + dataIndex + "]")[0].remove();
                                                             callDel.done(res);
                                                         })
                                                     } else {
                                                         layer.msg("没有配置回调参数");
-                                                        $("#imgsPrev img:last")[0].remove();
+                                                        $("#imgsPrev img[data-index=" + dataIndex + "]")[0].remove();
                                                     }
                                                     layer.close(index);
                                                 });
@@ -787,6 +815,22 @@ layui.define(['layer', 'form'], function (exports) {
                                         , style: styleStr
                                     }, range);
                                     layer.close(index);
+                                }
+                            }
+                            , btn2: function (index, layero) {
+                                var callDel = set.calldel;
+                                if (callDel.url != "") {
+                                    $.post(callDel.url, { "imgpath": layero.find('input[name="Imgsrc"]').val() }, function (res) {
+                                        callDel.done(res);
+                                    })
+                                }
+                            }
+                            , cancel: function () {
+                                var callDel = set.calldel;
+                                if (callDel.url != "") {
+                                    $.post(callDel.url, { "imgpath": layero.find('input[name="Imgsrc"]').val() }, function (res) {
+                                        callDel.done(res);
+                                    })
                                 }
                             }
                             , success: function (layero, index) {
@@ -908,6 +952,28 @@ layui.define(['layer', 'form'], function (exports) {
                                         , class: custclass
                                     }, range);
                                     layer.close(index);
+                                }
+                            }
+                            , btn2: function (index, layero) {
+                                var callDel = set.calldel;
+                                if (callDel.url != "") {
+                                    $.post(callDel.url, {
+                                        "imgpath": layero.find('input[name="cover"]').val()
+                                        , "filepath": layero.find('input[name="video"]').val()
+                                    }, function (res) {
+                                        callDel.done(res);
+                                    })
+                                }
+                            }
+                            , cancel: function () {
+                                var callDel = set.calldel;
+                                if (callDel.url != "") {
+                                    $.post(callDel.url, {
+                                        "imgpath": layero.find('input[name="cover"]').val()
+                                        , "filepath": layero.find('input[name="video"]').val()
+                                    }, function (res) {
+                                        callDel.done(res);
+                                    })
                                 }
                             }
                             , success: function (layero, index) {
@@ -1156,11 +1222,11 @@ layui.define(['layer', 'form'], function (exports) {
                             editor.setValue(docs);
                             editor.setOption("wrap", "free");
                             editor.gotoLine(0);
-                            editor.execCommand('find');
                             //工具栏屏蔽
                             $(that).siblings('i').addClass("layui-disabled");
                             $(that).siblings('.layedit-tool-fullScreen').removeClass("layui-disabled");
                             $(that).removeClass("layui-disabled");
+
                         } else {
                             var editor = ace.edit(that.parentElement.nextElementSibling.firstElementChild.id + 'aceHtmleditor');
                             iframeWin.document.body.innerHTML = editor.getValue();
@@ -1215,7 +1281,7 @@ layui.define(['layer', 'form'], function (exports) {
                             iframeDOM.execCommand('formatBlock', false, "<" + value + ">");
                             setTimeout(function () {
                                 body.focus();
-                            }, 1);
+                            }, 10);
                         });
                     }
                     , fontfamily: function (range) {
@@ -1244,7 +1310,7 @@ layui.define(['layer', 'form'], function (exports) {
                             }, range);
                             setTimeout(function () {
                                 body.focus();
-                            }, 1);
+                            }, 10);
                         });
                     }
                     , fontSize: function (range) {
@@ -1273,7 +1339,7 @@ layui.define(['layer', 'form'], function (exports) {
                             }, range);
                             setTimeout(function () {
                                 body.focus();
-                            }, 1);
+                            }, 10);
                         });
                     }
                     , customlink: function (range) {
