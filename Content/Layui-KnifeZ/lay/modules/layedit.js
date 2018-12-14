@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V18.12.12 beta
+ @Version: V18.12.14 beta
  */
 
 layui.define(['layer', 'form'], function (exports) {
@@ -409,13 +409,13 @@ layui.define(['layer', 'form'], function (exports) {
                 }
                 var container = getContainer(range), parentNode = container.parentNode;
 
-                if (tagName != "p" && tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
+                if (tagName != "p"&&tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
                     elep.appendChild(elem);
                 } else {
                     elep = elem;
                 }
                 //处理换行
-                if (container.innerHTML == "<br>" || tagName == "div") {
+                if (container.innerHTML == "<br>"||tagName == "div") {
                     range.selectNode(container);
                     range.deleteContents();
                 }
@@ -667,7 +667,7 @@ layui.define(['layer', 'form'], function (exports) {
                                         $.post(callDel.url, { "imgpath": imgPaths }, function (res) {
                                             callDel.done(res);
                                         })
-                                    }
+                                    } 
                                 }
                             }
                             , cancel: function () {
@@ -736,8 +736,8 @@ layui.define(['layer', 'form'], function (exports) {
                                                 layer.confirm('是否删除该图片?', { icon: 3, title: '提示' }, function (index) {
                                                     var callDel = set.calldel;
                                                     if (callDel.url != "") {
-                                                        $.post(callDel.url, { "imgpath": imgsrc }, function (res) {
-                                                            $("#imgsPrev img[data-index=" + dataIndex + "]")[0].remove();
+                                                        $.post(callDel.url, { "imgpath": imgsrc}, function (res) {
+                                                            $("#imgsPrev img[data-index=" + dataIndex+"]")[0].remove();
                                                             callDel.done(res);
                                                         })
                                                     } else {
@@ -924,11 +924,11 @@ layui.define(['layer', 'form'], function (exports) {
                             , content: ['<ul class="layui-form layui-form-pane" style="margin: 20px 20px 0 20px">'
                                 , '<li class="layui-form-item" style="position: relative">'
                                 , '<button type="button" class="layui-btn" id="LayEdit_InsertVideo" style="width: 110px;position: relative;z-index: 10;"> <i class="layui-icon"></i>上传视频</button>'
-                                , '<input type="text" name="video" placeholder="请选择文件" style="position: absolute;width: 100%;padding-left: 120px;left: 0;top:0" class="layui-input">'
+                                , '<input type="text" name="video" placeholder="请选择上传或粘贴视频地址" style="position: absolute;width: 100%;padding-left: 120px;left: 0;top:0" class="layui-input">'
                                 , '</li>'
                                 , '<li class="layui-form-item" style="position: relative">'
                                 , '<button type="button" class="layui-btn" id="LayEdit_InsertImage" style="width: 110px;position: relative;z-index: 10;"> <i class="layui-icon"></i>上传封面</button>'
-                                , '<input type="text" name="cover" placeholder="请选择文件" style="position: absolute;width: 100%;padding-left: 120px;left: 0;top:0" class="layui-input">'
+                                , '<input type="text" name="cover" placeholder="请选择视频封面" style="position: absolute;width: 100%;padding-left: 120px;left: 0;top:0" class="layui-input">'
                                 , '</li>'
                                 , customContent
                                 , '</ul>'].join('')
@@ -959,8 +959,7 @@ layui.define(['layer', 'form'], function (exports) {
                                 if (callDel.url != "") {
                                     $.post(callDel.url, {
                                         "imgpath": layero.find('input[name="cover"]').val()
-                                        , "filepath": layero.find('input[name="video"]').val()
-                                    }, function (res) {
+                                        , "filepath": layero.find('input[name="video"]').val()}, function (res) {
                                         callDel.done(res);
                                     })
                                 }
@@ -1643,16 +1642,8 @@ layui.define(['layer', 'form'], function (exports) {
                                     if (video.val() == '') {
                                         layer.msg('请选择一个视频或输入视频地址')
                                     } else {
-                                        var txt = '&nbsp;<video src="' + video.val() + '" poster="' + cover.val() + '" controls="controls" >您的浏览器不支持video播放</video>&nbsp;';
-                                        var custclass = '';
-                                        if (customTheme.video.title.length > 0 && theme.length > 0) {
-                                            //追加样式
-                                            custclass = theme[0].options[theme[0].selectedIndex].value;
-                                        }
-                                        insertInline.call(iframeWin, 'div', {
-                                            text: txt
-                                            , class: custclass
-                                        }, range);
+                                        event.target.src = video.val();
+                                        event.target.poster = cover.val();
                                         layer.close(index);
                                     }
                                 }
