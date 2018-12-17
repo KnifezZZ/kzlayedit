@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V18.12.14 beta
+ @Version: V18.12.17 beta
  */
 
 layui.define(['layer', 'form'], function (exports) {
@@ -45,31 +45,16 @@ layui.define(['layer', 'form'], function (exports) {
                 ]
                 , uploadImage: {
                     url: '',
-                    field: 'file',//上传时的文件参数字段名
-                    accept: 'image',
-                    acceptMime: 'image/*',
-                    exts: 'jpg|png|gif|bmp|jpeg',
-                    size: 1024 * 10, //单位为KB
-                    done: function (data) {//文件上传接口返回code为0时的回调
+                    done: function (data) {
                     }
                 }
                 , uploadVideo: {
                     url: '',
-                    field: 'file',//上传时的文件参数字段名
-                    accept: 'video',
-                    acceptMime: 'video/*',
-                    exts: 'mp4|flv|avi|rm|rmvb',
-                    size: 1024 * 20, //单位为KB
-                    done: function (data) {//文件上传接口返回code为0时的回调
+                    done: function (data) {
                     }
                 }
                 , uploadFiles: {
                     url: '',
-                    field: 'file',//上传时的文件参数字段名
-                    accept: 'file',
-                    acceptMime: 'file/*',
-                    exts: '',
-                    size: 1024 * 20, //单位为KB
                     done: function (data) {//文件上传接口返回code为0时的回调
                     }
                 }
@@ -409,13 +394,13 @@ layui.define(['layer', 'form'], function (exports) {
                 }
                 var container = getContainer(range), parentNode = container.parentNode;
 
-                if (tagName != "p"&&tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
+                if (tagName != "p" && tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
                     elep.appendChild(elem);
                 } else {
                     elep = elem;
                 }
                 //处理换行
-                if (container.innerHTML == "<br>"||tagName == "div") {
+                if (container.innerHTML == "<br>" || tagName == "div") {
                     range.selectNode(container);
                     range.deleteContents();
                 }
@@ -554,14 +539,21 @@ layui.define(['layer', 'form'], function (exports) {
                     , image: function (range) {
                         var that = this;
                         layui.use('upload', function (upload) {
+                            debugger;
                             var uploadImage = set.uploadImage || {};
+                            if (uploadImage.url == "") {
+                                layer.msg("上传接口配置错误！");
+                            }
                             upload.render({
                                 url: uploadImage.url
+                                , method: uploadImage.method
                                 , field: uploadImage.field
-                                , accept: uploadImage.accept
-                                , acceptMime: uploadImage.acceptMime
-                                , exts: uploadImage.exts
-                                , size: uploadImage.size
+                                , data: uploadImage.data
+                                , headers: uploadImage.headers
+                                , accept: uploadImage.accept || 'image'
+                                , acceptMime: uploadImage.acceptMime || 'image/*'
+                                , exts: uploadImage.exts|| 'jpg|png|gif|bmp|jpeg'
+                                , size: uploadImage.size || 1024 * 10
                                 , elem: $(that).find('input')[0]
                                 , done: function (res) {
                                     if (res.code == 0) {
@@ -667,10 +659,10 @@ layui.define(['layer', 'form'], function (exports) {
                                         $.post(callDel.url, { "imgpath": imgPaths }, function (res) {
                                             callDel.done(res);
                                         })
-                                    } 
+                                    }
                                 }
                             }
-                            , cancel: function () {
+                            , cancel: function (index, layero) {
                                 if (layero.find("#imgsPrev img").length > 0) {
                                     var imgPaths = "";
                                     for (var i = 0; i < layero.find("#imgsPrev img").length; i++) {
@@ -688,17 +680,22 @@ layui.define(['layer', 'form'], function (exports) {
                                 layui.use('upload', function () {
                                     var upload = layui.upload;
                                     var uploadImage = set.uploadImage || {};
+                                    if (uploadImage.url == "") {
+                                        layer.msg("上传接口配置错误！");
+                                    }
                                     var errorIndex = [];//上传接口出错的文件索引
                                     //执行实例
                                     upload.render({
                                         elem: '#LayEdit_InsertImages'
                                         , url: uploadImage.url
+                                        , method: uploadImage.method
+                                        , data: uploadImage.data
+                                        , headers: uploadImage.headers
+                                        , accept: uploadImage.accept || 'image'
+                                        , acceptMime: uploadImage.acceptMime || 'image/*'
+                                        , exts: uploadImage.exts || 'jpg|png|gif|bmp|jpeg'
+                                        , size: uploadImage.size || 1024 * 10
                                         , field: uploadImage.field
-                                        , method: uploadImage.type
-                                        , accept: uploadImage.accept
-                                        , acceptMime: uploadImage.acceptMime
-                                        , exts: uploadImage.exts
-                                        , size: uploadImage.size
                                         , multiple: true
                                         , before: function (obj) {
                                             obj.preview(function (index, file, result) {
@@ -736,8 +733,8 @@ layui.define(['layer', 'form'], function (exports) {
                                                 layer.confirm('是否删除该图片?', { icon: 3, title: '提示' }, function (index) {
                                                     var callDel = set.calldel;
                                                     if (callDel.url != "") {
-                                                        $.post(callDel.url, { "imgpath": imgsrc}, function (res) {
-                                                            $("#imgsPrev img[data-index=" + dataIndex+"]")[0].remove();
+                                                        $.post(callDel.url, { "imgpath": imgsrc }, function (res) {
+                                                            $("#imgsPrev img[data-index=" + dataIndex + "]")[0].remove();
                                                             callDel.done(res);
                                                         })
                                                     } else {
@@ -825,7 +822,7 @@ layui.define(['layer', 'form'], function (exports) {
                                     })
                                 }
                             }
-                            , cancel: function () {
+                            , cancel: function (index, layero) {
                                 var callDel = set.calldel;
                                 if (callDel.url != "") {
                                     $.post(callDel.url, { "imgpath": layero.find('input[name="Imgsrc"]').val() }, function (res) {
@@ -839,15 +836,21 @@ layui.define(['layer', 'form'], function (exports) {
                                     var loding, altStr = layero.find('input[name="altStr"]'),
                                         Imgsrc = layero.find('input[name="Imgsrc"]');
                                     var uploadImage = set.uploadImage || {};
+                                    if (uploadImage.url == "") {
+                                        layer.msg("上传接口配置错误！");
+                                    }
                                     //执行实例
                                     upload.render({
                                         elem: '#LayEdit_InsertImage'
                                         , url: uploadImage.url
+                                        , method: uploadImage.method
+                                        , data: uploadImage.data
+                                        , headers: uploadImage.headers
+                                        , accept: uploadImage.accept || 'image'
+                                        , acceptMime: uploadImage.acceptMime || 'image/*'
+                                        , exts: uploadImage.exts || 'jpg|png|gif|bmp|jpeg'
+                                        , size: uploadImage.size || 1024 * 10
                                         , field: uploadImage.field
-                                        , accept: uploadImage.accept
-                                        , acceptMime: uploadImage.acceptMime
-                                        , exts: uploadImage.exts
-                                        , size: uploadImage.size
                                         , before: function (obj) {
                                             loding = layer.msg('文件上传中,请稍等哦', { icon: 16, shade: 0.3, time: 0 });
                                         }
@@ -924,11 +927,11 @@ layui.define(['layer', 'form'], function (exports) {
                             , content: ['<ul class="layui-form layui-form-pane" style="margin: 20px 20px 0 20px">'
                                 , '<li class="layui-form-item" style="position: relative">'
                                 , '<button type="button" class="layui-btn" id="LayEdit_InsertVideo" style="width: 110px;position: relative;z-index: 10;"> <i class="layui-icon"></i>上传视频</button>'
-                                , '<input type="text" name="video" placeholder="请选择上传或粘贴视频地址" style="position: absolute;width: 100%;padding-left: 120px;left: 0;top:0" class="layui-input">'
+                                , '<input type="text" name="video" placeholder="请选择文件" style="position: absolute;width: 100%;padding-left: 120px;left: 0;top:0" class="layui-input">'
                                 , '</li>'
                                 , '<li class="layui-form-item" style="position: relative">'
                                 , '<button type="button" class="layui-btn" id="LayEdit_InsertImage" style="width: 110px;position: relative;z-index: 10;"> <i class="layui-icon"></i>上传封面</button>'
-                                , '<input type="text" name="cover" placeholder="请选择视频封面" style="position: absolute;width: 100%;padding-left: 120px;left: 0;top:0" class="layui-input">'
+                                , '<input type="text" name="cover" placeholder="请选择文件" style="position: absolute;width: 100%;padding-left: 120px;left: 0;top:0" class="layui-input">'
                                 , '</li>'
                                 , customContent
                                 , '</ul>'].join('')
@@ -959,12 +962,13 @@ layui.define(['layer', 'form'], function (exports) {
                                 if (callDel.url != "") {
                                     $.post(callDel.url, {
                                         "imgpath": layero.find('input[name="cover"]').val()
-                                        , "filepath": layero.find('input[name="video"]').val()}, function (res) {
+                                        , "filepath": layero.find('input[name="video"]').val()
+                                    }, function (res) {
                                         callDel.done(res);
                                     })
                                 }
                             }
-                            , cancel: function () {
+                            , cancel: function (index, layero) {
                                 var callDel = set.calldel;
                                 if (callDel.url != "") {
                                     $.post(callDel.url, {
@@ -981,16 +985,27 @@ layui.define(['layer', 'form'], function (exports) {
                                         cover = layero.find('input[name="cover"]');
                                     var upload = layui.upload;
                                     var uploadImage = set.uploadImage || {};
+
+                                    if (uploadImage.url == "") {
+                                        layer.msg("图片上传接口配置错误！");
+                                    }
                                     var uploadfile = set.uploadVideo || {};
+
+                                    if (uploadfile.url == "") {
+                                        layer.msg("视频上传接口配置错误！");
+                                    }
                                     //执行实例
                                     upload.render({
                                         elem: '#LayEdit_InsertImage'
                                         , url: uploadImage.url
+                                        , method: uploadImage.method
+                                        , data: uploadImage.data
+                                        , headers: uploadImage.headers
+                                        , accept: uploadImage.accept || 'image'
+                                        , acceptMime: uploadImage.acceptMime || 'image/*'
+                                        , exts: uploadImage.exts || 'jpg|png|gif|bmp|jpeg'
+                                        , size: uploadImage.size || 1024 * 10
                                         , field: uploadImage.field
-                                        , accept: uploadImage.accept
-                                        , acceptMime: uploadImage.acceptMime
-                                        , exts: uploadImage.exts
-                                        , size: uploadImage.size
                                         , before: function (obj) {
                                             loding = layer.msg('文件上传中,请稍等哦', { icon: 16, shade: 0.3, time: 0 });
                                         }
@@ -1032,11 +1047,14 @@ layui.define(['layer', 'form'], function (exports) {
                                     upload.render({
                                         elem: '#LayEdit_InsertVideo'
                                         , url: uploadfile.url
+                                        , method: uploadfile.method
+                                        , data: uploadfile.data
+                                        , headers: uploadfile.headers
                                         , field: uploadfile.field
-                                        , accept: uploadfile.accept
-                                        , acceptMime: uploadfile.acceptMime
-                                        , exts: uploadfile.exts
-                                        , size: uploadfile.size
+                                        , accept: uploadfile.accept || 'video'
+                                        , acceptMime: uploadfile.acceptMime || 'video/*'
+                                        , exts: uploadfile.exts || 'mp4|flv|avi|rm|rmvb'
+                                        , size: uploadfile.size || 1024 * 20
                                         , before: function (obj) {
                                             loding = layer.msg('文件上传中,请稍等哦', { icon: 16, shade: 0.3, time: 0 });
                                         }
@@ -1136,6 +1154,9 @@ layui.define(['layer', 'form'], function (exports) {
                                 layui.use('upload', function () {
                                     var upload = layui.upload;
                                     var uploadFiles = set.uploadFiles || {};
+                                    if (uploadFiles.url == "") {
+                                        layer.msg("上传接口配置错误！");
+                                    }
                                     var errorIndex = [];//上传接口出错的文件索引
                                     //执行实例
                                     upload.render({
@@ -1143,10 +1164,10 @@ layui.define(['layer', 'form'], function (exports) {
                                         , url: uploadFiles.url
                                         , field: uploadFiles.field
                                         , method: uploadFiles.type
-                                        , accept: uploadFiles.accept
-                                        , acceptMime: uploadFiles.acceptMime
+                                        , accept: uploadFiles.accept || 'file'
+                                        , acceptMime: uploadFiles.acceptMime || 'file/*'
                                         , exts: uploadFiles.exts
-                                        , size: uploadFiles.size
+                                        , size: uploadFiles.size || 1024 * 30
                                         , multiple: true
                                         , before: function (obj) {
                                             obj.preview(function (index, file, result) {
@@ -1539,6 +1560,9 @@ layui.define(['layer', 'form'], function (exports) {
                                 success: function (layero, index) {
                                     var uploadImage = set.uploadImage || {};
 
+                                    if (uploadImage.url == "") {
+                                        layer.msg("图片上传接口配置错误！");
+                                    }
                                     layui.use('upload', function (upload) {
                                         var loding, altStr = layero.find('input[name="altStr"]'),
                                             Imgsrc = layero.find('input[name="Imgsrc"]');
@@ -1546,11 +1570,14 @@ layui.define(['layer', 'form'], function (exports) {
                                         upload.render({
                                             elem: '#LayEdit_UpdateImage'
                                             , url: uploadImage.url
+                                            , method: uploadImage.method
+                                            , data: uploadImage.data
+                                            , headers: uploadImage.headers
+                                            , accept: uploadImage.accept || 'image'
+                                            , acceptMime: uploadImage.acceptMime || 'image/*'
+                                            , exts: uploadImage.exts || 'jpg|png|gif|bmp|jpeg'
+                                            , size: uploadImage.size || 1024 * 10
                                             , field: uploadImage.field
-                                            , accept: uploadImage.accept
-                                            , acceptMime: uploadImage.acceptMime
-                                            , exts: uploadImage.exts
-                                            , size: uploadImage.size
                                             , before: function (obj) {
                                                 loding = layer.msg('文件上传中,请稍等哦', { icon: 16, shade: 0.3, time: 0 });
                                             }
@@ -1637,8 +1664,7 @@ layui.define(['layer', 'form'], function (exports) {
                                 , btnAlign: 'c'
                                 , yes: function (index, layero) {
                                     var video = layero.find('input[name="video"]')
-                                        , cover = layero.find('input[name="cover"]')
-                                        , theme = layero.find('select[name="theme"]');
+                                        , cover = layero.find('input[name="cover"]');
                                     if (video.val() == '') {
                                         layer.msg('请选择一个视频或输入视频地址')
                                     } else {
@@ -1671,15 +1697,24 @@ layui.define(['layer', 'form'], function (exports) {
                                         var upload = layui.upload;
                                         var uploadImage = set.uploadImage || {};
                                         var uploadfile = set.uploadVideo || {};
+                                        if (uploadImage.url == "") {
+                                            layer.msg("图片上传接口配置错误！");
+                                        }
+                                        if (uploadfile.url == "") {
+                                            layer.msg("视频上传接口配置错误！");
+                                        }
                                         //执行实例
                                         upload.render({
                                             elem: '#LayEdit_InsertImage'
                                             , url: uploadImage.url
+                                            , method: uploadImage.method
+                                            , data: uploadImage.data
+                                            , headers: uploadImage.headers
+                                            , accept: uploadImage.accept || 'image'
+                                            , acceptMime: uploadImage.acceptMime || 'image/*'
+                                            , exts: uploadImage.exts || 'jpg|png|gif|bmp|jpeg'
+                                            , size: uploadImage.size || 1024 * 10
                                             , field: uploadImage.field
-                                            , accept: uploadImage.accept
-                                            , acceptMime: uploadImage.acceptMime
-                                            , exts: uploadImage.exts
-                                            , size: uploadImage.size
                                             , before: function (obj) {
                                                 loding = layer.msg('文件上传中,请稍等哦', { icon: 16, shade: 0.3, time: 0 });
                                             }
@@ -1721,11 +1756,14 @@ layui.define(['layer', 'form'], function (exports) {
                                         upload.render({
                                             elem: '#LayEdit_InsertVideo'
                                             , url: uploadfile.url
+                                            , method: uploadfile.method
+                                            , data: uploadfile.data
+                                            , headers: uploadfile.headers
                                             , field: uploadfile.field
-                                            , accept: uploadfile.accept
-                                            , acceptMime: uploadfile.acceptMime
-                                            , exts: uploadfile.exts
-                                            , size: uploadfile.size
+                                            , accept: uploadfile.accept || 'video'
+                                            , acceptMime: uploadfile.acceptMime || 'video/*'
+                                            , exts: uploadfile.exts || 'mp4|flv|avi|rm|rmvb'
+                                            , size: uploadfile.size || 1024 * 20
                                             , before: function (obj) {
                                                 loding = layer.msg('文件上传中,请稍等哦', { icon: 16, shade: 0.3, time: 0 });
                                             }

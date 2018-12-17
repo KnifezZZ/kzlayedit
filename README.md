@@ -3,6 +3,11 @@
 [码云Gitee Pages](http://knifez.gitee.io/kz.layedit/)
 ### 虽然对移动端做了适配,但是使用体验不咋的,已经放弃治疗.以后估计只会优化界面,避免出现宽,高溢出的情况.但是操作体验上基本无法改进了...不建议移动端做富文本编辑....
 #### 更新日志
+- ##### V18.12.17
+1. [修复] 上传图片上传视频弹出框点击右上角关闭报错问题 （感谢<a href="https://gitee.com//dapperfd845es64">孤独感胜多负少</a>的反馈）
+2. [优化] uploadImage/video/file配置优化，uploadImage 默认 accept: 'image',acceptMime: 'image/*',exts: 'jpg|png|gif|bmp|jpeg',size: 1024 * 10,
+uploadVideo默认参数 accept: 'video',acceptMime: 'video/*', exts: 'mp4|flv|avi|rm|rmvb', size: 1024 * 20, uploadFile默认参数 accept: 'file',   acceptMime: 'file/*',  size: 1024 * 30
+3. [新增] 上传接口新增headers/data参数，【接口的请求头。如：headers: {token: 'sasasas'}。注：该参数为 layui 2.2.6 开始新增】可根据需要调用，详细见<a href="https://www.layui.com/doc/modules/upload.html#options" target="_blank">layuplaod基础参数</a>
 - ##### V18.12.14 beta
 1. [修复] 视频右键修改报错问题 （感谢<a href="https://gitee.com/flygervip">flyger</a>的反馈）
 2. [优化] 视频上传提示信息修改，可选择上传视频或直接粘贴视频地址
