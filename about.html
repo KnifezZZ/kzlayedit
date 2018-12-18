@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!--<meta charset="utf-8" />-->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<title>about kz.layedit</title>
+	<link href="Content/Layui-KnifeZ/css/layui.css" rel="stylesheet" />
+	<script src="Content/Layui-KnifeZ/layui.js"></script>
+</head>
+<body>
+	<div class="layui-content">
+		<h1 class="site-h1"><i class="layui-icon"></i>富文本编辑器文档 - layui.layedit</h1>
+		<div class="site-tips site-text">
+			<p>国内外有许多优秀、强大的HTML编辑器，但普遍都有一个共性：异常地臃肿（少则几千行，多则上万行代码）、UI陈旧，并且基本都好几年没更新了。而现在，随着Layui的发布，我们有必要重新为富文本做一些新的定义。LayEdit仍旧<em>遵循极简</em>的设计风格，无论是UI上，还是接口使用上，<em>都尽可能地避免一些繁杂的功能和配置</em>。如果你正苦苦寻找一款轻量的Web富文本编辑器，那么LayEdit会是你不错的选择。</p>
+		</div>
+		<div class="site-tips site-text">
+			<p>模块加载名称：<a>layedit</a></p>
+		</div>
+
+
+		<div style="margin: 15px 0; text-align: center; background-color: #F2F2F2;">
+			<ins class="adsbygoogle" style="display: none !important; width: 728px; height: 90px;" data-ad-client="ca-pub-6111334333458862" data-ad-slot="9841027833"></ins>
+		</div>
+
+
+		<div class="site-title">
+			<fieldset><legend><a name="use">使用</a></legend></fieldset>
+		</div>
+		<div class="site-text">
+			<p>跟那些过往的编辑器一样，你需要放置一个标签（一般为textarea文本域）作为编辑器的目标元素，然后调用 <em>layedit.build('id')</em> 即可，如下所示：</p>
+			<pre class="layui-code layui-box layui-code-view"><h3 class="layui-code-h3">code<a href="http://www.layui.com/doc/modules/code.html" target="_blank">layui.code</a></h3><ol class="layui-code-ol"><li>&lt;textarea id="demo" style="display: none;"&gt;&lt;/textarea&gt;</li><li>&lt;script&gt;</li><li>layui.use('layedit', function(){</li><li>  var layedit = layui.layedit;</li><li>  layedit.build('demo'); //建立编辑器</li><li>});</li><li>&lt;/script&gt;</li><li>      </li></ol></pre>
+			<p>然后你会看到一个如下模样（部分工具Bar未配置出来），它跟Layui的所有存在体一样，兼容IE6/7以外的全部浏览器。</p>
+			<p style="margin: 20px 0;">
+				<textarea id="Lay_docDemo_layedit" style="display: none;" class="layui-hide">&lt;p&gt;&lt;a href="http://www.layui.com/" target="_blank"&gt;&lt;u&gt;Layui&lt;/u&gt;&lt;/a&gt;是一款由贤心个人原创的UI框架，这正是我们对高质量的承诺。尽管现在市面上有太多依托在 &lt;em&gt;Vue/React&lt;/em&gt; 光环下的前端方案，但我们仍然定位现在这样一个模式，是为了呈现一个&lt;strong&gt;极简&lt;/strong&gt;的解决手段，那就是无需依赖过多看似逼格的工具，直接信手即用。而恰是因为原创，有些事情远比人们想象中的那么简单，尤其是在追求尽善尽美的强迫症的引领下，我常常徘徊在轮子的制造、摧毁又重建的漩涡中，所以&lt;a href="http://www.layui.com/" target="_blank"&gt;Layui&lt;/a&gt;一拖再拖，从计划到现在，似乎已经接近1年。在我全职接近两个月的SOHO后，Layui的第一个版本终于发布！&lt;/p&gt;
+&lt;p style="text-align: right"&gt;&lt;br&gt;&lt;br&gt;2016.10.14&lt;/p&gt;
+        </textarea><div class="layui-layedit"><div class="layui-unselect layui-layedit-tool"><i class="layui-icon layedit-tool-b" title="加粗" lay-command="Bold" layedit-event="b" "=" "></i><i class=" layui-icon layedit-tool-i" title="斜体" lay-command="italic" layedit-event="i" "=" "></i><i class="layui-icon layedit-tool-u" title="下划线" lay-command="underline" layedit-event="u" "=" "></i><i class=" layui-icon layedit-tool-d" title="删除线" lay-command="strikeThrough" layedit-event="d" "=" "></i><span class="layedit-tool-mid"></span><i class="layui-icon layedit-tool-left" title="左对齐" lay-command="justifyLeft" layedit-event="left" "=" "></i><i class=" layui-icon layedit-tool-center" title="居中对齐" lay-command="justifyCenter" layedit-event="center" "=" "></i><i class="layui-icon layedit-tool-right" title="右对齐" lay-command="justifyRight" layedit-event="right" "=" "></i><span class=" layedit-tool-mid"></span><i class="layui-icon layedit-tool-link" title="插入链接" layedit-event="link" "=" "></i><i class="layui-icon layedit-tool-unlink layui-disabled" title="清除链接" lay-command="unlink" layedit-event="unlink" "=" "></i><i class=" layui-icon layedit-tool-face" title="表情" layedit-event="face" "=" "></i><i class="layui-icon layedit-tool-image" title="图片" layedit-event="image"><input type="file" name="file"></i></div><div class="layui-layedit-iframe"><iframe id="LAY_layedit_1" name="LAY_layedit_1" textarea="Lay_docDemo_layedit" frameborder="0" style="height: 180px;"></iframe></div></div>
+			</p>
+		</div>
+
+		<div class="site-title">
+			<fieldset><legend><a name="base">基础方法</a></legend></fieldset>
+		</div>
+		<div class="site-text">
+			<p>LayEdit提供了相当精简的方法，如下：</p>
+			<table class="layui-table">
+				<thead>
+					<tr>
+						<th>方法名</th>
+						<th>描述</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>var index = layedit.build(id, options)</td>
+						<td>
+							用于建立编辑器的核心方法
+							<br> <em>index</em>：即该方法返回的索引
+							<br>参数 <em>id</em>： 实例元素（一般为textarea）的id值
+							<br>参数 <em>options</em>：编辑器的可配置项，下文会做进一步介绍
+						</td>
+					</tr>
+					<tr></tr>
+					<tr>
+						<td>layedit.set(options)</td>
+						<td>
+							设置编辑器的全局属性
+							<br>即上述build方法的options
+						</td>
+					</tr>
+					<tr>
+						<td>layedit.getContent(index)</td>
+						<td>
+							获得编辑器的内容
+							<br>参数 <em>index</em>： 即执行layedit.build返回的值
+						</td>
+					</tr>
+					<tr>
+						<td>layedit.getText(index)</td>
+						<td>
+							获得编辑器的纯文本内容
+							<br>参数 <em>index</em>： 同上
+						</td>
+					</tr>
+					<tr>
+						<td>layedit.sync(index)</td>
+						<td>
+							用于同步编辑器内容到textarea（一般用于异步提交）
+							<br>参数 <em>index</em>： 同上
+						</td>
+					</tr>
+					<tr>
+						<td>layedit.getSelection(index)</td>
+						<td>
+							获取编辑器选中的文本
+							<br>参数 <em>index</em>： 同上
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="site-title">
+			<fieldset><legend><a name="set">编辑器基本设置</a></legend></fieldset>
+		</div>
+		<div class="site-text">
+			<p>在建立编辑器的方法 <em>layedit.build(id, options)</em> 的第二个参数（options）中，允许我们对编辑器进行一些设置，如：</p>
+			<pre class="layui-box layui-code-view"><h3 class="layui-code-h3">code<a href="http://www.layui.com/doc/modules/code.html" target="_blank">layui.code</a></h3><ol class="layui-code-ol"><li>layedit.build('id', {</li><li>  height: 180 //设置编辑器高度</li><li>});</li><li>      </li></ol></pre>
+			<p>options可提供支持的参数如下表</p>
+			<table class="layui-table">
+				<thead>
+					<tr>
+						<th>属性</th>
+						<th>类型</th>
+						<th>描述</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>tool</td>
+						<td>Array</td>
+						<td>重新定制编辑器工具栏，如： tool: ['link', 'unlink', 'face']</td>
+					</tr>
+					<tr>
+						<td>hideTool</td>
+						<td>Array</td>
+						<td>不显示编辑器工具栏，一般用于隐藏默认配置的工具bar</td>
+					</tr>
+					<tr>
+						<td>height</td>
+						<td>Number</td>
+						<td>设定编辑器的初始高度</td>
+					</tr>
+					<tr>
+						<td>uploadImage</td>
+						<td>Object</td>
+						<td>设定图片上传接口，如：uploadImage: {url: '/upload/', type: 'post'}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="site-title">
+			<fieldset><legend><a name="tool">自定义工具Bar</a></legend></fieldset>
+		</div>
+		<div class="site-text">
+			<p>通过下述方式可自定义编辑器的工具Bar</p>
+			<pre class="layui-code layui-box layui-code-view"><h3 class="layui-code-h3">code<a href="http://www.layui.com/doc/modules/code.html" target="_blank">layui.code</a></h3><ol class="layui-code-ol"><li>layedit.build('id', {</li><li>  tool: ['left', 'center', 'right', '|', 'face']</li><li>});      </li><li>      </li></ol></pre>
+			<p>目前layedit可选的Bar有（顺序可以自由排列）：</p>
+			<pre class="layui-code layui-box layui-code-view layui-code-notepad" lay-skin="notepad"><h3 class="layui-code-h3">code<a href="http://www.layui.com/doc/modules/code.html" target="_blank">layui.code</a></h3><ol class="layui-code-ol"><li>tool: [</li><li>  'strong' //加粗</li><li>  ,'italic' //斜体</li><li>  ,'underline' //下划线</li><li>  ,'del' //删除线</li><li>  </li><li>  ,'|' //分割线</li><li>  </li><li>  ,'left' //左对齐</li><li>  ,'center' //居中对齐</li><li>  ,'right' //右对齐</li><li>  ,'link' //超链接</li><li>  ,'unlink' //清除链接</li><li>  ,'face' //表情</li><li>  ,'image' //插入图片</li><li>  ,'help' //帮助</li><li>]</li><li>      </li></ol></pre>
+		</div>
+
+		<div class="site-title">
+			<fieldset><legend><a name="uploadImage">插入图片接口</a></legend></fieldset>
+		</div>
+		<div class="site-text">
+			<p>LayEdit提供了向编辑器插入图片的支持，前提是配置了 <em>uploadImage</em>，如：</p>
+			<pre class="layui-code layui-box layui-code-view"><h3 class="layui-code-h3">code<a href="http://www.layui.com/doc/modules/code.html" target="_blank">layui.code</a></h3><ol class="layui-code-ol"><li>layedit.set({</li><li>  uploadImage: {</li><li>    url: '' //接口url</li><li>    ,type: '' //默认post</li><li>  }</li><li>});</li><li>//注意：layedit.set 一定要放在 build 前面，否则配置全局接口将无效。</li><li>layedit.build('demo'); //建立编辑器</li><li>      </li></ol></pre>
+			<p>也就是说LayEdit并不提供服务端的图片接受，但你需要在图片上传成功后对LayEdit返回如下格式的JSON信息：</p>
+			<pre class="layui-code layui-box layui-code-view layui-code-notepad" lay-skin="notepad"><h3 class="layui-code-h3">code<a href="http://www.layui.com/doc/modules/code.html" target="_blank">layui.code</a></h3><ol class="layui-code-ol"><li>{</li><li>  "code": 0 //0表示成功，其它失败</li><li>  ,"msg": "" //提示信息 //一般上传失败后返回</li><li>  ,"data": {</li><li>    "src": "图片路径"</li><li>    ,"title": "图片名称" //可选</li><li>  }</li><li>}</li><li>      </li></ol></pre>
+		</div>
+
+		<div class="site-title">
+			<fieldset><legend><a name="other">下版更新预告</a></legend></fieldset>
+		</div>
+		<div class="site-text">
+			<p>也许你会觉得LayEdit的功能实在有点少吧，尤其是跟百度的UE这些重量级编辑器相比。是的，LayEdit的工具Bar还并不多，这主要是受制于Layui第一个版本的发布时间，一个功能丰富的编辑器需要较长时间的打磨，而Layui 1.0显然等不及。但我们会在后续版本视情况针对LayEdit进行功能升级，其中会包括：<em>HTML源代码编辑、字体颜色、字体大小、字体格式、插入表格、插入列表、插入引用块、插入代码、插入附件、分割线、预览、二次开发工具Bar的接口支持等等</em>。</p>
+			<p>在保证功能完备的同时，也会格外注重代码的轻量性。</p>
+		</div>
+
+		<div class="layui-elem-quote">
+			<p>Layui - 用心与你沟通</p>
+		</div>
+
+	</div>
+	</body>
+</html>

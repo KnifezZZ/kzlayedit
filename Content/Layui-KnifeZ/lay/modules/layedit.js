@@ -292,6 +292,7 @@ layui.define(['layer', 'form'], function (exports) {
         , hotkey = function (iframeWin, iframe, textArea, set) {
             var iframeDOM = iframeWin.document, body = $(iframeDOM.body);
             body.on('keydown', function (e) {
+                debugger;
                 var keycode = e.keyCode;
                 //处理回车
                 if (keycode === 13) {
@@ -309,6 +310,15 @@ layui.define(['layer', 'form'], function (exports) {
                     setTimeout(function () {
                         iframeDOM.execCommand('formatBlock', false, '<p>');
                     }, 10);
+                }
+                //back 删除空hr
+                if (keycode === 8) {
+                    var range = Range(iframeDOM);
+                    var container = getContainer(range);
+                    if (container.innerHTML == "<hr>" && container.tagName.toLowerCase() == "body") {
+                        range.selectNode(container.childNodes[0]);
+                        range.deleteContents();
+                    }
                 }
             });
 
@@ -340,19 +350,19 @@ layui.define(['layer', 'form'], function (exports) {
                 , iframeDOM = iframeWin.document;
 
             //清除影响版面的css属性
-            body.find('*[style]').each(function () {
-                var textAlign = this.style.textAlign;
-                this.removeAttribute('style');
-                $(this).css({
-                    'text-align': textAlign || ''
-                })
-            });
+            //body.find('*[style]').each(function () {
+            //    var textAlign = this.style.textAlign;
+            //    this.removeAttribute('style');
+            //    $(this).css({
+            //        'text-align': textAlign || ''
+            //    })
+            //});
 
             ////修饰表格
             //body.find('table').addClass('layui-table');
 
             //移除不安全的标签
-            body.find('script,link').remove();
+            //body.find('script,link').remove();
         }
 
         //Range对象兼容性处理
@@ -394,7 +404,7 @@ layui.define(['layer', 'form'], function (exports) {
                 }
                 var container = getContainer(range), parentNode = container.parentNode;
 
-                if (tagName != "p" && tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
+                if (tagName != "p" && tagName != "a"&& tagName != "hr" && tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
                     elep.appendChild(elem);
                 } else {
                     elep = elem;
@@ -552,7 +562,7 @@ layui.define(['layer', 'form'], function (exports) {
                                 , headers: uploadImage.headers
                                 , accept: uploadImage.accept || 'image'
                                 , acceptMime: uploadImage.acceptMime || 'image/*'
-                                , exts: uploadImage.exts|| 'jpg|png|gif|bmp|jpeg'
+                                , exts: uploadImage.exts || 'jpg|png|gif|bmp|jpeg'
                                 , size: uploadImage.size || 1024 * 10
                                 , elem: $(that).find('input')[0]
                                 , done: function (res) {
@@ -642,8 +652,11 @@ layui.define(['layer', 'form'], function (exports) {
                                 if (layero.find('#imgsPrev').find('img').length === 0) {
                                     layer.msg('请选择要插入的图片');
                                 } else {
+                                    if (styleStr != "") {
+                                        styleStr = 'style="' + styleStr + '"';
+                                    }
                                     insertInline.call(iframeWin, 'p', {
-                                        text: layero.find('#imgsPrev').html().replace(new RegExp(/(max-width:70px;margin:2px)/g), styleStr)
+                                        text: layero.find('#imgsPrev').html().replace(new RegExp(/(style="max-width:70px;margin:2px")/g), styleStr)
                                     }, range);
                                     layer.close(index);
                                 }
@@ -683,6 +696,7 @@ layui.define(['layer', 'form'], function (exports) {
                                     if (uploadImage.url == "") {
                                         layer.msg("上传接口配置错误！");
                                     }
+                                    var loding;
                                     var errorIndex = [];//上传接口出错的文件索引
                                     //执行实例
                                     upload.render({
@@ -698,10 +712,11 @@ layui.define(['layer', 'form'], function (exports) {
                                         , field: uploadImage.field
                                         , multiple: true
                                         , before: function (obj) {
+                                            loding = layer.msg('文件上传中,请稍等', { icon: 16, shade: 0.3, time: 0 });
                                             obj.preview(function (index, file, result) {
                                                 //由于有时预览会在allDone之后回调，此时所有单个文件的error已经执行，即已经出错的文件id以有，因此需要判断此预览文件id是否是上传出错文件的id，不是才预览
                                                 if (errorIndex.indexOf(index) === -1)
-                                                    $('#imgsPrev').append('<img data-index="' + index + '" src="' + result + '" alt="' + file.name + '" style="max-width:70px;margin:2px" class="layui-upload-img"/> ')
+                                                    $('#imgsPrev').append('<img data-index="' + index + '" src="' + result + '" alt="' + file.name + '" style="max-width:70px;margin:2px" /> ')
                                             });
                                         }
                                         , allDone: function () {
@@ -709,25 +724,26 @@ layui.define(['layer', 'form'], function (exports) {
                                             for (var i = 0; i < errorIndex.length; i++) {
                                                 $('#imgsPrev').find('img[data-index="' + errorIndex[i] + '"]').remove();
                                             }
+                                            layer.close(loding);
                                         }
                                         , error: function (index, upload) {
                                             //某文件上传接口返回错误时，将其错误index记录下来
                                             errorIndex.push(index);
                                         }
-                                        , done: function (res, input, upload) {
+                                        , done: function (res, index, upload) {
                                             if (res.code == 0) {
                                                 res.data = res.data || {};
-                                                $("#imgsPrev img:last")[0].src = res.data.src;
+                                                $('#imgsPrev img[data-index="' + index + '"]').attr('src', res.data.src);
                                                 uploadImage.done(res);
                                             } else if (res.code == 2) {
                                                 res.data = res.data || {};
-                                                $("#imgsPrev img:last")[0].src = res.data.src;
+                                                $('#imgsPrev img[data-index="' + index + '"]').attr('src', res.data.src);
                                                 uploadImage.done(res);
                                             } else {
                                                 layer.msg(res.msg || '上传失败');
                                             }
 
-                                            layero.find('.layui-upload-img').on('click', function () {
+                                            layero.find('#imgsPrev img').on('click', function () {
                                                 var imgsrc = this.src;
                                                 var dataIndex = this.getAttribute("data-index");
                                                 layer.confirm('是否删除该图片?', { icon: 3, title: '提示' }, function (index) {
@@ -1186,30 +1202,31 @@ layui.define(['layer', 'form'], function (exports) {
                                             //某文件上传接口返回错误时，将其错误index记录下来
                                             errorIndex.push(index);
                                         }
-                                        , done: function (res, input, upload) {
+                                        , done: function (res, index, upload) {
                                             if (res.code == 0) {
                                                 res.data = res.data || {};
-                                                $("#filesPrev a:last")[0].href = res.data.src;
-                                                uploadFiles.done(res);
+                                                $('#filesPrev a[data-index="' + index + '"]').attr('href', res.data.src);
+                                                uploadImage.done(res);
                                             } else if (res.code == 2) {
                                                 layer.msg(res.msg || '上传失败');
                                                 res.data = res.data || {};
-                                                $("#filesPrev a:last")[0].href = res.data.src;
+                                                $('#filesPrev a[data-index="' + index + '"]').attr('href', res.data.src);
+                                                uploadImage.done(res);
                                             } else {
                                                 layer.msg(res.msg || '上传失败');
                                             }
-
-                                            layero.find('.layui-upload-img').on('click', function () {
+                                            layero.find('#filesPrev a').on('click', function () {
+                                                var dataIndex = this.getAttribute("data-index");
                                                 layer.confirm('是否删除该附件?', { icon: 3, title: '提示' }, function (index) {
                                                     var callDel = set.calldel;
                                                     if (callDel.url != "") {
-                                                        $.post(callDel.url, { "imgpath": this.src }, function (res) {
-                                                            $("#filesPrev a:last")[0].remove();
+                                                        $.post(callDel.url, { "filepath": this.href }, function (res) {
+                                                            $('#filesPrev').find('a[data-index="' + dataIndex + '"]').remove();
                                                             callDel.done(res);
                                                         })
                                                     } else {
                                                         layer.msg("没有配置回调参数");
-                                                        $("#filesPrev a:last")[0].remove();
+                                                        $('#filesPrev').find('a[data-index="' + dataIndex + '"]').remove();
                                                     }
                                                     layer.close(index);
                                                 });
