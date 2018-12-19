@@ -1243,7 +1243,7 @@ layui.define(['layer', 'form'], function (exports) {
                         var docs = that.parentElement.nextElementSibling.firstElementChild.contentDocument.body.innerHTML;
                         docs = style_html(docs, 4, ' ', 80);
                         if (that.parentElement.nextElementSibling.lastElementChild.id.indexOf('aceHtmleditor') == -1) {
-                            that.parentElement.nextElementSibling.setAttribute("style", "z-index: 999; overflow: hidden;height:" + set.height);
+                            that.parentElement.nextElementSibling.setAttribute("style", "z-index: 999; overflow: hidden;height:" + that.parentElement.nextElementSibling.clientHeight + "px");
                             if (this.parentElement.parentElement.getAttribute("style") !== null)
                                 that.parentElement.nextElementSibling.setAttribute("style", "z-index: 999; overflow: hidden;height:100%");
 
@@ -1267,15 +1267,16 @@ layui.define(['layer', 'form'], function (exports) {
                         } else {
                             var editor = ace.edit(that.parentElement.nextElementSibling.firstElementChild.id + 'aceHtmleditor');
                             iframeWin.document.body.innerHTML = editor.getValue();
+                            var height = that.parentElement.nextElementSibling.clientHeight;
                             that.parentElement.nextElementSibling.removeAttribute("style");
-                            this.parentElement.nextElementSibling.firstElementChild.style = "height:" + set.height;
+                            this.parentElement.nextElementSibling.firstElementChild.style = "height:" + height + "px";
                             this.parentElement.nextElementSibling.lastElementChild.remove();
                             $(that).siblings('i').removeClass("layui-disabled");
                         }
                     }
                     //全屏
                     , fullScreen: function (range) {
-
+                        debugger;
                         if (this.parentElement.parentElement.getAttribute("style") == null) {
                             this.parentElement.parentElement.setAttribute("style", "position: fixed;top: 0;left: 0;height: 100%;width: 100%;background-color: antiquewhite;z-index: 9999;");
                             this.parentElement.nextElementSibling.style = "height:100%";
@@ -1290,8 +1291,8 @@ layui.define(['layer', 'form'], function (exports) {
                             this.parentElement.nextElementSibling.removeAttribute("style");
                             this.parentElement.nextElementSibling.firstElementChild.style = "height:" + set.height;
                             if (this.parentElement.nextElementSibling.lastElementChild.id.indexOf('aceHtmleditor') > -1) {
+                                this.parentElement.nextElementSibling.setAttribute("style", "z-index: 999; overflow: hidden;height:" + this.parentElement.nextElementSibling.firstElementChild.clientHeight + "px");
                                 this.parentElement.nextElementSibling.firstElementChild.style = "position: absolute;left: -32768px;top: -32768px;";
-                                this.parentElement.nextElementSibling.setAttribute("style", "z-index: 999; overflow: hidden;height:" + set.height);
                             }
                         }
                     }
