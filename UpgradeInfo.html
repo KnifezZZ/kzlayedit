@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>历史更新记录</title>
+    <link href="Content/Layui-KnifeZ/css/layui.css" rel="stylesheet" />
+</head>
+<body>
+    <div>
+        <div class="site-content" style="margin:10px">
+            <ul class="layui-timeline">
+
+                <li class="layui-timeline-item">
+                    <i class="layui-icon layui-timeline-axis"></i>
+                    <div class="layui-timeline-content layui-text">
+                        <div class="layui-timeline-title">
+                            <h2>V18.12.*</h2>
+                            <span class="layui-badge-rim">2018-12-19</span>
+                        </div>
+                        <blockquote class="layui-elem-quote">
+                            2018年的12月的第三个版本
+                        </blockquote>
+                        <ul>
+                            <li>V18.12.01</li>
+                            <li>[新增] 上传附件功能【attachment】,配置参数【uploadFiles】,同uploadImage继承自LayUpload</li>
+                            <li>[修复] 部分情况下（layer弹出层引用，一个页面多个编辑器时）右键触发事件定位报错问题</li>
+                            <li>[优化] 表情地址改为网络地址，由【facePath】配置，目录指向layui文件夹</li>
+                            <li>[待修复] 新增fontfamily暂时无法使用，无法定位光标位置到span标签内</li>
+                            <li>V18.12.06</li>
+                            <li> [优化] 字体颜色、背景色功能引用layui.colorpicker，可自定义选取颜色</li>
+                            <li>V18.12.07</li>
+                            <li>[修复] 一个页面多个编辑器时字体颜色、背景色无效问题</li>
+                            <li>[修复] 添加超链接无法正确获取选中文本，不选rel和target属性时不添加rel和target,tartget设置为_self时不添加target,取消默认nofollow</li>
+                            <li> [修复] Uncaught TypeError: Cannot read property 'focus' of undefined at layedit.js:8</li>
+                            <li style="color:red">[待修复] 新增fontfamily，fontSize设置文本字体和字体大小，暂时插入&nbsp;空格定位光标</li>
+                            <li>[新增] videoAttr配置参数，供插入视频时的自定义属性，如 preload="none"</li>
+                            <li>V18.12.10</li>
+                            <li> [优化] Html源码模式参照ueditor直接展示，不再使用弹出层，兼容全屏。</li>
+                            <li> [优化] enter回车插入p标签，防止出现div或其他奇怪的问题</li>
+                            <li> [优化] 插入元素优化，光标节点为p标签时只插入选择的元素如img,a标签，如果光标节点不为p标签时自动追加一层p标签，（插入视频外部为div）</li>
+                            <li> [修复] 插入图片时结尾多一个br标签问题，该问题为插入图片时先回车换行，再选择图片插入，如果当前节点为< br>时自动去除br标签并居中</li>
+                            <li> [优化] 表格右键菜单</li>
+                            <li>V18.12.12</li>
+                            <li>[修复] 多图上传点击图片删除无法按照预期进行问题，该错误为调用callDel回调时imgpath获取失败导致。</li>
+                            <li> [优化] 图片上传、 多图上传、视频上传取消和右上角关闭按钮添加回调函数，调用callDel方法。</li>
+                            <li>V18.12.14 beta</li>
+                            <li>[修复] 视频右键修改报错问题 （感谢<a href="https://gitee.com/flygervip">flyger</a>的反馈）</li>
+                            <li>[优化] 视频上传提示信息修改，可选择上传视频或直接粘贴视频地址</li>
+                            <li>V18.12.17</li>
+                            <li> [修复] 上传图片上传视频弹出框点击右上角关闭报错问题 （感谢<a href="https://gitee.com/dapperfd845es64">孤独感胜多负少</a>的反馈）</li>
+                            <li>
+                                [优化] uploadImage/video/file配置优化，uploadImage 默认 accept: 'image',acceptMime: 'image/*',exts: 'jpg|png|gif|bmp|jpeg',size: 1024 * 10,
+                                uploadVideo默认参数 accept: 'video',acceptMime: 'video/*', exts: 'mp4|flv|avi|rm|rmvb', size: 1024 * 20, uploadFile默认参数 accept: 'file',   acceptMime: 'file/*',  size: 1024 * 30
+                            </li>
+                            <li>
+                                [新增] 上传接口新增headers/data参数，【接口的请求头。如：headers: {token: 'sasasas'}。注：该参数为 layui 2.2.6 开始新增】可根据需要调用，详细见<a href="https://www.layui.com/doc/modules/upload.html#options" target="_blank">layuplaod基础参数</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="layui-timeline-item">
+                    <i class="layui-icon layui-timeline-axis"></i>
+                    <div class="layui-timeline-content layui-text">
+                        <div class="layui-timeline-title">
+                            <h2>v18.11.*</h2>
+                            <span class="layui-badge-rim">2018-11-29</span>
+                        </div>
+                        <blockquote class="layui-elem-quote">
+                            2018年11月更新内容
+                        </blockquote>
+                        <ul>
+                            <li>
+                                v18.11.12
+                            </li>
+                            <li>
+                                插入代码新增自定义参数 codeConfig{hide:true|false,default:"javascript/c#/java..."} 设置hide为true时不显示代码选择框，可依据default设置默认语言格式。不设置codeConfig则为原版
+                            </li>
+                            <li>新增 添加水平线/hr（<i>addhr</i>）功能</li>
+                            <li>修复上传视频什么也不选时也能成功添加bug，现在会提示上传视频(感谢<a href="https://gitee.com/herohill">hreohill</a>的反馈)</li>
+                            <li>新增图片右键修改功能，可重新上传图片</li>
+                            <li>V18.11.16</li>
+                            <li>[修复] 空编辑器上传视频并删除后编辑器无法操作问题</li>
+                            <li>[修复] 插入锚点功能</li>
+                            <li>[移除] 字体/字体大小设置</li>
+                            <li>[优化] 右键菜单/段落格式展示效果</li>
+                            <li>[优化] 插入视频同时插入p标签，并在左右各加一个空格符，以处理video标签无法选中问题。</li>
+                            <li>[新增] 图片上传和视频上传文件限制参数 file/filemine/exts --该参数引用自layupload，详细见<a href="https://www.layui.com/doc/modules/upload.html#options" target="_blank">layuplaod基础参数</a></li>
+                            <li>[新增] 右键删除视频图片的回调方法设置 calldel:{url:''},该设置会调用post方法传递图片(imgpath)/视频地址(filepath)</li>
+                            <li>[新增] 开发者模式 devmode,默认为false,false时隐藏添加链接的 打开方式和rel属性</li>
+                            <li>[新增] 图片右键添加删除功能</li>
+                            <li>[新增] 超链接添加页面新增链接 文本字段，打开方式默认为新页面</li>
+                            <li>[新增] 图片视频上传时可在后台检测服务器是否存在相同文件，相同可返回服务器文件地址进行调用，前台有提示，返回码为2</li>
+                            <li> [已知问题] 粘贴或赋默认值时会过滤script和style标签，内容中存在错误时编辑器不可用，如存在该问题请检查内容是否正确</li>
+                            <li>V18.11.23</li>
+                            <li> [新增] 多图上传功能[images],配置参数同uploadImage，删除回调同 calldel</li>
+                            <li>[新增]  文字背景色设置[fontBackColor]</li>
+                            <li>[优化] uploadImage/uploadVideo可只设置url，其余均设置可读取默认值。</li>
+                            <li>V18.11.25    感谢来自<a href="https://gitee.com/yhl452493373">杨黄林</a>的反馈</li>
+                            <li>[合并优化]  图片上传时图片的宽度，高度单位为px，输入时不需输入单位；</li>
+                            <li>[合并优化] 修改图片属性时可以初始化获取设置的图片的宽和；</li>
+                            <li>[合并新增] 文件、视频上传/删除时增加done回调，参数为服务器返回的数据；新增field 上传时的文件参数字段名</li>
+                            <li>[合并优化] 图片、视频地址为空时，确定给出提示，不能为空；</li>
+                            <li>[合并修复] 批量上传时，上传失败会删除相应图片；</li>
+                            <li>[合并优化] 超链接弹窗高度自适应；</li>
+                            <li>[合并优化] 弹窗使用layer自带按钮</li>
+                            <li>[新增] 上传图片视频时可在后台判断服务器是否存在该文件，如存在则返回{code:2,msg:"重复提示",data:{src:"重复文件路径"}}; 会弹窗提示是否调用重复文件，如不需要该功能返回状态码请勿使用2，正常 0，错误 1， 重复 2 </li>
+                            <li>[新增] 编辑器外置样式和js引用【quote】</li>
+                            <li>V18.11.27</li>
+                            <li>[优化] 段落格式选择样式，背景改为白色，鼠标加手;</li>
+                            <li>[新增] 自定义样式【CustomTheme】,暂时只支持video添加时进行主题样式选择，提供三个参数，title(下拉框展示项),content（自定义class）.preview（预览图地址）</li>
+                            <li>[优化] 修改多图上传图标</li>
+                            <li>[新增] 插入表格功能【table】,最大支持10X10，支持右键删除行\新增行，暂不支持合并单元格</li>
+                            <li>[新增] 插入自定义链接【customlink】,提供title（弹出层名称），href(添加链接url),onmouseup(onmouseup触发事件)三个参数，添加的链接默认target='_blank',rel='nofollow'</li>
+                            <li>V18.11.28</li>
+                            <li>[修复] 自定义链接宽度错误设置为3500px问题,修复合并冲突customlink.title设置无效问题</li>
+                            <li>[优化] 锚点不再采用class控制，兼容非本编辑器编辑锚点，修改锚点展示样式为<span style="color:#01aaed">§</span></li>
+                            <li>[优化] 插入锚点弹窗兼容移动端</li>
+                            <li> [新增] 简单撤销【undo】 重做【redo】功能， 仅对编辑器内文本操作有效，，插入锚点等功能无法撤销重做</li>
+                            <li>V18.11.29</li>
+                            <li> [优化] 视频右键菜单优化，可修改视频、封面或删除该视频</li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="layui-timeline-item">
+                    <i class="layui-icon layui-timeline-axis"></i>
+                    <div class="layui-timeline-content layui-text">
+                        <div class="layui-timeline-title">
+                            <h2>v18.10.*</h2>
+                            <span class="layui-badge-rim">2018-10-23</span>
+                        </div>
+                        <blockquote class="layui-elem-quote">十月更新内容</blockquote>
+                        <ul>
+                            <li>优化右键面板样式，最大化最小化功能优化</li>
+                            <li>添加右键触发事件 --居中，居左，居右，删除</li>
+                            <li>回车、居中居左等自动追加p标签</li>
+                            <li>新增图片右键修改宽高功能</li>
+                            <li> 修复取消全屏后样式错误问题（部分情况下依旧会出现高度变矮情况） </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="layui-timeline-item">
+                    <i class="layui-icon layui-timeline-axis"></i>
+                    <div class="layui-timeline-content layui-text">
+                        <div class="layui-timeline-title">
+                            <h2>v18.9.29</h2>
+                            <span class="layui-badge-rim">2018-9-29</span>
+                        </div>
+                        <blockquote class="layui-elem-quote">
+                            2018年的9月的第一个版本，基于layui 1.0.9版本的layedit修改而来
+                            <a href="https://www.layui.com/v1/doc/modules/layedit.html" target="_blank">  前身</a>
+                        </blockquote>
+                        <ul>
+                            <li>添加HTML源码模式</li>
+                            <li> 图片插入添加alt属性</li>
+                            <li>新增 视频插入、全屏、字体颜色设置功能</li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
