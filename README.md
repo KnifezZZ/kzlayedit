@@ -6,6 +6,8 @@
 - ##### V18.12.20
 1. [修复] 代码冲突导致字体设置和字体大小设置一样（感谢<a href="https://gitee.com/flash127">あ读鈊茚ケ</a>的反馈）
 2. [新增] 弹窗预览功能，预览样式配合quote {style}使用
+3. [新增] 自动同步到textarea参数autoSync:true|false,true则内容改动实时同步到textarea,false与原版一致，默认false
+4. [新增] 内容改变监听方法onchange:function(content){};content为获取的编辑器内容，用法查看示例文件
 - ##### V18.12.19
 1. [修复] 编辑器高度设置为百分比时源码模式不展示问题
 - ##### V18.12.18

@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V18.12.19 beta
+ @Version: V18.12.20 beta
  */
 
 layui.define(['layer', 'form'], function (exports) {
@@ -81,6 +81,8 @@ layui.define(['layer', 'form'], function (exports) {
                 }
                 , facePath: layui.cache.dir
                 , devmode: false
+                , autoSync: false
+                , onchange: function (content) {}
                 , hideTool: []
                 , height: 280 //默认高
             };
@@ -229,7 +231,6 @@ layui.define(['layer', 'form'], function (exports) {
     //iframe初始化
     var setIframe = function (editor, textArea, set) {
         var that = this, iframe = editor.find('iframe');
-
         iframe.css({
             height: set.height
         }).on('load', function () {
@@ -264,7 +265,6 @@ layui.define(['layer', 'form'], function (exports) {
             body.attr('contenteditable', 'true').css({
                 'min-height': set.height
             }).html(textArea.value || '');
-
             hotkey.apply(that, [iframeWin, iframe, textArea, set]); //快捷键处理
             toolActive.call(that, iframeWin, editor, set); //触发工具
 
@@ -292,7 +292,6 @@ layui.define(['layer', 'form'], function (exports) {
         , hotkey = function (iframeWin, iframe, textArea, set) {
             var iframeDOM = iframeWin.document, body = $(iframeDOM.body);
             body.on('keydown', function (e) {
-                debugger;
                 var keycode = e.keyCode;
                 //处理回车
                 if (keycode === 13) {
@@ -320,6 +319,20 @@ layui.define(['layer', 'form'], function (exports) {
                         range.deleteContents();
                     }
                 }
+                
+                setTimeout(function () {
+                    var html = body.html();
+                    //IE8下将标签处理成小写
+                    if (device.ie == 8) {
+                        html = html.replace(/<.+>/g, function (str) {
+                            return str.toLowerCase();
+                        });
+                    }
+                    if (set.autoSync) {
+                        textArea.value = html;
+                    }
+                    set.onchange(html);
+                }, 1);
             });
 
             //给textarea同步内容
@@ -333,7 +346,6 @@ layui.define(['layer', 'form'], function (exports) {
                 }
                 textArea.value = html;
             });
-
             //处理粘贴
             body.on('paste', function (e) {
                 iframeDOM.execCommand('formatBlock', false, '<p>');
@@ -1303,7 +1315,7 @@ layui.define(['layer', 'form'], function (exports) {
                             currStyle.push('<link href="' + item + '" rel="stylesheet"/>');
                         });
                         var docs = this.parentElement.nextElementSibling.firstElementChild.contentDocument.body.innerHTML;
-                        var ii=layer.open({
+                        layer.open({
                             type: 1
                             , id: 'layui-kz-preview'
                             , title: '预览'
@@ -1324,9 +1336,12 @@ layui.define(['layer', 'form'], function (exports) {
                                     return '100px'
                                 }
                             }()
-                            , content: currStyle.join('')+ docs
+                            , content: currStyle.join('') + docs
+                            , success: function (layero, index) {
+                                layer.full(index);//全屏
+                                layer.setTop(layero); //置顶
+                            }
                         })
-                        layer.full(ii);
                     }
 
                     , fontFomatt: function (range) {

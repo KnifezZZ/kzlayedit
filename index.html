@@ -68,6 +68,12 @@
             }
             //开发者模式 --默认为false
             , devmode: true
+            //是否自动同步到textarea
+            , autoSync: true
+            //内容改变监听事件
+            , onchange: function (content) {
+                console.log(content);
+            }
             //插入代码设置 --hide:true 等同于不配置codeConfig
             , codeConfig: {
                 hide: false,  //是否显示编码语言选择框
