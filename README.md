@@ -4,14 +4,16 @@
 ### 虽然对移动端做了适配,但是使用体验不咋的,已经放弃治疗.以后估计只会优化界面,避免出现宽,高溢出的情况.但是操作体验上基本无法改进了...不建议移动端做富文本编辑....
 #### 更新日志
 - ##### V18.12.19
+1. [修复] 代码冲突导致字体设置和字体大小设置一样（感谢<a href="https://gitee.com/flash127">あ读鈊茚ケ</a>的反馈）
+- ##### V18.12.19
 1. [修复] 编辑器高度设置为百分比时源码模式不展示问题
 - ##### V18.12.18
-1. [修复] 多图上传/附件上传 路径未能正确转换问题，多图上传添加loading层 （感谢<a href="https://gitee.com//kkink">kkink</a>的反馈）
+1. [修复] 多图上传/附件上传 路径未能正确转换问题，多图上传添加loading层 （感谢<a href="https://gitee.com/kkink">kkink</a>的反馈）
 2. [优化] 空内容添加hr标签退格键back删除兼容
 3. [优化] 移除粘贴内容过滤style样式，script、link代码块
 4. [优化] 插入hr/a标签不再使用p标签包裹
 - ##### V18.12.17
-1. [修复] 上传图片上传视频弹出框点击右上角关闭报错问题 （感谢<a href="https://gitee.com//dapperfd845es64">孤独感胜多负少</a>的反馈）
+1. [修复] 上传图片上传视频弹出框点击右上角关闭报错问题 （感谢<a href="https://gitee.com/dapperfd845es64">孤独感胜多负少</a>的反馈）
 2. [优化] uploadImage/video/file配置优化，uploadImage 默认 accept: 'image',acceptMime: 'image/*',exts: 'jpg|png|gif|bmp|jpeg',size: 1024 * 10,
 uploadVideo默认参数 accept: 'video',acceptMime: 'video/*', exts: 'mp4|flv|avi|rm|rmvb', size: 1024 * 20, uploadFile默认参数 accept: 'file',   acceptMime: 'file/*',  size: 1024 * 30
 3. [新增] 上传接口新增headers/data参数，【接口的请求头。如：headers: {token: 'sasasas'}。注：该参数为 layui 2.2.6 开始新增】可根据需要调用，详细见<a href="https://www.layui.com/doc/modules/upload.html#options" target="_blank">layuplaod基础参数</a>

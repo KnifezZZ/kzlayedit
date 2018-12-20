@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V18.12.17 beta
+ @Version: V18.12.19 beta
  */
 
 layui.define(['layer', 'form'], function (exports) {
@@ -2539,8 +2539,6 @@ layui.define(['layer', 'form'], function (exports) {
             ,
             fontFomatt: '<i class="layui-icon layedit-tool-fontFomatt" title="段落格式" layedit-event="fontFomatt" style="font-size:18px">&#xe639;</i>'
             ,
-            fontFamily: '<i class="layui-icon layedit-tool-fontFamily" title="字体" layedit-event="fontFamily" style="font-size:18px">&#xe702;</i>'
-            ,
             fontSize: '<i class="layui-icon layedit-tool-fontSize" title="字体大小" layedit-event="fontSize" style="font-size:18px">&#xe642;</i>'
             ,
             addhr: '<i class="layui-icon layui-icon-chart layedit-tool-addhr" title="添加水平线" layedit-event="addhr" style="font-size:18px"></i>'
@@ -2553,7 +2551,7 @@ layui.define(['layer', 'form'], function (exports) {
             ,
             attachment: '<i class="layui-icon layedit-tool-attachment" title="插入附件" layedit-event="attachment" style="font-size:18px">&#xe62f;</i>'
             ,
-            fontfamily: '<i class="layui-icon layedit-tool-fontfamily" title="字体大小" layedit-event="fontfamily" style="font-size:18px">&#xe642;</i>'
+            fontfamily: '<i class="layui-icon layedit-tool-fontfamily" title="字体" layedit-event="fontfamily" style="font-size:18px">&#xe702;</i>'
             ,
             help: '<i class="layui-icon layedit-tool-help" title="帮助" layedit-event="help">&#xe607;</i>'
         }
