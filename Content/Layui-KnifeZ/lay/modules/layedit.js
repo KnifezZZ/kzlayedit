@@ -1276,7 +1276,6 @@ layui.define(['layer', 'form'], function (exports) {
                     }
                     //全屏
                     , fullScreen: function (range) {
-                        debugger;
                         if (this.parentElement.parentElement.getAttribute("style") == null) {
                             this.parentElement.parentElement.setAttribute("style", "position: fixed;top: 0;left: 0;height: 100%;width: 100%;background-color: antiquewhite;z-index: 9999;");
                             this.parentElement.nextElementSibling.style = "height:100%";
@@ -1296,6 +1295,40 @@ layui.define(['layer', 'form'], function (exports) {
                             }
                         }
                     }
+
+                    , preview: function (range) {
+                        debugger;
+                        var currStyle = [];
+                        layui.each(set.quote.style, function (index, item) {
+                            currStyle.push('<link href="' + item + '" rel="stylesheet"/>');
+                        });
+                        var docs = this.parentElement.nextElementSibling.firstElementChild.contentDocument.body.innerHTML;
+                        var ii=layer.open({
+                            type: 1
+                            , id: 'layui-kz-preview'
+                            , title: '预览'
+                            , shade: 0.05
+                            , maxmin :true
+                            , shadeClose: true
+                            , area: function () {
+                                if (/mobile/i.test(navigator.userAgent) || $(window).width() <= 485) {
+                                    return ['90%']
+                                } else {
+                                    return ['485px']
+                                }
+                            }()
+                            , offset: function () {
+                                if (/mobile/i.test(navigator.userAgent)) {
+                                    return 'auto'
+                                } else {
+                                    return '100px'
+                                }
+                            }()
+                            , content: currStyle.join('')+ docs
+                        })
+                        layer.full(ii);
+                    }
+
                     , fontFomatt: function (range) {
                         var alt = set.fontFomatt || {
                             code: ["p", "h1", "h2", "h3", "h4", "div"],
@@ -1380,6 +1413,7 @@ layui.define(['layer', 'form'], function (exports) {
                             }, 10);
                         });
                     }
+
                     , customlink: function (range) {
                         var container = getContainer(range)
                             , parentNode = $(container).parent();
@@ -2539,6 +2573,8 @@ layui.define(['layer', 'form'], function (exports) {
             ,
             fontFomatt: '<i class="layui-icon layedit-tool-fontFomatt" title="段落格式" layedit-event="fontFomatt" style="font-size:18px">&#xe639;</i>'
             ,
+            fontfamily: '<i class="layui-icon layedit-tool-fontfamily" title="字体" layedit-event="fontfamily" style="font-size:18px">&#xe702;</i>'
+            ,
             fontSize: '<i class="layui-icon layedit-tool-fontSize" title="字体大小" layedit-event="fontSize" style="font-size:18px">&#xe642;</i>'
             ,
             addhr: '<i class="layui-icon layui-icon-chart layedit-tool-addhr" title="添加水平线" layedit-event="addhr" style="font-size:18px"></i>'
@@ -2551,7 +2587,7 @@ layui.define(['layer', 'form'], function (exports) {
             ,
             attachment: '<i class="layui-icon layedit-tool-attachment" title="插入附件" layedit-event="attachment" style="font-size:18px">&#xe62f;</i>'
             ,
-            fontfamily: '<i class="layui-icon layedit-tool-fontfamily" title="字体" layedit-event="fontfamily" style="font-size:18px">&#xe702;</i>'
+            preview: '<i class="layui-icon layedit-tool-preview" title="预览" layedit-event="preview" style="font-size:18px">&#xe615;</i>'
             ,
             help: '<i class="layui-icon layedit-tool-help" title="帮助" layedit-event="help">&#xe607;</i>'
         }

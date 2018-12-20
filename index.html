@@ -74,10 +74,10 @@
                 default: 'javascript' //hide为true时的默认语言格式
             }
             //新增iframe外置样式和js
-            //, quote:{
-            //    style: ['/Content/Layui-KnifeZ/css/layui.css','/others'],
-            //    js: ['/Content/Layui-KnifeZ/lay/modules/jquery.js']
-            //}
+            , quote:{
+                style: ['/Content/css.css'],
+                //js: ['/Content/Layui-KnifeZ/lay/modules/jquery.js']
+            }
             //自定义样式-暂只支持video添加
             //, customTheme: {
             //    video: {
@@ -100,13 +100,13 @@
                 , '|', 'left', 'center', 'right', '|', 'link', 'unlink', 'images', 'image_alt', 'video','attachment', 'anchors'
                 , '|'
                 , 'table','customlink'
-                , 'fullScreen'
+                , 'fullScreen','preview'
             ]
             , height: '500px'
         });
         var ieditor = layedit.build('layeditDemo');
         //设置编辑器内容
-        layedit.setContent(ieditor, "<h1>hello layedit</h1>", false);
+        layedit.setContent(ieditor, "<h1>hello layedit</h1><p>对layui.layedit的拓展，基于layui v2.4.3.增加了HTML源码模式、插入table、批量上传图片、图片插入、超链接插入功能优化、视频插入功能、全屏功能、段落、字体颜色、背景色设置、锚点设置等功能。</p><br><br><div>by KnifeZ </div>", false);
         $("#openlayer").click(function () {
             layer.open({
                 type: 2,
