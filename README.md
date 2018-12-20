@@ -1,6 +1,6 @@
 # Kz.layedit
 ### 在线预览
-[码云Gitee Pages](http://knifez.gitee.io/kz.layedit/)
+[码云Gitee Pages](http://knifez.gitee.io/kz.layedit/index.html)
 
 ### 虽然对移动端做了适配,但是使用体验不咋的,已经放弃治疗.以后估计只会优化界面,避免出现宽,高溢出的情况.但是操作体验上基本无法改进了...不建议移动端做富文本编辑....
 #### 更新日志
@@ -17,7 +17,7 @@
 3. [优化] 移除粘贴内容过滤style样式，script、link代码块
 4. [优化] 插入hr/a标签不再使用p标签包裹
 
-####  <a href="UpgradeInfo.html">历史日志</a>
+####  <a href="http://knifez.gitee.io/kz.layedit/UpgradeInfo.html">历史日志</a>
 
 #### 项目介绍
 对layui.layedit的拓展，基于layui v2.4.3.
