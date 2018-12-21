@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V18.12.20 beta
+ @Version: V18.12.21 beta
  */
 
 layui.define(['layer', 'form'], function (exports) {
@@ -82,7 +82,7 @@ layui.define(['layer', 'form'], function (exports) {
                 , facePath: layui.cache.dir
                 , devmode: false
                 , autoSync: false
-                , onchange: function (content) {}
+                , onchange: function (content) { }
                 , hideTool: []
                 , height: 280 //默认高
             };
@@ -319,7 +319,7 @@ layui.define(['layer', 'form'], function (exports) {
                         range.deleteContents();
                     }
                 }
-                
+
                 setTimeout(function () {
                     var html = body.html();
                     //IE8下将标签处理成小写
@@ -348,11 +348,44 @@ layui.define(['layer', 'form'], function (exports) {
             });
             //处理粘贴
             body.on('paste', function (e) {
-                iframeDOM.execCommand('formatBlock', false, '<p>');
+                if (!(e.originalEvent.clipboardData && e.originalEvent.clipboardData.items)) {
+                    return;
+                }
+                for (var i = 0, len = e.originalEvent.clipboardData.items.length; i < len; i++) {
+                    var item = e.originalEvent.clipboardData.items[i];
+                    if (item.kind === "file") {
+                        var f = item.getAsFile();
+                        var formData = new FormData();
+                        formData.append('file', f);
+                        var url = set.uploadImage.url;
+                        $.ajax({
+                            type: 'POST',
+                            url: url,
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            dataType: "json",
+                            mimeType: "multipart/form-data",
+                            success: function (data) {
+                                if (data.code == 0 || data.code == 2) {
+                                    var range = iframeWin.document.getSelection().getRangeAt(0);
+                                    var elem = document.createElement("img");
+                                    elem.src = data.data.src;
+                                    var elep = document.createElement('p');
+                                    elep.appendChild(elem);
+                                    range.insertNode(elep);
+                                }
+                            },
+                            error: function (d) {
+                                layer.msg("上传服务器出错");
+                            }
+                        });
+                    }
+                }
                 setTimeout(function () {
                     filter.call(iframeWin, body);
                     textArea.value = body.html();
-                }, 100);
+                }, 10);
             });
         }
 
@@ -416,7 +449,7 @@ layui.define(['layer', 'form'], function (exports) {
                 }
                 var container = getContainer(range), parentNode = container.parentNode;
 
-                if (tagName != "p" && tagName != "a"&& tagName != "hr" && tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
+                if (tagName != "p" && tagName != "a" && tagName != "hr" && tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
                     elep.appendChild(elem);
                 } else {
                     elep = elem;
@@ -1320,7 +1353,7 @@ layui.define(['layer', 'form'], function (exports) {
                             , id: 'layui-kz-preview'
                             , title: '预览'
                             , shade: 0.05
-                            , maxmin :true
+                            , maxmin: true
                             , shadeClose: true
                             , area: function () {
                                 if (/mobile/i.test(navigator.userAgent) || $(window).width() <= 485) {
