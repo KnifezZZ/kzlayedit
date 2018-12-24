@@ -36,7 +36,7 @@
                     console.log(data);
                 }
             },
-             uploadVideo: {
+            uploadVideo: {
                 url: 'your url',
                 accept: 'video',
                 acceptMime: 'video/*',
@@ -64,6 +64,22 @@
                 url: 'your url',
                 done: function (data) {
                     console.log(data);
+                }
+            }
+            , rightBtn: {
+                type: "layBtn",//default|layBtn|custom  浏览器默认/layedit右键面板/自定义菜单 default和layBtn无需配置customEvent
+                customEvent: function (targetName, event) {
+                    //根据tagName分类型设置
+                    switch (targetName) {
+                        case "img":
+                            alert("this is img");
+                            break;
+                        default:
+                            alert("hello world");
+                            break;
+                    };
+                    //或者直接统一设定
+                    //alert("all in one");
                 }
             }
             //开发者模式 --默认为false

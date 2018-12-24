@@ -4,6 +4,9 @@
 
 ### 虽然对移动端做了适配,但是使用体验不咋的,已经放弃治疗.以后估计只会优化界面,避免出现宽,高溢出的情况.但是操作体验上基本无法改进了...不建议移动端做富文本编辑....
 #### 更新日志
+- ##### V18.12.24 beta
+1. [修复] 上传附件报uploadImage错误，done回调方法错误调用uploadImage.done，已修改为uplaodFile.done。（感谢<a href="https://gitee.com/dengkai1992">三十年的老咸菜</a>的反馈）
+2. [新增] 右键菜单自定义设置rightBtn。有type和customEvent两个属性，type=default|layBtn|custom，浏览器默认/layedit右键面板/自定义菜单 default和layBtn无需配置customEvent，customEvent为自定义右键方法，默认为layBtn
 - ##### V18.12.21
 1. [新增] ctrl+v粘贴图片时调用后台方法上传至服务器，配置地址为uploadImage的src地址,不支持从word复制的图片
 - ##### V18.12.20

@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V18.12.21 beta
+ @Version: V18.12.24 beta
  */
 
 layui.define(['layer', 'form'], function (exports) {
@@ -1251,12 +1251,12 @@ layui.define(['layer', 'form'], function (exports) {
                                             if (res.code == 0) {
                                                 res.data = res.data || {};
                                                 $('#filesPrev a[data-index="' + index + '"]').attr('href', res.data.src);
-                                                uploadImage.done(res);
+                                                uploadFiles.done(res);
                                             } else if (res.code == 2) {
                                                 layer.msg(res.msg || '上传失败');
                                                 res.data = res.data || {};
                                                 $('#filesPrev a[data-index="' + index + '"]').attr('href', res.data.src);
-                                                uploadImage.done(res);
+                                                uploadFiles.done(res);
                                             } else {
                                                 layer.msg(res.msg || '上传失败');
                                             }
@@ -1580,12 +1580,19 @@ layui.define(['layer', 'form'], function (exports) {
             //右键菜单自定义
             var rbtnIndex = null;
             var contextmenu = function (event) {
-                if (event != null) {
+                var rbtn = set.rightBtn || {
+                    type: "layBtn", customEvent: function (tagName,event) { }
+                };
+                if (event != null && rbtn.type!="default") {
                     layer.close(rbtnIndex);
                     var currenNode, parentNode;
 
                     currenNode = event.target;
                     parentNode = currenNode.parentNode;
+                    if (rbtn.type == "custom") {
+                        rbtn.customEvent(currenNode.tagName, event);
+                        return false;
+                    }
                     switch (currenNode.tagName) {
                         case "IMG":
                             rbtnIndex = layer.open({
