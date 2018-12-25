@@ -34,7 +34,11 @@
                 acceptMime: 'image/*',
                 exts: 'jpg|png|gif|bmp|jpeg',
                 size: 1024 * 10,
-                done: function (data) {
+                data: {
+                    name: "测试参数",
+                    age:99
+                }
+                ,done: function (data) {
                     console.log(data);
                 }
             },
