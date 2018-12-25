@@ -1,6 +1,6 @@
 # Kz.layedit
 
-## 已更新项目配置使用说明 [Kz.layedit使用说明](https://knifez.gitee.io/2018/12/22/kz.layedit/)
+## 已更新项目配置使用说明 [Kz.layedit使用说明](https://knifez.gitee.io/articles/kz.layedit/)
 
 ### 在线预览 [码云Gitee Pages](http://knifez.gitee.io/kz.layedit/index.html)
 
