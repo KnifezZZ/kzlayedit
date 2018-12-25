@@ -1,12 +1,12 @@
 # Kz.layedit
-### 在线预览
-[码云Gitee Pages](http://knifez.gitee.io/kz.layedit/index.html)
 
-### 项目配置说明
+## 已更新项目配置使用说明 [Kz.layedit使用说明](https://knifez.gitee.io/2018/12/22/kz.layedit/)
 
-[Kz.layedit使用说明](https://knifez.gitee.io/2018/12/22/kz.layedit/)
+### 在线预览 [码云Gitee Pages](http://knifez.gitee.io/kz.layedit/index.html)
+
 
 ### 虽然对移动端做了适配,但是使用体验不咋的,已经放弃治疗.以后估计只会优化界面,避免出现宽,高溢出的情况.但是操作体验上基本无法改进了...不建议移动端做富文本编辑....
+
 #### 更新日志
 - ##### V18.12.24 beta
 1. [修复] 上传附件报uploadImage错误，done回调方法错误调用uploadImage.done，已修改为uplaodFile.done。（感谢<a href="https://gitee.com/dengkai1992">三十年的老咸菜</a>的反馈）
@@ -56,7 +56,7 @@
  		 layedit.set({
                 //暴露layupload参数设置接口 --详细查看layupload参数说明
                 uploadImage: {
-                    url: '/Attachment/LayUploadFile',
+                    url: 'your url',
                     field: 'file',//上传时的文件参数字段名
                     accept: 'image',
                     acceptMime: 'image/*',
@@ -66,7 +66,7 @@
                     }
                 }
                 , uploadVideo: {
-                    url: '/Attachment/LayUploadFile',
+                    url: 'your url',
                     field: 'file',//上传时的文件参数字段名
                     accept: 'video',
                     acceptMime: 'video/*',
@@ -80,7 +80,7 @@
                 //图片： imgpath --图片路径
                 //视频： filepath --视频路径 imgpath --封面路径
                 , calldel: {
-                    url: '/Attachment/DeleteFile',
+                    url: 'your url',
                     done: function (data) {//data删除文件接口返回返回的数据
                     }
                 }
