@@ -2,6 +2,8 @@
 
 ## 已更新项目配置使用说明 [Kz.layedit使用说明](https://knifez.gitee.io/articles/kz.layedit/)
 
+### 各位再有问题可直接提issues，也方便其他人查看，不再翻评论 :smile: 
+
 ### 在线预览 [码云Gitee Pages](http://knifez.gitee.io/kz.layedit/index.html)
 
 
