@@ -10,6 +10,8 @@
 ### 虽然对移动端做了适配,但是使用体验不咋的,已经放弃治疗.以后估计只会优化界面,避免出现宽,高溢出的情况.但是操作体验上基本无法改进了...不建议移动端做富文本编辑....
 
 #### 更新日志
+- ##### V18.12.26
+1. [修复] 预览最大化还原高度溢出问题（感谢<a href="https://gitee.com/Supan_Tony">PP_860</a>的反馈）
 - ##### V18.12.24 beta
 1. [修复] 上传附件报uploadImage错误，done回调方法错误调用uploadImage.done，已修改为uplaodFile.done。（感谢<a href="https://gitee.com/dengkai1992">三十年的老咸菜</a>的反馈）
 2. [新增] 右键菜单自定义设置rightBtn。有type和customEvent两个属性，type=default|layBtn|custom，浏览器默认/layedit右键面板/自定义菜单 default和layBtn无需配置customEvent，customEvent为自定义右键方法，默认为layBtn

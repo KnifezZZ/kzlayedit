@@ -96,9 +96,9 @@
             , onchange: function (content) {
                 console.log(content);
             }
-            //插入代码设置 --hide:true 等同于不配置codeConfig
+            //插入代码设置 --hide:false 等同于不配置codeConfig
             , codeConfig: {
-                hide: false,  //是否显示编码语言选择框
+                hide: true,  //是否隐藏编码语言选择框
                 default: 'javascript' //hide为true时的默认语言格式
             }
             //新增iframe外置样式和js

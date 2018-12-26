@@ -1354,12 +1354,23 @@ layui.define(['layer', 'form'], function (exports) {
                             , title: '预览'
                             , shade: 0.05
                             , maxmin: true
+                            , full: function (index) {
+                                index[0].style.height = ($(".layui-layer-shade").offsetHeight) + "px";
+                                index[0].children[1].style.height = ($(".layui-layer-shade").offsetHeight - 43) + "px";
+                            },
+                            min: function (index) {
+                            },
+                            restore: function (index) {
+                                debugger;
+                                index[0].style.height = (document.body.clientHeight - 100)+"px";
+                                index[0].children[1].style.height =(document.body.clientHeight - 143) + "px";
+                            }
                             , shadeClose: true
                             , area: function () {
                                 if (/mobile/i.test(navigator.userAgent) || $(window).width() <= 485) {
                                     return ['90%']
                                 } else {
-                                    return ['485px']
+                                    return ['600px']
                                 }
                             }()
                             , offset: function () {
