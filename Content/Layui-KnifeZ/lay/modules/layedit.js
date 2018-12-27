@@ -393,21 +393,19 @@ layui.define(['layer', 'form'], function (exports) {
         , filter = function (body) {
             var iframeWin = this
                 , iframeDOM = iframeWin.document;
-
-            //清除影响版面的css属性
-            //body.find('*[style]').each(function () {
-            //    var textAlign = this.style.textAlign;
-            //    this.removeAttribute('style');
-            //    $(this).css({
-            //        'text-align': textAlign || ''
-            //    })
-            //});
-
+            //    //清除影响版面的css属性
+            //    body.find('*[style]').each(function () {
+            //        var textAlign = this.style.textAlign;
+            //        this.removeAttribute('style');
+            //        $(this).css({
+            //            'text-align': textAlign || ''
+            //        })
+            //    });
+            //    //移除不安全的标签
+            //    body.find('script,link').remove();
+ 
             ////修饰表格
             //body.find('table').addClass('layui-table');
-
-            //移除不安全的标签
-            //body.find('script,link').remove();
         }
 
         //Range对象兼容性处理
@@ -449,7 +447,7 @@ layui.define(['layer', 'form'], function (exports) {
                 }
                 var container = getContainer(range), parentNode = container.parentNode;
 
-                if (tagName != "p" && tagName != "a" && tagName != "hr" && tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
+                if (tagName!="span"&&tagName != "p" && tagName != "a" && tagName != "hr" && tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
                     elep.appendChild(elem);
                 } else {
                     elep = elem;
@@ -487,7 +485,6 @@ layui.define(['layer', 'form'], function (exports) {
             }
             tools.find('>i').removeClass(CHECK);
             item('unlink').addClass(ABLED);
-
             $(container).parents().each(function () {
                 var tagName = this.tagName.toLowerCase()
                     , textAlign = this.style.textAlign;
@@ -1388,6 +1385,12 @@ layui.define(['layer', 'form'], function (exports) {
                         })
                     }
 
+                    , removeformat: function (range) {
+                        iframeDOM.execCommand('removeFormat');
+                        setTimeout(function () {
+                            body.focus();
+                        }, 10);
+                    }
                     , fontFomatt: function (range) {
                         var alt = set.fontFomatt || {
                             code: ["p", "h1", "h2", "h3", "h4", "div"],
@@ -2654,6 +2657,8 @@ layui.define(['layer', 'form'], function (exports) {
             attachment: '<i class="layui-icon layedit-tool-attachment" title="插入附件" layedit-event="attachment" style="font-size:18px">&#xe62f;</i>'
             ,
             preview: '<i class="layui-icon layedit-tool-preview" title="预览" layedit-event="preview" style="font-size:18px">&#xe615;</i>'
+            ,
+            removeformat: '<i class="layui-icon layedit-tool-removeformat" title="清除文字样式" layedit-event="removeformat" style="font-size:18px">&#xe615;</i>'
             ,
             help: '<i class="layui-icon layedit-tool-help" title="帮助" layedit-event="help">&#xe607;</i>'
         }
