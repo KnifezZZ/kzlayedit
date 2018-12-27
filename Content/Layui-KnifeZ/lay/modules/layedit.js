@@ -1386,7 +1386,13 @@ layui.define(['layer', 'form'], function (exports) {
                     }
 
                     , removeformat: function (range) {
-                        iframeDOM.execCommand('removeFormat');
+                        //if (device.ie)
+                        //    iframeDOM.execCommand('backColor', false, "#fff");
+                        //else
+                        //    iframeDOM.execCommand('hiliteColor', false, "#fff");
+                        
+                        //iframeDOM.execCommand('forecolor', false, "#000");
+                        iframeDOM.execCommand('removeFormat', 'strong', 'color', 'width' );
                         setTimeout(function () {
                             body.focus();
                         }, 10);
