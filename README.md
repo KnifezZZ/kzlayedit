@@ -10,6 +10,8 @@
 ### 虽然对移动端做了适配,但是使用体验不咋的,已经放弃治疗.以后估计只会优化界面,避免出现宽,高溢出的情况.但是操作体验上基本无法改进了...不建议移动端做富文本编辑....
 
 #### 更新日志
+- ##### V18.12.28
+1.[修复] <a href="https://gitee.com/KnifeZ/dashboard/issues?id=IQB94">IQB94</a> 插入代码转义html特殊字符，兼容Html源码模式，需配置codeConfig{encode:true}（感谢<a href="https://gitee.com/hjljy">海加尔金鹰</a>的反馈）
 - ##### V18.12.27
 1. [新增] 移除指定内容字体样式 removeformat
 2. [修复] 字体、字体大小设置

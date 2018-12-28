@@ -7,7 +7,7 @@
  @Version: V18.12.24 beta
  */
 
-layui.define(['layer', 'form'], function (exports) {
+layui.define(['layer', 'form','code'], function (exports) {
     "use strict";
 
     /**
@@ -447,7 +447,7 @@ layui.define(['layer', 'form'], function (exports) {
                 }
                 var container = getContainer(range), parentNode = container.parentNode;
 
-                if (tagName!="span"&&tagName != "p" && tagName != "a" && tagName != "hr" && tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
+                if (tagName != "pre"&&tagName!="span"&&tagName != "p" && tagName != "a" && tagName != "hr" && tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
                     elep.appendChild(elem);
                 } else {
                     elep = elem;
@@ -627,13 +627,20 @@ layui.define(['layer', 'form'], function (exports) {
                     }
                     //插入代码
                     , code: function (range) {
-                        var codeConfig = set.codeConfig || { hide: false };
+                        var codeConfig = set.codeConfig || { hide: false, encode: true };
                         code.call(body, { hide: codeConfig.hide, default: codeConfig.default }, function (pre) {
+                            if (codeConfig.encode || true) {
+                                pre.code = pre.code.replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')
+                                    .replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+                            }
                             insertInline.call(iframeWin, 'pre', {
                                 text: pre.code
                                 , 'lay-lang': pre.lang
+                                , 'lay-encode': codeConfig.encode
+                                , class: "layui-code"
                             }, range);
                             setTimeout(function () {
+                                layui.code();
                                 body.focus();
                             }, 10);
                         });
@@ -1282,9 +1289,13 @@ layui.define(['layer', 'form'], function (exports) {
                     //源码模式
                     , html: function (range) {
                         var that = this;
-                        var docs = that.parentElement.nextElementSibling.firstElementChild.contentDocument.body.innerHTML;
-                        docs = style_html(docs, 4, ' ', 80);
                         if (that.parentElement.nextElementSibling.lastElementChild.id.indexOf('aceHtmleditor') == -1) {
+                            var docs = that.parentElement.nextElementSibling.firstElementChild.contentDocument.body.innerHTML;
+                            if (docs.indexOf("</pre>") > -1) {
+                                docs = docs
+                                    .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+                            }
+                            docs = style_html(docs, 4, ' ', 80);
                             that.parentElement.nextElementSibling.setAttribute("style", "z-index: 999; overflow: hidden;height:" + that.parentElement.nextElementSibling.clientHeight + "px");
                             if (this.parentElement.parentElement.getAttribute("style") !== null)
                                 that.parentElement.nextElementSibling.setAttribute("style", "z-index: 999; overflow: hidden;height:100%");
@@ -1308,7 +1319,13 @@ layui.define(['layer', 'form'], function (exports) {
 
                         } else {
                             var editor = ace.edit(that.parentElement.nextElementSibling.firstElementChild.id + 'aceHtmleditor');
-                            iframeWin.document.body.innerHTML = editor.getValue();
+                            var doc = editor.getValue();
+                            iframeWin.document.body.innerHTML = doc;
+                            iframeWin.document.body.childNodes.forEach(function (item, index, arr) {
+                                if (item.tagName == "PRE") {
+                                    item.innerHTML = item.innerHTML.replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+                                }
+                            });
                             var height = that.parentElement.nextElementSibling.clientHeight;
                             that.parentElement.nextElementSibling.removeAttribute("style");
                             this.parentElement.nextElementSibling.firstElementChild.style = "height:" + height + "px";
