@@ -1246,6 +1246,13 @@ layui.define(['layer', 'form','code'], function (exports) {
                                             for (var i = 0; i < errorIndex.length; i++) {
                                                 $('#filesPrev').find('a[data-index="' + errorIndex[i] + '"]').remove();
                                             }
+                                            //触发自动插入编辑器功能
+                                            if (uploadFiles.autoInsert) {
+                                                insertInline.call(iframeWin, 'p', {
+                                                    text: layero.find('#filesPrev').html()
+                                                }, range);
+                                                layer.close(index);
+                                            }
                                         }
                                         , error: function (index, upload) {
                                             //某文件上传接口返回错误时，将其错误index记录下来

@@ -10,32 +10,10 @@
 ### 虽然对移动端做了适配,但是使用体验不咋的,已经放弃治疗.以后估计只会优化界面,避免出现宽,高溢出的情况.但是操作体验上基本无法改进了...不建议移动端做富文本编辑....
 
 #### 更新日志
-- ##### V18.12.28
-1.[修复] <a href="https://gitee.com/KnifeZ/dashboard/issues?id=IQB94">IQB94</a> 插入代码转义html特殊字符，兼容Html源码模式，需配置codeConfig{encode:true}（感谢<a href="https://gitee.com/hjljy">海加尔金鹰</a>的反馈）
-- ##### V18.12.27
-1. [新增] 移除指定内容字体样式 removeformat
-2. [修复] 字体、字体大小设置
-- ##### V18.12.26
-1. [修复] 预览最大化还原高度溢出问题（感谢<a href="https://gitee.com/Supan_Tony">PP_860</a>的反馈）
-- ##### V18.12.24 beta
-1. [修复] 上传附件报uploadImage错误，done回调方法错误调用uploadImage.done，已修改为uplaodFile.done。（感谢<a href="https://gitee.com/dengkai1992">三十年的老咸菜</a>的反馈）
-2. [新增] 右键菜单自定义设置rightBtn。有type和customEvent两个属性，type=default|layBtn|custom，浏览器默认/layedit右键面板/自定义菜单 default和layBtn无需配置customEvent，customEvent为自定义右键方法，默认为layBtn
-- ##### V18.12.21
-1. [新增] ctrl+v粘贴图片时调用后台方法上传至服务器，配置地址为uploadImage的src地址,不支持从word复制的图片
-- ##### V18.12.20
-1. [修复] 代码冲突导致字体设置和字体大小设置一样（感谢<a href="https://gitee.com/flash127">あ读鈊茚ケ</a>的反馈）
-2. [新增] 弹窗预览功能，预览样式配合quote {style}使用
-3. [新增] 自动同步到textarea参数autoSync:true|false,true则内容改动实时同步到textarea,false与原版一致，默认false
-4. [新增] 内容改变监听方法onchange:function(content){};content为获取的编辑器内容，用法查看示例文件
-- ##### V18.12.19
-1. [修复] 编辑器高度设置为百分比时源码模式不展示问题
- - ##### V18.12.18
-1. [修复] 多图上传/附件上传 路径未能正确转换问题，多图上传添加loading层 （感谢<a href="https://gitee.com/kkink">kkink</a>的反馈）
-2. [优化] 空内容添加hr标签退格键back删除兼容
-3. [优化] 移除粘贴内容过滤style样式，script、link代码块
-4. [优化] 插入hr/a标签不再使用p标签包裹
+##### V19.01.05
+1. [新增] 附件上传自动插入编辑器设置 autoInsert, 添加设置参数 uploadFiles{autoInsert:true} 即可选中文件上传完之后自动插入编辑器，无需点确认按钮
 
-####  <a href="http://knifez.gitee.io/kz.layedit/UpgradeInfo.html">历史日志</a>
+####  <a href="http://knifez.gitee.io/kz.layedit/UpgradeInfo.html">历史日志--V18.*</a>
 
 #### 项目介绍
 对layui.layedit的拓展，基于layui v2.4.3.
