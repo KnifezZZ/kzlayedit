@@ -306,9 +306,9 @@ layui.define(['layer', 'form','code'], function (exports) {
                     if (parentNode.tagName.toLowerCase() === 'body') {
                         iframeDOM.execCommand('formatBlock', false, '<p>');
                     }
-                    setTimeout(function () {
-                        iframeDOM.execCommand('formatBlock', false, '<p>');
-                    }, 10);
+                    //setTimeout(function () {
+                    //    iframeDOM.execCommand('formatBlock', false, '<p>');
+                    //}, 10);
                 }
                 //back 删除空hr
                 if (keycode === 8) {
@@ -424,12 +424,10 @@ layui.define(['layer', 'form','code'], function (exports) {
         , insertInline = function (tagName, attr, range) {
             var iframeDOM = this.document
                 , elem = document.createElement(tagName);
-            var elep = document.createElement('p');
             for (var key in attr) {
                 elem.setAttribute(key, attr[key]);
             }
             elem.removeAttribute('text');
-            // be fix by knifeZ
             if (device.ie) { //IE
                 var text = range.text || attr.text;
                 if (tagName === 'a' && !text) return;
@@ -447,18 +445,22 @@ layui.define(['layer', 'form','code'], function (exports) {
                 }
                 var container = getContainer(range), parentNode = container.parentNode;
 
-                if (tagName != "pre"&&tagName!="span"&&tagName != "p" && tagName != "a" && tagName != "hr" && tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
-                    elep.appendChild(elem);
-                } else {
-                    elep = elem;
-                }
+                //var elep = document.createElement('p');
+                //if (container.innerHTML == "<br>" && tagName == "img" && parentNode.tagName == "P") {
+                //    elep.appendChild(elem);
+                //} else {
+                //    elep = elem;
+                //}
+                //if (tagName != "pre"&&tagName!="span"&&tagName != "p" && tagName != "a" && tagName != "hr" && tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
+                //    elep.appendChild(elem);
+                //} 
                 //处理换行
                 if (container.innerHTML == "<br>" || tagName == "div") {
                     range.selectNode(container);
                     range.deleteContents();
                 }
                 range.deleteContents();
-                range.insertNode(elep);
+                range.insertNode(elem);
                 //图片默认居中
                 if (tagName == "img" && container.innerHTML == "<br>") {
                     iframeDOM.execCommand('formatBlock', false, '<p>');
