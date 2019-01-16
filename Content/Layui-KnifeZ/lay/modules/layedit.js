@@ -4,10 +4,10 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V18.12.24 beta
+ @Version: V19.01.16 beta
  */
 
-layui.define(['layer', 'form','code'], function (exports) {
+layui.define(['layer', 'form', 'code'], function (exports) {
     "use strict";
 
     /**
@@ -403,7 +403,7 @@ layui.define(['layer', 'form','code'], function (exports) {
             //    });
             //    //移除不安全的标签
             //    body.find('script,link').remove();
- 
+
             ////修饰表格
             //body.find('table').addClass('layui-table');
         }
@@ -428,6 +428,7 @@ layui.define(['layer', 'form','code'], function (exports) {
                 elem.setAttribute(key, attr[key]);
             }
             elem.removeAttribute('text');
+            // be fix by knifeZ
             if (device.ie) { //IE
                 var text = range.text || attr.text;
                 if (tagName === 'a' && !text) return;
@@ -446,14 +447,11 @@ layui.define(['layer', 'form','code'], function (exports) {
                 var container = getContainer(range), parentNode = container.parentNode;
 
                 //var elep = document.createElement('p');
-                //if (container.innerHTML == "<br>" && tagName == "img" && parentNode.tagName == "P") {
+                //if (tagName != "pre" && tagName != "span" && tagName != "p" && tagName != "a" && tagName != "hr" && tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
                 //    elep.appendChild(elem);
                 //} else {
                 //    elep = elem;
                 //}
-                //if (tagName != "pre"&&tagName!="span"&&tagName != "p" && tagName != "a" && tagName != "hr" && tagName != "div" && parentNode.tagName != "P" && container.innerHTML != "<br>") {
-                //    elep.appendChild(elem);
-                //} 
                 //处理换行
                 if (container.innerHTML == "<br>" || tagName == "div") {
                     range.selectNode(container);
@@ -873,11 +871,10 @@ layui.define(['layer', 'form','code'], function (exports) {
                                 if (Imgsrc.val() == '') {
                                     layer.msg('请选择一张图片或输入图片地址');
                                 } else {
-                                    insertInline.call(iframeWin, 'img', {
-                                        src: Imgsrc.val()
-                                        , alt: altStr.val()
-                                        , style: styleStr
-                                    }, range);
+                                    var attrs = { src: Imgsrc.val() };
+                                    if (altStr.val() != "") attrs["alt"] = altStr.val();
+                                    if (styleStr != "") attrs["style"] = styleStr;
+                                    insertInline.call(iframeWin, 'img', attrs, range);
                                     layer.close(index);
                                 }
                             }
@@ -1248,6 +1245,7 @@ layui.define(['layer', 'form','code'], function (exports) {
                                             for (var i = 0; i < errorIndex.length; i++) {
                                                 $('#filesPrev').find('a[data-index="' + errorIndex[i] + '"]').remove();
                                             }
+
                                             //触发自动插入编辑器功能
                                             if (uploadFiles.autoInsert) {
                                                 insertInline.call(iframeWin, 'p', {
@@ -1385,8 +1383,8 @@ layui.define(['layer', 'form','code'], function (exports) {
                             },
                             restore: function (index) {
                                 debugger;
-                                index[0].style.height = (document.body.clientHeight - 100)+"px";
-                                index[0].children[1].style.height =(document.body.clientHeight - 143) + "px";
+                                index[0].style.height = (document.body.clientHeight - 100) + "px";
+                                index[0].children[1].style.height = (document.body.clientHeight - 143) + "px";
                             }
                             , shadeClose: true
                             , area: function () {
@@ -1416,9 +1414,9 @@ layui.define(['layer', 'form','code'], function (exports) {
                         //    iframeDOM.execCommand('backColor', false, "#fff");
                         //else
                         //    iframeDOM.execCommand('hiliteColor', false, "#fff");
-                        
+
                         //iframeDOM.execCommand('forecolor', false, "#000");
-                        iframeDOM.execCommand('removeFormat', 'strong', 'color', 'width' );
+                        iframeDOM.execCommand('removeFormat', 'strong', 'color', 'width', 'class', 'style');
                         setTimeout(function () {
                             body.focus();
                         }, 10);
@@ -1627,9 +1625,9 @@ layui.define(['layer', 'form','code'], function (exports) {
             var rbtnIndex = null;
             var contextmenu = function (event) {
                 var rbtn = set.rightBtn || {
-                    type: "layBtn", customEvent: function (tagName,event) { }
+                    type: "layBtn", customEvent: function (tagName, event) { }
                 };
-                if (event != null && rbtn.type!="default") {
+                if (event != null && rbtn.type != "default") {
                     layer.close(rbtnIndex);
                     var currenNode, parentNode;
 
