@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V19.01.16 beta
+ @Version: V18.12.24 beta
  */
 
 layui.define(['layer', 'form', 'code'], function (exports) {
@@ -1227,6 +1227,8 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                                         elem: '#LayEdit_InsertFiles'
                                         , url: uploadFiles.url
                                         , field: uploadFiles.field
+                                        , headers: uploadFiles.headers
+                                        , data: uploadFiles.data
                                         , method: uploadFiles.type
                                         , accept: uploadFiles.accept || 'file'
                                         , acceptMime: uploadFiles.acceptMime || 'file/*'
