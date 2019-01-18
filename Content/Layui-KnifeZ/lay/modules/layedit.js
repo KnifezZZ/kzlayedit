@@ -306,6 +306,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                     if (parentNode.tagName.toLowerCase() === 'body') {
                         iframeDOM.execCommand('formatBlock', false, '<p>');
                     }
+                    //自动变p标签
                     //setTimeout(function () {
                     //    iframeDOM.execCommand('formatBlock', false, '<p>');
                     //}, 10);
@@ -453,7 +454,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                 //    elep = elem;
                 //}
                 //处理换行
-                if (container.innerHTML == "<br>" || tagName == "div") {
+                if (container.innerHTML == "<br>") {
                     range.selectNode(container);
                     range.deleteContents();
                 }
@@ -1371,7 +1372,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                         });
                         var setPreview = set.previewAttr || {
                             area: ['50%', '100%'],
-                            offset:'r'
+                            offset: 'r'
                         };
                         var docs = this.parentElement.nextElementSibling.firstElementChild.contentDocument.body.innerHTML;
                         layer.open({
@@ -1393,7 +1394,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                             , shadeClose: true
                             , area: function () {
                                 if (/mobile/i.test(navigator.userAgent) || $(window).width() <= 485) {
-                                    return ['90%','90%']
+                                    return ['90%', '90%']
                                 } else {
                                     return setPreview.area
                                 }
