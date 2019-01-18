@@ -1977,7 +1977,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                                     var content = [
                                         , '<li  style="float: initial;width:100%;" lay-command="addnewtr"> 新增行 </li>'
                                         , '<li  style="float: initial;width:100%;"  lay-command="deltr"> 删除行 </li>'].join('');
-                                    return '<ul class="layui-clear" style="width: max-content;">' + content + '</ul>';
+                                    return '<ul class="layui-clear" style="width: max-content;width:-moz-max-content;">' + content + '</ul>';
                                 }()
                                 , success: function (layero, index) {
 
@@ -2474,7 +2474,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                 layui.each(options.fonts, function (index, item) {
                     content.push('<li title="' + options.fonts[index] + '" style="float: initial;width:100%;"><' + options.fonts[index] + '>' + options.texts[index] + '</' + options.fonts[index] + '></li>');
                 });
-                return '<ul class="layui-clear" style="width: max-content;">' + content.join('') + '</ul>';
+                return '<ul class="layui-clear" style="width: max-content;width:-moz-max-content;">' + content.join('') + '</ul>';
             }(), this, {
                     tips: 1
                     , time: 0
@@ -2500,7 +2500,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                 layui.each(options.fonts, function (index, item) {
                     content.push('<li title="' + options.fonts[index] + '" style="float: initial;width:100%;' + options.fonts[index] + '"><' + options.fonts[index] + '>' + options.texts[index] + '</' + options.fonts[index] + '></li>');
                 });
-                return '<ul class="layui-clear" style="width: max-content;">' + content.join('') + '</ul>';
+                return '<ul class="layui-clear" style="width: max-content;width:-moz-max-content;">' + content.join('') + '</ul>';
             }(), this, {
                     tips: 1
                     , time: 0
@@ -2526,7 +2526,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                 layui.each(options.fonts, function (index, item) {
                     content.push('<li title="' + options.fonts[index] + '" style="float: initial;width:100%;' + options.fonts[index] + '"><' + options.fonts[index] + '>' + options.texts[index] + '</' + options.fonts[index] + '></li>');
                 });
-                return '<ul class="layui-clear" style="width: max-content;">' + content.join('') + '</ul>';
+                return '<ul class="layui-clear" style="width: max-content;width:-moz-max-content;">' + content.join('') + '</ul>';
             }(), this, {
                     tips: 1
                     , time: 0
