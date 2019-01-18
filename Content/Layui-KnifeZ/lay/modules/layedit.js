@@ -1365,11 +1365,14 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                     }
 
                     , preview: function (range) {
-                        debugger;
                         var currStyle = [];
                         layui.each(set.quote.style, function (index, item) {
                             currStyle.push('<link href="' + item + '" rel="stylesheet"/>');
                         });
+                        var setPreview = set.previewAttr || {
+                            area: ['50%', '100%'],
+                            offset:'r'
+                        };
                         var docs = this.parentElement.nextElementSibling.firstElementChild.contentDocument.body.innerHTML;
                         layer.open({
                             type: 1
@@ -1384,28 +1387,27 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                             min: function (index) {
                             },
                             restore: function (index) {
-                                debugger;
                                 index[0].style.height = (document.body.clientHeight - 100) + "px";
                                 index[0].children[1].style.height = (document.body.clientHeight - 143) + "px";
                             }
                             , shadeClose: true
                             , area: function () {
                                 if (/mobile/i.test(navigator.userAgent) || $(window).width() <= 485) {
-                                    return ['90%']
+                                    return ['90%','90%']
                                 } else {
-                                    return ['600px']
+                                    return setPreview.area
                                 }
                             }()
                             , offset: function () {
                                 if (/mobile/i.test(navigator.userAgent)) {
                                     return 'auto'
                                 } else {
-                                    return '100px'
+                                    return setPreview.offset
                                 }
                             }()
                             , content: currStyle.join('') + docs
                             , success: function (layero, index) {
-                                layer.full(index);//全屏
+                                //layer.full(index);//全屏
                                 layer.setTop(layero); //置顶
                             }
                         })
@@ -1418,7 +1420,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                         //    iframeDOM.execCommand('hiliteColor', false, "#fff");
 
                         //iframeDOM.execCommand('forecolor', false, "#000");
-                        iframeDOM.execCommand('removeFormat', 'strong', 'color', 'width', 'class', 'style');
+                        iframeDOM.execCommand('removeFormat', 'strong', 'color');
                         setTimeout(function () {
                             body.focus();
                         }, 10);

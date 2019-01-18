@@ -12,6 +12,7 @@
 #### 更新日志
 ##### V19.01.18
 1. [修复] <a href="https://gitee.com/KnifeZ/Kz.layedit/issues/IR5LC?from=project-issue">IR5LC 火狐浏览器菜单宽度异常问题</a>
+2. [新增] preview预览样式设置参数 previewAttr,支出对预览弹出层的area,offset参数设置，修改默认值为area:['50%','100%'],offset:'r'。 
 ##### V19.01.16-beta
 1. [优化] 插入图片时如果不填写描述属性和宽高时，不再添加style="" alt="" 空属性
 2. [修复] 附件上传没有添加data和headers参数，由于我个人不使用这两个参数且测试时都时拿上传图片测试、、、所以未能测试出该问题，对因此造成困扰的人感到抱歉=.=
