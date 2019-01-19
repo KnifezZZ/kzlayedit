@@ -375,6 +375,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                                     var elep = document.createElement('p');
                                     elep.appendChild(elem);
                                     range.insertNode(elep);
+                                    set.uploadImage.done(data);
                                 }
                             },
                             error: function (d) {
@@ -628,7 +629,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                     }
                     //插入代码
                     , code: function (range) {
-                        var codeConfig = set.codeConfig || { hide: false, encode: true };
+                        var codeConfig = set.codeConfig || { hide: false, encode: true, class: "layui-code" };
                         code.call(body, { hide: codeConfig.hide, default: codeConfig.default }, function (pre) {
                             if (codeConfig.encode || true) {
                                 pre.code = pre.code.replace(/&(?!#?[a-zA-Z0-9]+;)/g, '&amp;')
@@ -638,7 +639,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                                 text: pre.code
                                 , 'lay-lang': pre.lang
                                 , 'lay-encode': codeConfig.encode
-                                , class: "layui-code"
+                                , class: codeConfig.class || 'layui-code'
                             }, range);
                             setTimeout(function () {
                                 layui.code();
