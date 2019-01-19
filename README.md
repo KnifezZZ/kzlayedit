@@ -10,6 +10,9 @@
 ### 虽然对移动端做了适配,但是使用体验不咋的,已经放弃治疗.以后估计只会优化界面,避免出现宽,高溢出的情况.但是操作体验上基本无法改进了...不建议移动端做富文本编辑....
 
 #### 更新日志
+##### V19.01.19 （感谢<a href="https://gitee.com/bsxbl">biancangming</a>的反馈）
+1. [修复] 粘贴图片不调用uploadImage.done方法
+2. [新增] 插入代码配置codeConfig新增参数 class,可根据需要自定义样式，不填默认为layui-code
 ##### V19.01.18
 1. [修复] <a href="https://gitee.com/KnifeZ/Kz.layedit/issues/IR5LC?from=project-issue">IR5LC 火狐浏览器菜单宽度异常问题</a>
 2. [新增] preview预览样式设置参数 previewAttr,支出对预览弹出层的area,offset参数设置，修改默认值为area:['50%','100%'],offset:'r'。 
