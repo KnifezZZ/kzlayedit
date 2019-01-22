@@ -57,6 +57,7 @@
                     console.log(data);
                 }
             }
+            , autoSync: true
             , facePath: 'http://knifez.gitee.io/kz.layedit/Content/Layui-KnifeZ/'
             , devmode: true
             , tool: [
@@ -68,7 +69,6 @@
             , height: '80%'
         });
         var ieditor = layedit.build('layeditDemo');
-        layedit.setContent(ieditor, "<h1>hello layedit</h1>", false);
     })
 	</script>
 </body>

@@ -4,9 +4,8 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V18.12.24 beta
+ @Version: V19.01.22 beta
  */
-
 layui.define(['layer', 'form', 'code'], function (exports) {
     "use strict";
 
@@ -306,18 +305,28 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                     if (parentNode.tagName.toLowerCase() === 'body') {
                         iframeDOM.execCommand('formatBlock', false, '<p>');
                     }
-                    //自动变p标签
-                    //setTimeout(function () {
-                    //    iframeDOM.execCommand('formatBlock', false, '<p>');
-                    //}, 10);
                 }
-                //back 删除空hr
+                //back键
                 if (keycode === 8) {
                     var range = Range(iframeDOM);
                     var container = getContainer(range);
+                    //删除第一条hr水平线
                     if (container.innerHTML == "<hr>" && container.tagName.toLowerCase() == "body") {
                         range.selectNode(container.childNodes[0]);
                         range.deleteContents();
+                    }
+                    //触发图片删除回调函数 p标签内图片
+                    if (container.hasChildNodes() && container.tagName.toLowerCase() != "body") {
+                        var callDel = set.calldel;
+                        if (callDel.url != "" && set.backDelImg) {
+                            if (container.children[0].tagName.toLowerCase() != "img") {
+                                alert("error-无法找到图片路径");
+                            } else {
+                                $.post(callDel.url, { "imgpath": container.children[0].src }, function (res) {
+                                    callDel.done(res);
+                                })
+                            }
+                        }
                     }
                 }
 
@@ -695,19 +704,19 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                             , yes: function (index, layero) {
                                 var styleStr = "";
                                 if (layero.find('input[name="imgWidth"]').val() != "") {
-                                    styleStr += "width:" + layero.find('input[name="imgWidth"]').val() + "px;";
+                                    var w = layero.find('input[name="imgWidth"]').val();
+                                    styleStr += "width:" + w.indexOf('%') > 0 ? w : w + "px;";
                                 }
                                 if (layero.find('input[name="imgHeight"]').val() != "") {
-                                    styleStr += "height:" + layero.find('input[name="imgHeight"]').val() + "px;";
+                                    var h = layero.find('input[name="imgHeight"]').val();
+                                    styleStr += "height:" + h.indexOf('%') > 0 ? h : h + "px;";
                                 }
                                 if (layero.find('#imgsPrev').find('img').length === 0) {
                                     layer.msg('请选择要插入的图片');
                                 } else {
-                                    if (styleStr != "") {
-                                        styleStr = 'style="' + styleStr + '"';
-                                    }
+                                    if (styleStr != "") attrs["style"] = styleStr;
                                     insertInline.call(iframeWin, 'p', {
-                                        text: layero.find('#imgsPrev').html().replace(new RegExp(/(style="max-width:70px;margin:2px")/g), styleStr)
+                                        text: layero.find('#imgsPrev').html().replace(new RegExp(/(max-width:70px;margin:2px)/g), styleStr)
                                     }, range);
                                     layer.close(index);
                                 }
@@ -865,10 +874,12 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                                 var styleStr = "", altStr = layero.find('input[name="altStr"]'),
                                     Imgsrc = layero.find('input[name="Imgsrc"]');
                                 if (layero.find('input[name="imgWidth"]').val() != "") {
-                                    styleStr += "width:" + layero.find('input[name="imgWidth"]').val() + "px;";
+                                    var w = layero.find('input[name="imgWidth"]').val();
+                                    styleStr += "width:" + w.indexOf('%') > 0 ? w : w + "px;";
                                 }
                                 if (layero.find('input[name="imgHeight"]').val() != "") {
-                                    styleStr += "height:" + layero.find('input[name="imgHeight"]').val() + "px;";
+                                    var h = layero.find('input[name="imgHeight"]').val();
+                                    styleStr += "height:" + h.indexOf('%') > 0 ? h : h + "px;";
                                 }
                                 if (Imgsrc.val() == '') {
                                     layer.msg('请选择一张图片或输入图片地址');
@@ -1695,8 +1706,8 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                                     } else {
                                         event.target.src = imgSrc;
                                         event.target.alt = layero.find('input[name="altStr"]').val();
-                                        event.target.style.width = imgWidth != '' ? imgWidth + 'px' : '';
-                                        event.target.style.height = imgHeight != '' ? imgHeight + 'px' : '';
+                                        event.target.style.width = imgWidth != '' ? (imgWidth.indexOf('%') > 0 ? imgWidth : imgWidth + 'px') : '';
+                                        event.target.style.height = imgHeight != '' ? (imgHeight.indexOf('%') > 0 ? imgHeight : imgHeight + 'px') : '';
                                         layer.close(index);
                                     }
                                 },
