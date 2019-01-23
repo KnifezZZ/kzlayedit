@@ -302,7 +302,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                         layer.msg('请暂时用shift+enter');
                         return false;
                     }
-                    if (parentNode.tagName.toLowerCase() === 'body') {
+                    if (parentNode.tagName.toLowerCase() === 'body' || container.tagName.toLowerCase() === 'body') {
                         iframeDOM.execCommand('formatBlock', false, '<p>');
                     }
                 }
@@ -320,7 +320,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                         var callDel = set.calldel;
                         if (callDel.url != "" && set.backDelImg) {
                             if (container.children[0].tagName.toLowerCase() != "img") {
-                                alert("error-无法找到图片路径");
+                                //alert("error-无法找到图片路径");
                             } else {
                                 $.post(callDel.url, { "imgpath": container.children[0].src }, function (res) {
                                     callDel.done(res);
