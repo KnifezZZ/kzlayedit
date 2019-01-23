@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V19.01.22 beta
+ @Version: V19.01.23 beta
  */
 layui.define(['layer', 'form', 'code'], function (exports) {
     "use strict";
@@ -318,7 +318,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                     //触发图片删除回调函数 p标签内图片
                     if (container.hasChildNodes() && container.tagName.toLowerCase() != "body") {
                         var callDel = set.calldel;
-                        if (callDel.url != "" && set.backDelImg) {
+                        if (callDel.url != "") {
                             if (container.children[0].tagName.toLowerCase() != "img") {
                                 //alert("error-无法找到图片路径");
                             } else {
@@ -705,11 +705,11 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                                 var styleStr = "";
                                 if (layero.find('input[name="imgWidth"]').val() != "") {
                                     var w = layero.find('input[name="imgWidth"]').val();
-                                    styleStr += "width:" + w.indexOf('%') > 0 ? w : w + "px;";
+                                    styleStr += w.indexOf('%') > 0 ? "width:" + w : "width:" + w + "px;";
                                 }
                                 if (layero.find('input[name="imgHeight"]').val() != "") {
                                     var h = layero.find('input[name="imgHeight"]').val();
-                                    styleStr += "height:" + h.indexOf('%') > 0 ? h : h + "px;";
+                                    styleStr += h.indexOf('%') > 0 ? "height:" + h : "height:" + h + "px;";
                                 }
                                 if (layero.find('#imgsPrev').find('img').length === 0) {
                                     layer.msg('请选择要插入的图片');
@@ -875,11 +875,11 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                                     Imgsrc = layero.find('input[name="Imgsrc"]');
                                 if (layero.find('input[name="imgWidth"]').val() != "") {
                                     var w = layero.find('input[name="imgWidth"]').val();
-                                    styleStr += "width:" + w.indexOf('%') > 0 ? w : w + "px;";
+                                    styleStr += w.indexOf('%') > 0 ? "width:" + w : "width:" + w + "px;";
                                 }
                                 if (layero.find('input[name="imgHeight"]').val() != "") {
                                     var h = layero.find('input[name="imgHeight"]').val();
-                                    styleStr += "height:" + h.indexOf('%') > 0 ? h : h + "px;";
+                                    styleStr += h.indexOf('%') > 0 ? "height:" + h : "height:" + h + "px;";
                                 }
                                 if (Imgsrc.val() == '') {
                                     layer.msg('请选择一张图片或输入图片地址');
