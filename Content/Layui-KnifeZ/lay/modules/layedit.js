@@ -404,15 +404,31 @@ layui.define(['layer', 'form', 'code'], function (exports) {
         , filter = function (body) {
             var iframeWin = this
                 , iframeDOM = iframeWin.document;
-            //    //清除影响版面的css属性
-            //    body.find('*[style]').each(function () {
-            //        var textAlign = this.style.textAlign;
-            //        this.removeAttribute('style');
-            //        $(this).css({
-            //            'text-align': textAlign || ''
-            //        })
-            //    });
-            //    //移除不安全的标签
+            //clean word start
+            body.find('.MsoNormal,.MsoListParagraph').each(function () {
+                this.removeAttribute('class');
+            })
+            body.html(body.html().replace(/<o:p> <\/o:p>/g, ""));
+            body.html(body.html().replace(/o:/g, ""));
+            body.html(body.html().replace(/<font>/gi, ""));
+            body.html(body.html().replace(/<span>/gi, ""));
+            body.html(body.html().replace(/<span [^>]+>/gi, ""));
+            body.html(body.html().replace(/<\/span>/gi, ""));
+            body.html(body.html().replace(/<P>/g, ""));
+            body.html(body.html().replace(/<\/P>/g, ""));
+
+            body.html(body.html().replace(/<p><\/p>/g, ""));//移除空p
+            //clean word end
+            //清除影响版面的css属性
+            body.find('*[style]').each(function () {
+                var textAlign = this.style.textAlign;
+                this.removeAttribute('style');
+                $(this).css({
+                    'text-align': textAlign || ''
+                })
+            });
+
+            // 移除不安全的标签
             //    body.find('script,link').remove();
 
             ////修饰表格
