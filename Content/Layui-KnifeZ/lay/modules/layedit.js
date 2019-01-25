@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V19.01.23 beta
+ @Version: V19.01.25 beta
  */
 layui.define(['layer', 'form', 'code'], function (exports) {
     "use strict";
@@ -331,6 +331,15 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                 }
 
                 setTimeout(function () {
+
+                    //ctrl+b 加粗
+                    if (e.ctrlKey && keycode == 66) {
+                        var elem = document.createElement("strong");
+                        body.find("b").each(function () {
+                            elem.innerText = this.innerText;
+                            this.outerHTML = elem.outerHTML;
+                        });
+                    }
                     var html = body.html();
                     //IE8下将标签处理成小写
                     if (device.ie == 8) {
@@ -338,11 +347,12 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                             return str.toLowerCase();
                         });
                     }
+
                     if (set.autoSync) {
                         textArea.value = html;
                     }
                     set.onchange(html);
-                }, 1);
+                }, 10);
             });
 
             //给textarea同步内容
@@ -1625,6 +1635,13 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                         }
                         iframeDOM.execCommand(command);
                         setTimeout(function () {
+                            if (/Bold/.test(command)) {
+                                var elem = document.createElement("strong");
+                                body.find("b").each(function () {
+                                    elem.innerText = this.innerText;
+                                    this.outerHTML = elem.outerHTML;
+                                });
+                            }
                             body.focus();
                         }, 10);
                     } else {
@@ -1653,6 +1670,8 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                 layer.close(face.index);
                 layer.close(table.index);
                 layer.close(fontFomatt.index);
+                layer.close(fontfamily.index);
+                layer.close(fontSize.index);
             });
             //右键菜单自定义
             var rbtnIndex = null;
@@ -2520,13 +2539,12 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                 });
         }
         , fontfamily = function (options, callback) {
-            fontFomatt.hide = fontFomatt.hide || function (e) {
-                if ($(e.target).attr('layedit-event') == 'fontFomatt' || $(e.target).attr('layedit-event') == 'fontfamily' || $(e.target).attr('layedit-event') == 'fontSize') {
-                } else {
-                    layer.close(fontFomatt.index);
+            fontfamily.hide = fontfamily.hide || function (e) {
+                if ($(e.target).attr('layedit-event') != 'fontfamily') {
+                    layer.close(fontfamily.index);
                 }
             }
-            fontFomatt.index = layer.tips(function () {
+            fontfamily.index = layer.tips(function () {
                 var content = [];
                 layui.each(options.fonts, function (index, item) {
                     content.push('<li title="' + options.fonts[index] + '" style="float: initial;width:100%;' + options.fonts[index] + '"><' + options.fonts[index] + '>' + options.texts[index] + '</' + options.fonts[index] + '></li>');
@@ -2541,18 +2559,17 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                             callback && callback(this.title, options.fonts);
                             layer.close(index);
                         });
-                        $(document).off('click', fontFomatt.hide).on('click', fontFomatt.hide);
+                        $(document).off('click', fontfamily.hide).on('click', fontfamily.hide);
                     }
                 });
         }
         , fontSize = function (options, callback) {
-            fontFomatt.hide = fontFomatt.hide || function (e) {
-                if ($(e.target).attr('layedit-event') == 'fontFomatt' || $(e.target).attr('layedit-event') == 'fontfamily' || $(e.target).attr('layedit-event') == 'fontSize') {
-                } else {
-                    layer.close(fontFomatt.index);
+            fontSize.hide = fontSize.hide || function (e) {
+                if ($(e.target).attr('layedit-event') != 'fontSize') {
+                    layer.close(fontSize.index);
                 }
             }
-            fontFomatt.index = layer.tips(function () {
+            fontSize.index = layer.tips(function () {
                 var content = [];
                 layui.each(options.fonts, function (index, item) {
                     content.push('<li title="' + options.fonts[index] + '" style="float: initial;width:100%;' + options.fonts[index] + '"><' + options.fonts[index] + '>' + options.texts[index] + '</' + options.fonts[index] + '></li>');
@@ -2567,7 +2584,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                             callback && callback(this.title, options.fonts);
                             layer.close(index);
                         });
-                        $(document).off('click', fontFomatt.hide).on('click', fontFomatt.hide);
+                        $(document).off('click', fontSize.hide).on('click', fontSize.hide);
                     }
                 });
         }
@@ -2904,7 +2921,7 @@ function style_html(html_source, indent_size, indent_character, max_char) {
 
             var tag_complete = content.join('');
             var tag_index;
-            if (tag_complete.indexOf(' ') != -1) {
+            if (tag_complete.indexOf(' ') !== -1) {
                 tag_index = tag_complete.indexOf(' ');
             } else {
                 tag_index = tag_complete.indexOf('>');
@@ -2920,13 +2937,13 @@ function style_html(html_source, indent_size, indent_character, max_char) {
                 this.record_tag(tag_check);
                 this.tag_type = 'STYLE';
             } else if (tag_check.charAt(0) === '!') {
-                if (tag_check.indexOf('[if') != -1) {
+                if (tag_check.indexOf('[if') !== -1) {
                     if (tag_complete.indexOf('!IE') != -1) {
                         var comment = this.get_unformatted('-->', tag_complete);
                         content.push(comment);
                     }
                     this.tag_type = 'START';
-                } else if (tag_check.indexOf('[endif') != -1) {
+                } else if (tag_check.indexOf('[endif') !== -1) {
                     this.tag_type = 'END';
                     this.unindent();
                 } else if (tag_check.indexOf('[cdata[') != -1) {
