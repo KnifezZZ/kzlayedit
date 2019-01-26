@@ -17,6 +17,8 @@
 #### 其他问题可先查看issues有没有类似问题，如果没有可直接提issues，也方便其他人查看，不再翻评论 :smile: 
 
 #### 更新日志
+##### V19.01.26
+1. [修复] 监听事件container.tagName为undefined错误  感谢<a href="https://gitee.com/yianyao">yianyao</a>的反馈
 ##### V19.01.25
 1. [优化] ctrl+b 加粗使用strong标签替换原版b标签
 2. [修复] 段落格式 和 字体大小 可能出现点击后即自动关闭的问题

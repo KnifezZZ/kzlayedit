@@ -302,7 +302,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                         layer.msg('请暂时用shift+enter');
                         return false;
                     }
-                    if (parentNode.tagName.toLowerCase() === 'body' || container.tagName.toLowerCase() === 'body') {
+                    if (parentNode.tagName.toLowerCase() === 'body' || container.tagName === 'BODY') {
                         iframeDOM.execCommand('formatBlock', false, '<p>');
                     }
                 }
@@ -311,12 +311,12 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                     var range = Range(iframeDOM);
                     var container = getContainer(range);
                     //删除第一条hr水平线
-                    if (container.innerHTML == "<hr>" && container.tagName.toLowerCase() == "body") {
+                    if (container.innerHTML == "<hr>" && container.tagName == "BODY") {
                         range.selectNode(container.childNodes[0]);
                         range.deleteContents();
                     }
                     //触发图片删除回调函数 p标签内图片
-                    if (container.hasChildNodes() && container.tagName.toLowerCase() != "body") {
+                    if (container.hasChildNodes() && container.tagName != "BODY") {
                         var callDel = set.calldel;
                         if (callDel.url != "") {
                             if (container.children[0].tagName.toLowerCase() != "img") {
