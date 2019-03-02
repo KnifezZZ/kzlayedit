@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V19.01.25 beta
+ @Version: V19.03.02 beta
  */
 layui.define(['layer', 'form', 'code'], function (exports) {
     "use strict";
@@ -1345,8 +1345,9 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                             }
                             docs = style_html(docs, 4, ' ', 80);
                             that.parentElement.nextElementSibling.setAttribute("style", "z-index: 999; overflow: hidden;height:" + that.parentElement.nextElementSibling.clientHeight + "px");
-                            if (this.parentElement.parentElement.getAttribute("style") !== null)
-                                that.parentElement.nextElementSibling.setAttribute("style", "z-index: 999; overflow: hidden;height:100%");
+
+                            if (this.parentElement.parentElement.getAttribute("style") !== null) this.parentElement.nextElementSibling.setAttribute("style", "z-index: 999; overflow: hidden;height: " + (this.parentElement.parentElement.offsetHeight - this.parentElement.offsetHeight - 14) + "px");
+
 
                             that.parentElement.nextElementSibling.firstElementChild.style = "position: absolute;left: -32768px;top: -32768px;";
                             var htmlPanel = document.createElement("div");
@@ -1384,13 +1385,14 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                     //全屏
                     , fullScreen: function (range) {
                         if (this.parentElement.parentElement.getAttribute("style") == null) {
-                            this.parentElement.parentElement.setAttribute("style", "position: fixed;top: 0;left: 0;height: 100%;width: 100%;background-color: antiquewhite;z-index: 9999;");
-                            this.parentElement.nextElementSibling.style = "height:100%";
+                            debugger;
+                            this.parentElement.parentElement.setAttribute("style", "position: fixed;top: 0;left: 0;height: 100%;width: 100%;background-color: #fff;z-index: 9999;");
+                            this.parentElement.nextElementSibling.style = "height:" + (this.parentElement.parentElement.offsetHeight - this.parentElement.offsetHeight - 8) + "px";
                             this.parentElement.nextElementSibling.firstElementChild.style = "height:100%";
                             //是否源码模式
                             if (this.parentElement.nextElementSibling.lastElementChild.id.indexOf('aceHtmleditor') > -1) {
                                 this.parentElement.nextElementSibling.firstElementChild.style = "position: absolute;left: -32768px;top: -32768px;";
-                                this.parentElement.nextElementSibling.setAttribute("style", "z-index: 999; overflow: hidden;height:100%");
+                                this.parentElement.nextElementSibling.setAttribute("style", "z-index: 999; overflow: hidden;height: " + (this.parentElement.parentElement.offsetHeight - this.parentElement.offsetHeight) + "px");
                             }
                         } else {
                             this.parentElement.parentElement.removeAttribute("style");
@@ -1402,7 +1404,6 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                             }
                         }
                     }
-
                     , preview: function (range) {
                         var currStyle = [];
                         layui.each(set.quote.style, function (index, item) {
