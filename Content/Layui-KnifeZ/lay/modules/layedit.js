@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V19.03.02 beta
+ @Version: V19.03.05 beta
  */
 layui.define(['layer', 'form', 'code'], function (exports) {
     "use strict";
@@ -430,13 +430,13 @@ layui.define(['layer', 'form', 'code'], function (exports) {
             body.html(body.html().replace(/<p><\/p>/g, ""));//移除空p
             //clean word end
             //清除影响版面的css属性
-            body.find('*[style]').each(function () {
-                var textAlign = this.style.textAlign;
-                this.removeAttribute('style');
-                $(this).css({
-                    'text-align': textAlign || ''
-                })
-            });
+            //body.find('*[style]').each(function () {
+            //    var textAlign = this.style.textAlign;
+            //    this.removeAttribute('style');
+            //    $(this).css({
+            //        'text-align': textAlign || ''
+            //    })
+            //});
 
             // 移除不安全的标签
             //    body.find('script,link').remove();
