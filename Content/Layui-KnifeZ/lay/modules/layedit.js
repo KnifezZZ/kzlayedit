@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V19.03.05 beta
+ @Version: V19.03.18 beta
  */
 layui.define(['layer', 'form', 'code'], function (exports) {
     "use strict";
@@ -368,6 +368,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
             });
             //处理粘贴
             body.on('paste', function (e) {
+                var range = Range(iframeDOM);
                 if (!(e.originalEvent.clipboardData && e.originalEvent.clipboardData.items)) {
                     return;
                 }
@@ -378,22 +379,19 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                         var formData = new FormData();
                         formData.append('file', f);
                         var url = set.uploadImage.url;
+                        var src = "";
                         $.ajax({
                             type: 'POST',
                             url: url,
                             data: formData,
+                            async: false,
                             contentType: false,
                             processData: false,
                             dataType: "json",
                             mimeType: "multipart/form-data",
                             success: function (data) {
                                 if (data.code == 0 || data.code == 2) {
-                                    var range = iframeWin.document.getSelection().getRangeAt(0);
-                                    var elem = document.createElement("img");
-                                    elem.src = data.data.src;
-                                    var elep = document.createElement('p');
-                                    elep.appendChild(elem);
-                                    range.insertNode(elep);
+                                    src = data.data.src;
                                     set.uploadImage.done(data);
                                 }
                             },
@@ -401,6 +399,24 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                                 layer.msg("上传服务器出错");
                             }
                         });
+                        if (src != "") {
+                            var elem = document.createElement("img");
+                            elem.src = src;
+                            if (device.ie) {
+                                layer.msg("暂不支持IE浏览器");
+
+                            } else {
+                                var container = getContainer(range);
+                                if (container.innerHTML == "<br>") {
+                                    range.selectNode(container);
+                                    range.deleteContents();
+                                }
+                                range.deleteContents();
+                                range.insertNode(elem);
+                            }
+                        } else {
+                            layer.msg("unkwon error");
+                        }
                     }
                 }
                 setTimeout(function () {
