@@ -319,19 +319,32 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                     if (container.hasChildNodes() && container.tagName != "BODY") {
                         var callDel = set.calldel;
                         if (callDel.url != "") {
-                            if (container.children[0].tagName.toLowerCase() != "img") {
+                            if (range.commonAncestorContainer.childNodes[(range.startOffset-1)].tagName!= "IMG") {
                                 //alert("error-无法找到图片路径");
                             } else {
-                                $.post(callDel.url, { "imgpath": container.children[0].src }, function (res) {
+                                $.post(callDel.url, { "imgpath": range.commonAncestorContainer.childNodes[(range.startOffset-1)].src }, function (res) {
                                     callDel.done(res);
                                 })
                             }
                         }
                     }
                 }
+                //del
+                if (keycode === 46) {
+                    var range = Range(iframeDOM);
+                    var container = getContainer(range);
+                    //触发图片删除回调函数 p标签内图片
+                    if (container.nextElementSibling.tagName === "IMG") {
+                        var callDel = set.calldel;
+                        if (callDel.url != "") {
+                            $.post(callDel.url, { "imgpath": container.nextElementSibling.src }, function (res) {
+                                callDel.done(res);
+                            })
+                        }
+                    }
+                }
 
                 setTimeout(function () {
-
                     //ctrl+b 加粗
                     if (e.ctrlKey && keycode == 66) {
                         var elem = document.createElement("strong");
