@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V19.03.18 beta
+ @Version: V19.03.22 beta
  */
 layui.define(['layer', 'form', 'code'], function (exports) {
     "use strict";
@@ -769,9 +769,9 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                                 if (layero.find('#imgsPrev').find('img').length === 0) {
                                     layer.msg('请选择要插入的图片');
                                 } else {
-                                    if (styleStr != "") attrs["style"] = styleStr;
+                                    if (styleStr != "") styleStr = "style='"+styleStr+"'";
                                     insertInline.call(iframeWin, 'p', {
-                                        text: layero.find('#imgsPrev').html().replace(new RegExp(/(max-width:70px;margin:2px)/g), styleStr)
+                                        text: layero.find('#imgsPrev').html().replace(new RegExp(/(style="max-width:70px;margin:2px")/g), styleStr)
                                     }, range);
                                     layer.close(index);
                                 }
