@@ -4,7 +4,7 @@
  @Author：贤心
  @Modifier:KnifeZ
  @License：MIT
- @Version: V19.03.22 beta
+ @Version: V19.04.12 beta
  */
 layui.define(['layer', 'form', 'code'], function (exports) {
     "use strict";
@@ -319,10 +319,10 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                     if (container.hasChildNodes() && container.tagName != "BODY") {
                         var callDel = set.calldel;
                         if (callDel.url != "") {
-                            if (range.commonAncestorContainer.childNodes[(range.startOffset-1)].tagName!= "IMG") {
+                            if (range.commonAncestorContainer.childNodes[(range.startOffset - 1)].tagName != "IMG") {
                                 //alert("error-无法找到图片路径");
                             } else {
-                                $.post(callDel.url, { "imgpath": range.commonAncestorContainer.childNodes[(range.startOffset-1)].src }, function (res) {
+                                $.post(callDel.url, { "imgpath": range.commonAncestorContainer.childNodes[(range.startOffset - 1)].src }, function (res) {
                                     callDel.done(res);
                                 })
                             }
@@ -595,7 +595,6 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                     link: function (range) {
                         var container = getContainer(range)
                             , parentNode = $(container).parent();
-                        debugger;
                         link.call(body, {
                             href: parentNode.attr('href')
                             , target: parentNode.attr('target')
@@ -657,7 +656,6 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                     , image: function (range) {
                         var that = this;
                         layui.use('upload', function (upload) {
-                            debugger;
                             var uploadImage = set.uploadImage || {};
                             if (uploadImage.url == "") {
                                 layer.msg("上传接口配置错误！");
@@ -769,7 +767,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                                 if (layero.find('#imgsPrev').find('img').length === 0) {
                                     layer.msg('请选择要插入的图片');
                                 } else {
-                                    if (styleStr != "") styleStr = "style='"+styleStr+"'";
+                                    if (styleStr != "") styleStr = "style='" + styleStr + "'";
                                     insertInline.call(iframeWin, 'p', {
                                         text: layero.find('#imgsPrev').html().replace(new RegExp(/(style="max-width:70px;margin:2px")/g), styleStr)
                                     }, range);
@@ -1414,7 +1412,6 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                     //全屏
                     , fullScreen: function (range) {
                         if (this.parentElement.parentElement.getAttribute("style") == null) {
-                            debugger;
                             this.parentElement.parentElement.setAttribute("style", "position: fixed;top: 0;left: 0;height: 100%;width: 100%;background-color: #fff;z-index: 9999;");
                             this.parentElement.nextElementSibling.style = "height:" + (this.parentElement.parentElement.offsetHeight - this.parentElement.offsetHeight - 8) + "px";
                             this.parentElement.nextElementSibling.firstElementChild.style = "height:100%";
@@ -1607,7 +1604,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                         });
                     }
                     , table: function (range) {
-                        table.call(this, function (opts) {
+                        table.call(this, {}, function (opts) {
                             var tbody = "<tr>";
                             for (var i = 0; i < opts.cells; i++) {
                                 tbody += "<td></td>";
@@ -1620,9 +1617,6 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                             insertInline.call(iframeWin, 'table', {
                                 text: tbody
                             }, range);
-                            setTimeout(function () {
-                                body.focus();
-                            }, 10);
                         });
                     }
                     , addhr: function (range) {
@@ -1698,10 +1692,10 @@ layui.define(['layer', 'form', 'code'], function (exports) {
             body.on('click', function () {
                 toolCheck.call(iframeWin, tools);
                 layer.close(face.index);
-                layer.close(table.index);
                 layer.close(fontFomatt.index);
                 layer.close(fontfamily.index);
                 layer.close(fontSize.index);
+                layer.close(table.index);
             });
             //右键菜单自定义
             var rbtnIndex = null;
@@ -2371,23 +2365,32 @@ layui.define(['layer', 'form', 'code'], function (exports) {
             });
             anchors.index = index;
         }
-        , table = function (callback) {
+        , table = function (options, callback) {
+            table.hide = table.hide || function (e) {
+                if ($(e.target).attr('layedit-event') !== 'table') {
+                    layer.close(table.index);
+                }
+            };
             if (!/mobile/i.test(navigator.userAgent)) {
-                return table.index = layer.tips(function () {
-                    return '<div style="padding: 5px;border: 1px solid #e6e6e6;"><span id="laytable_label" class="layui-label">0列 x 0行</span>'
-                        + '<table class="layui-table" lay-size="sm">'
-                        + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
-                        + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
-                        + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
-                        + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
-                        + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
-                        + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
-                        + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
-                        + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
-                        + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
-                        + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
-                        + '</table ></div></div > ';
-                }(), this, {
+                return table.index = layer.tips(
+                    function () {
+                        return '<div style="padding: 5px;border: 1px solid #e6e6e6;"><span id="laytable_label" class="layui-label">0列 x 0行</span>'
+                            + '<table class="layui-table" lay-size="sm">'
+                            + '<tbody>'
+                            + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+                            + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+
+                            + '</tbody>'
+                            + '</table></div>';
+                    }(), this, {
                         tips: 1
                         , time: 0
                         , skin: 'layui-box layui-util-face'
@@ -2437,7 +2440,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                             + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
                             + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
                             + '<tr style="height: 20px;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
-                            + '</table ></div></div > ';
+                            + '</table></div>';
                     }()
                     , area: ['85%']
                     , skin: 'layui-box layui-util-face'

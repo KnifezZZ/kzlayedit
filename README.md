@@ -17,6 +17,8 @@
 #### 其他问题可先查看issues有没有类似问题，如果没有可直接提issues，也方便其他人查看，不再翻评论 :smile: 
 
 #### 更新日志
+##### v19.04.12
+1. [修复<a href="https://gitee.com/KnifeZ/Kz.layedit/issues/IVA7B?from=project-issue">#IVA7B</a>] 插入表格后无法提交问题 感谢<a href="https://gitee.com/ftlh2005">ftlh2005</a>的反馈
 ##### v19.03.22
 1. [修复] 多图上传设置宽高报错问题
 ##### V19.03.20
