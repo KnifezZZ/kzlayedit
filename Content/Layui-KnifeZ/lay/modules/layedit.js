@@ -334,6 +334,9 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                     var range = Range(iframeDOM);
                     var container = getContainer(range);
                     //触发图片删除回调函数 p标签内图片
+                    if(container.nextElementSibling == null){
+                        return;
+                    }
                     if (container.nextElementSibling.tagName === "IMG") {
                         var callDel = set.calldel;
                         if (callDel.url != "") {
@@ -758,11 +761,11 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                                 var styleStr = "";
                                 if (layero.find('input[name="imgWidth"]').val() != "") {
                                     var w = layero.find('input[name="imgWidth"]').val();
-                                    styleStr += w.indexOf('%') > 0 ? "width:" + w : "width:" + w + "px;";
+                                    styleStr += w.indexOf('%') > 0 ? "width:" + w + ";" : "width:" + w + "px;";
                                 }
                                 if (layero.find('input[name="imgHeight"]').val() != "") {
                                     var h = layero.find('input[name="imgHeight"]').val();
-                                    styleStr += h.indexOf('%') > 0 ? "height:" + h : "height:" + h + "px;";
+                                    styleStr += h.indexOf('%') > 0 ? "height:" + h + ";" : "height:" + h + "px;";
                                 }
                                 if (layero.find('#imgsPrev').find('img').length === 0) {
                                     layer.msg('请选择要插入的图片');
@@ -928,11 +931,11 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                                     Imgsrc = layero.find('input[name="Imgsrc"]');
                                 if (layero.find('input[name="imgWidth"]').val() != "") {
                                     var w = layero.find('input[name="imgWidth"]').val();
-                                    styleStr += w.indexOf('%') > 0 ? "width:" + w : "width:" + w + "px;";
+                                    styleStr += w.indexOf('%') > 0 ? "width:" + w + ";": "width:" + w + "px;";
                                 }
                                 if (layero.find('input[name="imgHeight"]').val() != "") {
                                     var h = layero.find('input[name="imgHeight"]').val();
-                                    styleStr += h.indexOf('%') > 0 ? "height:" + h : "height:" + h + "px;";
+                                    styleStr += h.indexOf('%') > 0 ? "height:" + h + ";": "height:" + h + "px;";
                                 }
                                 if (Imgsrc.val() == '') {
                                     layer.msg('请选择一张图片或输入图片地址');
@@ -1746,11 +1749,11 @@ layui.define(['layer', 'form', 'code'], function (exports) {
                                     , '</li>'
                                     , '<li class="layui-form-item" style="position: relative">'
                                     , '<label class="layui-form-label" style="width: 110px;position: relative;z-index: 10;">宽度</label>'
-                                    , '<input type="text" required name="imgWidth" placeholder="px" style="position: absolute;width: 100%;padding-left: 120px;left: 0;top:0" value="' + (parseInt(event.target.style.width) || '') + '" class="layui-input">'
+                                    , '<input type="text" required name="imgWidth" placeholder="px" style="position: absolute;width: 100%;padding-left: 120px;left: 0;top:0" value="' + ((event.target.style.width.indexOf("%") > 0 ? event.target.style.width : parseInt(event.target.style.width)) || '') + '" class="layui-input">'
                                     , '</li>'
                                     , '<li class="layui-form-item" style="position: relative">'
                                     , '<label class="layui-form-label" style="width: 110px;position: relative;z-index: 10;">高度</label>'
-                                    , '<input type="text" required name="imgHeight" placeholder="px" style="position: absolute;width: 100%;padding-left: 120px;left: 0;top:0" value="' + (parseInt(event.target.style.height) || '') + '" class="layui-input">'
+                                    , '<input type="text" required name="imgHeight" placeholder="px" style="position: absolute;width: 100%;padding-left: 120px;left: 0;top:0" value="' + ((event.target.style.height.indexOf("%") > 0 ? event.target.style.height : parseInt(event.target.style.height))|| '') + '" class="layui-input">'
                                     , '</li>'
                                     , '</ul>'].join(''),
                                 btn: ['确定', '取消', '<span style="color:red">删除</span>'],
