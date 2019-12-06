@@ -128,7 +128,7 @@ layui.define(['layer', 'form', 'code'], function (exports) {
             , editor = $(['<div class="' + ELEM + '">'
                 , '<div class="layui-unselect layui-layedit-tool">' + tool.replace("layBkColor_Index", "layBkColor_" + that.index).replace("layFontColor_Index", "layFontColor_" + that.index) + '</div>'
                 , '<div class="layui-layedit-iframe">'
-                , '<iframe id="' + name + '" name="' + name + '" textarea="' + id + '" frameborder="0"></iframe>'
+                , '<iframe  src="empty.html" id="' + name + '" name="' + name + '" textarea="' + id + '" frameborder="0"></iframe>'
                 , '</div>'
                 , '</div>'].join(''))
 
